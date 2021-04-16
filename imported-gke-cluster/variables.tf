@@ -33,7 +33,7 @@ variable "maint_recurence_sched" {
 }
 
 variable "default_pool_node_count" {
-  type = int
+  type = number
 }
 
 variable "default_pool_machine_type" {
