@@ -3,8 +3,8 @@ resource "google_container_cluster" "cluster" {
   location                    = var.cluster_location
   default_max_pods_per_node   = 110
   enable_intranode_visibility = false
-  enable_shielded_nodes       = true
-  enable_tpu                  = false
+  enable_shielded_nodes       = var.shielded_nodes
+  enable_tpu                  = var.enable_tpu
   initial_node_count          = 0
 
   network    = var.network_id

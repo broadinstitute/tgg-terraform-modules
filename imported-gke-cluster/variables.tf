@@ -41,5 +41,34 @@ variable "default_pool_machine_type" {
 }
 
 variable "default_pool_preemptible" {
-  type = boolean
+  type    = boolean
+  default = false
+}
+
+variable "cluster_v4_cidr" {
+  type        = string
+  description = "The ipv4 CIDR block of your cluster network, E.g. 10.4.0.0/14. Locate this value under the 'Pod address range' in the cluster details pane of the GKE console"
+}
+
+variable "services_v4_cidr" {
+  type        = string
+  description = "The ipv4 CIDR block of your service network, E.g. 10.8.0.0/20. Locate this value under the 'Service address range' in the cluster details pane of the GKE console"
+}
+
+variable "shielded_nodes" {
+  type        = boolean
+  default     = false
+  description = "Whether to enable or disable the shielded nodes feature"
+}
+
+variable "enable_tpu" {
+  type        = boolean
+  default     = false
+  description = "Whether to enable the Cloud TPU on the kubernetes cluster."
+}
+
+variable "intranode_visibility" {
+  type        = boolean
+  default     = false
+  description = "Whether to enable the intranode visibility setting for GKE"
 }
