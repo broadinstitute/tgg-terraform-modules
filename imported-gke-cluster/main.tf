@@ -10,6 +10,8 @@ resource "google_container_cluster" "cluster" {
   network    = var.network_id
   subnetwork = var.subnetwork_id
 
+  resource_labels = var.resource_labels
+
   maintenance_policy {
 
     recurring_window {

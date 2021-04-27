@@ -72,3 +72,12 @@ variable "intranode_visibility" {
   default     = false
   description = "Whether to enable the intranode visibility setting for GKE"
 }
+
+variable "resource_labels" {
+  description = "Tags to set for all resources"
+  type        = map(string)
+  default = {
+    admin      = "tgg"
+    managed_by = "terraform"
+  }
+}
