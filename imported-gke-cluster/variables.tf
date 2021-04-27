@@ -28,7 +28,7 @@ variable "maint_end_time" {
   description = "a datespec containing the time of day your maint should end. E.g. 2021-03-24T23:00:00Z"
 }
 
-variable "maint_recurence_sched" {
+variable "maint_recurrence_sched" {
   type = string
 }
 
