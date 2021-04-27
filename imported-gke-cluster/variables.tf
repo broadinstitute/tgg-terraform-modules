@@ -81,3 +81,9 @@ variable "resource_labels" {
     managed_by = "terraform"
   }
 }
+
+variable "initial_node_count" {
+  description = "the initial count of nodes in the default pool"
+  type        = number
+  default     = 0
+}

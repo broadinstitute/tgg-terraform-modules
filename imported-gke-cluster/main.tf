@@ -5,7 +5,7 @@ resource "google_container_cluster" "cluster" {
   enable_intranode_visibility = false
   enable_shielded_nodes       = var.shielded_nodes
   enable_tpu                  = var.enable_tpu
-  initial_node_count          = 0
+  initial_node_count          = var.initial_node_count
 
   network    = var.network_id
   subnetwork = var.subnetwork_id
