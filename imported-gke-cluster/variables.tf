@@ -41,7 +41,7 @@ variable "default_pool_machine_type" {
 }
 
 variable "default_pool_preemptible" {
-  type    = boolean
+  type    = bool
   default = false
 }
 
@@ -56,19 +56,19 @@ variable "services_v4_cidr" {
 }
 
 variable "shielded_nodes" {
-  type        = boolean
+  type        = bool
   default     = false
   description = "Whether to enable or disable the shielded nodes feature"
 }
 
 variable "enable_tpu" {
-  type        = boolean
+  type        = bool
   default     = false
   description = "Whether to enable the Cloud TPU on the kubernetes cluster."
 }
 
 variable "intranode_visibility" {
-  type        = boolean
+  type        = bool
   default     = false
   description = "Whether to enable the intranode visibility setting for GKE"
 }
