@@ -25,13 +25,6 @@ resource "google_container_cluster" "cluster" {
     cluster_ipv4_cidr_block  = var.cluster_v4_cidr
     services_ipv4_cidr_block = var.services_v4_cidr
   }
-
-  lifecycle {
-    ignore_changes = [
-      master_version,
-      node_version
-    ]
-  }
 }
 
 resource "google_container_node_pool" "default-pool" {
@@ -43,11 +36,5 @@ resource "google_container_node_pool" "default-pool" {
   node_config {
     preemptible  = var.default_pool_preemptible
     machine_type = var.default_pool_machine_type
-  }
-
-  lifecycle {
-    ignore_changes = [
-      version,
-    ]
   }
 }
