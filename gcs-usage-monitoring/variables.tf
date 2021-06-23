@@ -35,6 +35,6 @@ variable "source_repository_url" {
 }
 
 variable "cron_schedule" {
-  type = string
+  type        = string
   description = "A string representing the cron-format schedule for which to trigger the cloud function"
 }
