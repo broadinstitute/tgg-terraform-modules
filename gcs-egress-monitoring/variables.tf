@@ -18,7 +18,7 @@ variable "sent_bytes_alerting_duration" {
   description = "The number of seconds to evaluate an alert threshold on. As a string, 60 seconds would be represented as '60s'"
   validation {
     condition     = substr(var.sent_bytes_alerting_duration, -1, -1) == "s"
-    error_message = "The time format must be a string, with the number of seconds, ending in the letter 's'."
+    error_message = "The time format must be a string, with the number of seconds, ending in the letter 's'; e.g. '100s'."
   }
 }
 
@@ -27,7 +27,7 @@ variable "sent_bytes_alerting_alignment_period" {
   description = "The number of seconds to use for the alignment period when evaluating an alert condition. As a string, 60 seconds would be represented as '60s'"
   validation {
     condition     = substr(var.sent_bytes_alerting_alignment_period, -1, -1) == "s"
-    error_message = "The time format must be a string, with the number of seconds, ending in the letter 's'."
+    error_message = "The time format must be a string, with the number of seconds, ending in the letter 's'; e.g. '100s'."
   }
 }
 
