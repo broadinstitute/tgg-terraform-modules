@@ -1,5 +1,5 @@
 resource "google_monitoring_alert_policy" "gcs_bucket_egress_alarm" {
-  display_name = "bucket egress"
+  display_name = "${var.gcs_bucket_name} bucket egress alarm"
   combiner     = "OR"
   conditions {
     display_name = "GCS storage egress has exceeded the allowed threshold"
