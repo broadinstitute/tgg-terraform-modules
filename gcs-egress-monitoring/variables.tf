@@ -19,7 +19,7 @@ variable "sent_bytes_alerting_duration" {
 }
 
 variable "sent_bytes_alerting_alignment_period" {
-  type = string
+  type        = string
   description = "The number of seconds to use for the alignment period when evaluating an alert condition. As a string, 60 seconds would be represented as '60s'"
 
 }
@@ -27,4 +27,5 @@ variable "sent_bytes_alerting_alignment_period" {
 variable "notification_channels" {
   type        = list(string)
   description = "A list of notification channel IDs. These should be defined in your project's configuration, and supplied here as an input to the module"
+  default     = []
 }
