@@ -2,7 +2,7 @@
 
 This attempts to provide a reusable module for creating scheduled cloudfunctions as described here: https://cloud.google.com/scheduler/docs/tut-pub-sub
 
-The idea is that you end up with a cloudscheduler schedule, which sends a message to a pub/sub queue that triggers the desired function. Our environment almost exlusively uses slack as a notification target, so you must provide a slack channel name for function notifications.
+The idea is that you end up with a cloudscheduler schedule, which sends a message to a pub/sub queue that triggers the desired function. The module needs to be provided a service account email. The service accounts needs to have the IAM permissions required for running the function -- you are responsible for creating the service account, and granting it permissions.
 
 ## Required inputs
 
