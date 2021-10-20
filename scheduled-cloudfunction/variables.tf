@@ -3,7 +3,7 @@ variable "scheduled_function_name" {
   description = "The string that should be used to create resources associated with the module, pubsub queue, etc"
 
   validation {
-    condition     = length(var.scheduled_function_name_prefix) < 32
+    condition     = length(var.scheduled_function_name) < 32
     error_message = "The name_prefix must be less than 32 characters to conform to google's naming requirements."
   }
 }
@@ -19,7 +19,7 @@ variable "service_account_email" {
 
   validation {
     condition     = substr(var.service_account_email, -19, -1) == "gserviceaccount.com"
-    error_message = "The service account email must end in gserviceaccount.com"
+    error_message = "The service account email must end in gserviceaccount.com."
   }
 }
 
