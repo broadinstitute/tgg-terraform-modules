@@ -23,16 +23,6 @@ variable "service_account_email" {
   }
 }
 
-variable "slack_channel_name" {
-  type        = string
-  description = "The name of the slack channel that should receive notifications"
-
-  validation {
-    condition     = substr(var.slack_channel_name, 0, 1) == "#"
-    error_message = "The slack_channel_name must start with a pound (#) symbol."
-  }
-}
-
 variable "function_environment_variables" {
   type        = map(string)
   default     = {}
