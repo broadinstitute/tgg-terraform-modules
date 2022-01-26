@@ -6,7 +6,7 @@ resource "google_container_cluster" "cluster" {
   enable_shielded_nodes       = var.shielded_nodes
   enable_tpu                  = var.enable_tpu
   initial_node_count          = var.initial_node_count
-  remove_default_node_pool    = var.keep_default_node_pool
+  remove_default_node_pool    = var.remove_default_node_pool
 
   network    = var.network_id
   subnetwork = var.subnetwork_id
@@ -29,7 +29,6 @@ resource "google_container_cluster" "cluster" {
 }
 
 resource "google_container_node_pool" "default-pool" {
-  count      = var.keep_default_node_pool ? 1 : 0
   name       = "default-pool"
   location   = var.cluster_location
   cluster    = google_container_cluster.cluster.name
