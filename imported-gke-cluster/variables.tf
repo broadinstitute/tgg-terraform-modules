@@ -32,17 +32,9 @@ variable "maint_recurrence_sched" {
   type = string
 }
 
-variable "default_pool_node_count" {
-  type = number
-}
-
-variable "default_pool_machine_type" {
-  type = string
-}
-
-variable "default_pool_preemptible" {
+variable "remove_default_node_pool" {
   type    = bool
-  default = false
+  default = true
 }
 
 variable "cluster_v4_cidr" {

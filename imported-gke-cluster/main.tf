@@ -6,6 +6,7 @@ resource "google_container_cluster" "cluster" {
   enable_shielded_nodes       = var.shielded_nodes
   enable_tpu                  = var.enable_tpu
   initial_node_count          = var.initial_node_count
+  remove_default_node_pool    = var.remove_default_node_pool
 
   network    = var.network_id
   subnetwork = var.subnetwork_id
@@ -24,17 +25,5 @@ resource "google_container_cluster" "cluster" {
   ip_allocation_policy { # forces replacement
     cluster_ipv4_cidr_block  = var.cluster_v4_cidr
     services_ipv4_cidr_block = var.services_v4_cidr
-  }
-}
-
-resource "google_container_node_pool" "default-pool" {
-  name       = "default-pool"
-  location   = var.cluster_location
-  cluster    = google_container_cluster.cluster.name
-  node_count = var.default_pool_node_count
-
-  node_config {
-    preemptible  = var.default_pool_preemptible
-    machine_type = var.default_pool_machine_type
   }
 }
