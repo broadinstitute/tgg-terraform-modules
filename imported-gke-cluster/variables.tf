@@ -40,11 +40,6 @@ variable "default_pool_machine_type" {
   type = string
 }
 
-variable "remove_default_node_pool" {
-  type    = bool
-  default = false
-}
-
 variable "default_pool_preemptible" {
   type    = bool
   default = false
