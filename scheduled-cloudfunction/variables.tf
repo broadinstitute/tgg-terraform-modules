@@ -62,7 +62,7 @@ variable "function_timeout" {
   description = "The number of seconds that the function is allowed to execute."
 
   validation {
-    condition   = var.function_timeout >= 10 && var.function_timeout <= 540
-    description = "The function_timeout must be greater than or equal to 10, and less than or equal to 540."
+    condition     = var.function_timeout >= 10 && var.function_timeout <= 540
+    error_message = "The function_timeout must be greater than or equal to 10, and less than or equal to 540."
   }
 }
