@@ -45,3 +45,16 @@ resource "google_cloud_scheduler_job" "cloud_scheduler_schedule" {
     data       = base64encode("pleaserun")
   }
 }
+
+resource "google_logging_metric" "release_files_sync_timeout" {
+  name   = "${google_cloudfunctions_function.scheduled-cloudfunction.name}/timeout"
+  filter = <<-EOT
+resource.type="cloud_function"
+resource.labels.function_name="${google_cloudfunctions_function.scheduled-cloudfunction.name}"
+"finished with status: 'timeout'""
+EOT
+  metric_descriptor {
+    metric_kind = "DELTA"
+    value_type  = "INT64"
+  }
+}
