@@ -1,7 +1,7 @@
 # The IAM role that we'll use to allow read access to all GCP secrets within the project
 resource "google_project_iam_custom_role" "external-secrets-gsa" {
-  role_id     = "${app_name}_${var.env}_external_secrets"
-  title       = "${app_name} ${var.env} Secret Manager Read Access"
+  role_id     = "${var.app_name}_${var.env}_external_secrets"
+  title       = "${var.app_name} ${var.env} Secret Manager Read Access"
   description = "intended to allow the external-secrets controller to access secrets"
   permissions = [
     "resourcemanager.projects.get",
@@ -18,8 +18,8 @@ resource "google_project_iam_custom_role" "external-secrets-gsa" {
 
 # The ServiceAccount that the external-secrets controller will use to identify itself to the GCP API.
 resource "google_service_account" "external-secrets" {
-  account_id   = "${app_name}-${var.env}-external-secrets"
-  display_name = "${app_name} ${var.env} External Secrets Controller"
+  account_id   = "${var.app_name}-${var.env}-external-secrets"
+  display_name = "${var.app_name} ${var.env} External Secrets Controller"
 }
 
 # Bind the ServiceAccount to the IAM role.
