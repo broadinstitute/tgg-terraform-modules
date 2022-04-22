@@ -23,9 +23,13 @@ resource "google_service_account" "external-secrets" {
 }
 
 # Bind the ServiceAccount to the IAM role.
+
+data "google_project" "current_project" {}
+
 resource "google_project_iam_member" "k8s-external-secrets-iam-membership" {
   role   = google_project_iam_custom_role.external-secrets-gsa.name
   member = "serviceAccount:${google_service_account.external-secrets.email}"
+  project = data.google_project.current_project.project_id
 
   dynamic "condition" {
     for_each = var.iam_conditions
