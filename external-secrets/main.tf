@@ -27,14 +27,12 @@ resource "google_project_iam_member" "k8s-external-secrets-iam-membership" {
   role   = google_project_iam_custom_role.external-secrets-gsa.name
   member = "serviceAccount:${google_service_account.external-secrets.email}"
 
-  dynamic "iam_condition" {
+  dynamic "condition" {
     for_each = var.iam_conditions
     content {
-      condition {
-        title       = iam_condition.value.title
-        description = iam_condition.value.description
-        expression  = iam_condition.value.expression
-      }
+      title       = iam_condition.value.title
+      description = iam_condition.value.description
+      expression  = iam_condition.value.expression
     }
   }
 }
