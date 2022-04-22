@@ -34,9 +34,9 @@ resource "google_project_iam_member" "k8s-external-secrets-iam-membership" {
   dynamic "condition" {
     for_each = var.iam_conditions
     content {
-      title       = iam_condition.title.value
-      description = iam_condition.description.value
-      expression  = iam_condition.expression.value
+      title       = condition.value.title
+      description = condition.value.description
+      expression  = condition.value.expression
     }
   }
 }
