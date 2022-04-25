@@ -48,7 +48,7 @@ resource "google_service_account_key" "external_secrets_sa_key" {
 
 # create a secret to store the service account key in
 resource "google_secret_manager_secret" "external_secrets_sa_key_secret" {
-  secret_id = "external-secrets-serviceaccount-key"
+  secret_id = "${var.env}-external-secrets-serviceaccount-key"
 
   replication {
     automatic = true
