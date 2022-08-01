@@ -32,8 +32,8 @@ resource "google_compute_firewall" "dataproc_internal" {
 resource "google_compute_firewall" "allow_ssh_broad_access" {
   count   = var.allow_broad_inst_ssh_access ? 1 : 0
   name    = "allow-ssh-broad"
-  network = google_compute_network.my-network.name
-  project = google_compute_network.my-network.project
+  network = google_compute_network.project_network.name
+  project = google_compute_network.project_network.project
 
   allow {
     protocol = "tcp"
