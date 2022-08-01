@@ -1,5 +1,5 @@
 module "project-services" {
-  count   = var.apis_to_enable ? 1 : 0
+  count   = length(var.apis_to_enable) > 0 ? 1 : 0
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
   version = "13.0.0"
 
