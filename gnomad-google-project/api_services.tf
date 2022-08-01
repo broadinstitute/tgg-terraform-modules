@@ -6,6 +6,9 @@ module "project-services" {
   project_id = google_project.current_project.id
 
   activate_apis = var.apis_to_enable
+
+  disable_dependent_services  = false
+  disable_services_on_destroy = false
 }
 
 # we always need these in gnomAD-ish projects
@@ -21,4 +24,7 @@ module "default-project-services" {
     "cloudfunctions.googleapis.com",
     "compute.googleapis.com"
   ]
+
+  disable_dependent_services  = false
+  disable_services_on_destroy = false
 }
