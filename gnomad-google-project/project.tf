@@ -5,7 +5,7 @@ resource "random_id" "random_project_id_suffix" {
 resource "google_project" "current_project" {
   name                = var.project_name
   project_id          = format("%s-%s", var.project_id, random_id.random_project_id_suffix.hex)
-  folder_id           = format("folders/%s", var.folder_id)
+  folder_id           = format("folders/%s", var.gcp_folder_id)
   billing_account     = var.billing_account_id
   auto_create_network = false
 }
