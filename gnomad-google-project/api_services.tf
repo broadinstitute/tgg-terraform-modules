@@ -1,7 +1,7 @@
 module "project-services" {
   count   = var.apis_to_enable ? 1 : 0
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "10.1.1"
+  version = "13.0.0"
 
   project_id = google_project.current_project.id
 
@@ -12,7 +12,7 @@ module "project-services" {
 module "default-project-services" {
   count   = var.enable_default_services ? 1 : 0
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "10.1.1"
+  version = "13.0.0"
 
   project_id = google_project.current_project.id
 
