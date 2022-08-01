@@ -44,4 +44,5 @@ variable "owner_group_id" {
 variable "allow_broad_inst_ssh_access" {
   type        = bool
   description = "Whether to create a firewall rule that allows access to TCP port 22 from Broad Institute networks"
+  default     = true
 }
