@@ -33,7 +33,7 @@ resource "google_compute_firewall" "allow_ssh_broad_access" {
   count   = var.allow_broad_inst_ssh_access ? 1 : 0
   name    = "allow-ssh-broad"
   network = google_compute_network.project_network.name
-  project = google_compute_network.project_network.project
+  project = google_project.current_project.project_id
 
   allow {
     protocol = "tcp"
@@ -46,3 +46,18 @@ resource "google_compute_firewall" "allow_ssh_broad_access" {
     "ssh-broad"
   ]
 }
+
+# allows SSH access from the Identity Aware Proxy service (for cloud-console based SSH sessions)
+resource "google_compute_firewall" "iap_forwarding" {
+  name    = "iap-access"
+  network = google_compute_network.project_network.name
+  project = google_project.current_project.project_id
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  source_ranges = ["35.235.240.0/20"]
+}
+
