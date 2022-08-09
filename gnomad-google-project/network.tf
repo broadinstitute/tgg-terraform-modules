@@ -5,7 +5,7 @@ resource "google_compute_network" "project_network" {
 }
 
 resource "google_compute_firewall" "dataproc_internal" {
-  count       = var.enable_default_services ? 1 : 0
+  count       = var.configure_dataproc_firewall_rules ? 1 : 0
   project     = google_project.current_project.project_id
   name        = "dataproc-internal-allow"
   network     = google_compute_network.project_network.name

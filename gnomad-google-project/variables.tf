@@ -46,3 +46,9 @@ variable "allow_broad_inst_ssh_access" {
   description = "Whether to create a firewall rule that allows access to TCP port 22 from Broad Institute networks"
   default     = true
 }
+
+variable "configure_dataproc_firewall_rules" {
+  type        = bool
+  description = "Whether we should configure firewall rules to allow all traffic between nodes tagged 'dataproc-node'. If you intend to use dataproc, you will need this."
+  default     = true
+}
