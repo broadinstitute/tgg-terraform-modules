@@ -27,3 +27,9 @@ resource "google_project_iam_member" "default_compute_object_admin" {
   role    = "roles/storage.objectAdmin"
   member  = "serviceAccount:${data.google_service_account.default_compute_sa.email}"
 }
+
+resource "google_project_iam_member" "owner_group" {
+  project = google_project.current_project.project_id
+  role    = "roles/owner"
+  member  = "group:${var.owner_group_id}"
+}
