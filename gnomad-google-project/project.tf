@@ -13,19 +13,19 @@ resource "google_project" "current_project" {
 resource "google_project_iam_member" "default_compute_admin" {
   project = google_project.current_project.project_id
   role    = "roles/compute.admin"
-  member  = "serviceAccount:${data.google_service_account.default_compute_sa.email}"
+  member  = "serviceAccount:${google_project.current_project.number}-compute@developer.gserviceaccount.com"
 }
 
 resource "google_project_iam_member" "default_compute_dataproc_worker" {
   project = google_project.current_project.project_id
   role    = "roles/dataproc.worker"
-  member  = "serviceAccount:${data.google_service_account.default_compute_sa.email}"
+  member  = "serviceAccount:${google_project.current_project.number}-compute@developer.gserviceaccount.com"
 }
 
 resource "google_project_iam_member" "default_compute_object_admin" {
   project = google_project.current_project.project_id
   role    = "roles/storage.objectAdmin"
-  member  = "serviceAccount:${data.google_service_account.default_compute_sa.email}"
+  member  = "serviceAccount:${google_project.current_project.number}-compute@developer.gserviceaccount.com"
 }
 
 resource "google_project_iam_member" "owner_group" {
