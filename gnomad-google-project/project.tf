@@ -8,6 +8,12 @@ resource "google_project" "current_project" {
   folder_id           = format("folders/%s", var.gcp_folder_id)
   billing_account     = var.billing_account_id
   auto_create_network = false
+
+  lifecycle {
+    ignore_changes = [
+      labels,
+    ]
+  }
 }
 
 resource "google_project_iam_member" "default_compute_admin" {
