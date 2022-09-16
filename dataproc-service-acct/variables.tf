@@ -17,3 +17,8 @@ variable "dataproc_bucket_prefix" {
   type        = string
   description = "The prefix that we should use for the names of the stage and temp buckets for Dataproc."
 }
+
+variable "force_destroy_user_dataproc_buckets" {
+  type    = bool
+  default = false
+}

@@ -22,6 +22,7 @@ resource "google_storage_bucket" "user_dataproc_stage" {
   name          = "${var.dataproc_bucket_prefix}-stage"
   storage_class = "STANDARD"
   location      = "us-central1"
+  force_destroy = var.force_destroy_user_dataproc_buckets
 }
 
 resource "google_storage_bucket" "user_dataproc_temp" {
@@ -29,6 +30,7 @@ resource "google_storage_bucket" "user_dataproc_temp" {
   name          = "${var.dataproc_bucket_prefix}-temp"
   storage_class = "STANDARD"
   location      = "us-central1"
+  force_destroy = var.force_destroy_user_dataproc_buckets
 }
 
 resource "google_storage_bucket_iam_member" "grant_user_dataproc_stage_write" {
