@@ -22,3 +22,8 @@ variable "force_destroy_user_dataproc_buckets" {
   type    = bool
   default = false
 }
+
+variable "project_id" {
+  type        = string
+  description = "The GCP project ID where resources and permission grants should be created"
+}
