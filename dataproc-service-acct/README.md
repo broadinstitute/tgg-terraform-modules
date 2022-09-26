@@ -6,6 +6,21 @@ To allow users to run dataproc in a GCP project with limited access to storage, 
 - An IAM grant that allows the user to ActAs that service account
 - stage and temp buckets for dataproc, which the service account and user both have write access to
 
+Once created, users will need to specify a few flags when creating dataproc clusters, so this information will need to be shared with them:
+
+- Dataproc create requires a service account parameter: `--service-account=user-compute@example.com`
+- Dataproc create requires a bucket parameter for the "stage" bucket: `--bucket=user-stage`
+- Dataproc create requires a temp-bucket parameter for the "temp" bucket: `--temp-bucket=user-temp`
+
+Below is an example of creating a fresh dataproc cluster using the user's service account and buckets:
+
+```bash
+gcloud dataproc create cluster my-cluster-1 \
+--service-account=user-compute@example.com \
+--bucket=my-stage \
+--temp-bucket=my-temp
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -41,6 +56,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_dataproc_bucket_prefix"></a> [dataproc\_bucket\_prefix](#input\_dataproc\_bucket\_prefix) | The prefix that we should use for the names of the stage and temp buckets for Dataproc. | `string` | n/a | yes |
 | <a name="input_force_destroy_user_dataproc_buckets"></a> [force\_destroy\_user\_dataproc\_buckets](#input\_force\_destroy\_user\_dataproc\_buckets) | n/a | `bool` | `false` | no |
+| <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The GCP project ID where resources and permission grants should be created | `string` | n/a | yes |
 | <a name="input_service_account_display_name"></a> [service\_account\_display\_name](#input\_service\_account\_display\_name) | The display name of the service account that we are going to create | `string` | n/a | yes |
 | <a name="input_service_account_id"></a> [service\_account\_id](#input\_service\_account\_id) | The name that we should use as the username portion of the service account email address | `string` | n/a | yes |
 | <a name="input_user_principal"></a> [user\_principal](#input\_user\_principal) | The email address of the user we'd like to grant access to | `string` | n/a | yes |

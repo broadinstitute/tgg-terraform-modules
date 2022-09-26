@@ -1,5 +1,5 @@
 resource "google_service_account" "dataproc_service_account" {
-  project      = module.test_project.project_identifier
+  project      = var.project_id
   account_id   = var.service_account_id
   display_name = var.service_account_display_name
 }
@@ -12,13 +12,13 @@ resource "google_service_account_iam_binding" "grant_sa_usage" {
 }
 
 resource "google_project_iam_member" "grant_dataproc_editor" {
-  project = module.test_project.project_identifier
+  project = var.project_id
   role    = "roles/dataproc.editor"
   member  = "user:${var.user_principal}"
 }
 
 resource "google_storage_bucket" "user_dataproc_stage" {
-  project       = module.test_project.project_identifier
+  project       = var.project_id
   name          = "${var.dataproc_bucket_prefix}-stage"
   storage_class = "STANDARD"
   location      = "us-central1"
@@ -26,7 +26,7 @@ resource "google_storage_bucket" "user_dataproc_stage" {
 }
 
 resource "google_storage_bucket" "user_dataproc_temp" {
-  project       = module.test_project.project_identifier
+  project       = var.project_id
   name          = "${var.dataproc_bucket_prefix}-temp"
   storage_class = "STANDARD"
   location      = "us-central1"
