@@ -17,6 +17,19 @@ resource "google_project_iam_member" "grant_dataproc_editor" {
   member  = "user:${var.user_principal}"
 }
 
+resource "google_project_iam_member" "grant_user_service_usage" {
+  project = var.project_id
+  role    = "roles/serviceusage.serviceUsageConsumer"
+  member  = "user:${var.user_principal}"
+}
+
+resource "google_project_iam_member" "grant_sa_service_usage" {
+  project = var.project_id
+  role    = "roles/serviceusage.serviceUsageConsumer"
+  member  = "serviceAccount:${google_service_account.dataproc_service_account.email}"
+}
+
+
 resource "google_storage_bucket" "user_dataproc_stage" {
   project       = var.project_id
   name          = "${var.dataproc_bucket_prefix}-stage"
