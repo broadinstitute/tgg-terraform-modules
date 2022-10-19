@@ -3,14 +3,9 @@ variable "user_principal" {
   description = "The email address of the user we'd like to grant access to"
 }
 
-variable "service_account_id" {
+variable "service_account_email" {
   type        = string
-  description = "The name that we should use as the username portion of the service account email address"
-}
-
-variable "service_account_display_name" {
-  type        = string
-  description = "The display name of the service account that we are going to create"
+  description = "The email of the user's dataproc worker service account"
 }
 
 variable "dataproc_bucket_prefix" {
