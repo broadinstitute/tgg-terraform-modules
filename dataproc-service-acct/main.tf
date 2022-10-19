@@ -37,9 +37,8 @@ resource "google_storage_bucket" "user_dataproc_stage" {
   location      = "us-central1"
   force_destroy = var.force_destroy_user_dataproc_buckets
   labels = {
-    bucket = "${var.dataproc_bucket_prefix}-stage",
-    owner  = "${var.user_principal}"
-
+    "bucket" = "${var.dataproc_bucket_prefix}-stage",
+    "owner"  = "${var.user_principal}"
   }
 }
 
@@ -50,9 +49,8 @@ resource "google_storage_bucket" "user_dataproc_temp" {
   location      = "us-central1"
   force_destroy = var.force_destroy_user_dataproc_buckets
   labels = {
-    bucket = "${var.dataproc_bucket_prefix}-temp",
-    owner  = "${var.user_principal}"
-
+    "bucket" = "${var.dataproc_bucket_prefix}-temp",
+    "owner"  = "${var.user_principal}"
   }
 }
 
