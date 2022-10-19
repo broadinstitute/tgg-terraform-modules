@@ -31,11 +31,12 @@ resource "google_project_iam_member" "grant_sa_service_usage" {
 
 
 resource "google_storage_bucket" "user_dataproc_stage" {
-  project       = var.project_id
-  name          = "${var.dataproc_bucket_prefix}-stage"
-  storage_class = "STANDARD"
-  location      = "us-central1"
-  force_destroy = var.force_destroy_user_dataproc_buckets
+  project                     = var.project_id
+  name                        = "${var.dataproc_bucket_prefix}-stage"
+  storage_class               = "STANDARD"
+  location                    = "us-central1"
+  force_destroy               = var.force_destroy_user_dataproc_buckets
+  uniform_bucket_level_access = true
   labels = {
     "bucket" = format("%s-temp", var.dataproc_bucket_prefix)
     "owner"  = format("%s", split("@", var.user_principal)[0])
@@ -43,11 +44,12 @@ resource "google_storage_bucket" "user_dataproc_stage" {
 }
 
 resource "google_storage_bucket" "user_dataproc_temp" {
-  project       = var.project_id
-  name          = "${var.dataproc_bucket_prefix}-temp"
-  storage_class = "STANDARD"
-  location      = "us-central1"
-  force_destroy = var.force_destroy_user_dataproc_buckets
+  project                     = var.project_id
+  name                        = "${var.dataproc_bucket_prefix}-temp"
+  storage_class               = "STANDARD"
+  location                    = "us-central1"
+  force_destroy               = var.force_destroy_user_dataproc_buckets
+  uniform_bucket_level_access = true
   labels = {
     "bucket" = format("%s-temp", var.dataproc_bucket_prefix)
     "owner"  = format("%s", split("@", var.user_principal)[0])
