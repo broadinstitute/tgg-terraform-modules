@@ -25,7 +25,7 @@ resource "google_storage_bucket" "user_dataproc_stage" {
   force_destroy               = var.force_destroy_user_dataproc_buckets
   uniform_bucket_level_access = true
   labels = {
-    "bucket" = format("%s-temp", var.dataproc_bucket_prefix)
+    "bucket" = format("%s-stage", var.dataproc_bucket_prefix)
     "owner"  = format("%s", split("@", var.user_principal)[0])
   }
 }
