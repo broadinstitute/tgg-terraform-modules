@@ -90,7 +90,7 @@ resource "google_compute_firewall" "dataproc_internal" {
 }
 
 resource "google_compute_firewall" "allow_ssh_broad_access" {
-  name    = "allow-ssh-broad"
+  name    = "allow-ssh-broad-dataproc"
   network = google_compute_network.network.name
 
   allow {
