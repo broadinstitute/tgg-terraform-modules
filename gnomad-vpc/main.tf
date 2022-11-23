@@ -60,3 +60,61 @@ resource "google_compute_router_nat" "router_nat" {
     filter = "ERRORS_ONLY"
   }
 }
+
+data "google_storage_bucket_object_content" "internal_networks" {
+  name   = "internal_networks.json"
+  bucket = "broad-institute-networking"
+}
+
+resource "google_compute_firewall" "dataproc_internal" {
+  name        = "dataproc-internal-allow"
+  network     = google_compute_network.network.name
+  description = "Creates firewall rule allowing dataproc tagged instances to reach eachother"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["0-65535"]
+  }
+
+  allow {
+    protocol = "udp"
+    ports    = ["0-65535"]
+  }
+
+  allow {
+    protocol = "icmp"
+  }
+
+  source_tags = ["dataproc-node"]
+  target_tags = ["dataproc-node"]
+}
+
+resource "google_compute_firewall" "allow_ssh_broad_access" {
+  name    = "allow-ssh-broad"
+  network = google_compute_network.network.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  source_ranges = jsondecode(data.google_storage_bucket_object_content.internal_networks.content)
+
+  target_tags = [
+    "ssh-broad"
+  ]
+}
+
+# allows SSH access from the Identity Aware Proxy service (for cloud-console based SSH sessions)
+resource "google_compute_firewall" "iap_forwarding" {
+  name    = "iap-access"
+  network = google_compute_network.project_network.name
+  project = google_project.current_project.project_id
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  source_ranges = ["35.235.240.0/20"]
+}
