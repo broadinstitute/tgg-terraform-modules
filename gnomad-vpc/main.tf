@@ -61,6 +61,7 @@ resource "google_compute_router_nat" "router_nat" {
   }
 }
 
+# A document containing the Broad's public IP subnets for allowing Office and VPN IPs in firewalls
 data "google_storage_bucket_object_content" "internal_networks" {
   name   = "internal_networks.json"
   bucket = "broad-institute-networking"
