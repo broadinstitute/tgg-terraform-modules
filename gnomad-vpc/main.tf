@@ -101,7 +101,7 @@ resource "google_compute_firewall" "allow_ssh_broad_access" {
   source_ranges = jsondecode(data.google_storage_bucket_object_content.internal_networks.content)
 
   target_tags = [
-    "ssh-broad"
+    "dataproc-node"
   ]
 }
 
