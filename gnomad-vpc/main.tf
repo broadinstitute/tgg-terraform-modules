@@ -108,8 +108,7 @@ resource "google_compute_firewall" "allow_ssh_broad_access" {
 # allows SSH access from the Identity Aware Proxy service (for cloud-console based SSH sessions)
 resource "google_compute_firewall" "iap_forwarding" {
   name    = "iap-access"
-  network = google_compute_network.project_network.name
-  project = google_project.current_project.project_id
+  network = google_compute_network.network.name
 
   allow {
     protocol = "tcp"
