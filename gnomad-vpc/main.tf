@@ -5,17 +5,17 @@ resource "google_compute_network" "network" {
 
 resource "google_compute_subnetwork" "gnomad_subnet" {
   name          = "${var.network_name_prefix}-gnomad-subnet"
-  ip_cidr_range = "192.168.0.0/20"
+  ip_cidr_range = var.gnomad_primary_subnet_range # "192.168.0.0/20"
   network       = google_compute_network.network.id
 
   secondary_ip_range = [
     {
       range_name    = "gke-services"
-      ip_cidr_range = "10.0.32.0/20"
+      ip_cidr_range = var.gke_services_secondary_range # "10.0.32.0/20"
     },
     {
       range_name    = "gke-pods"
-      ip_cidr_range = "10.4.0.0/14"
+      ip_cidr_range = var.gke_pods_secondary_range # "10.4.0.0/14"
     }
   ]
 
@@ -30,7 +30,7 @@ resource "google_compute_subnetwork" "gnomad_subnet" {
 
 resource "google_compute_subnetwork" "dataproc_subnet" {
   name          = "${var.network_name_prefix}-dataproc-subnet"
-  ip_cidr_range = "192.168.255.0/24"
+  ip_cidr_range = var.dataproc_primary_subnet_range # "192.168.255.0/24"
   network       = google_compute_network.network.id
 
   private_ip_google_access = true
