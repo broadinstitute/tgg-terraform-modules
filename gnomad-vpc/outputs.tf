@@ -1,4 +1,4 @@
-output "gnomad_subnets" {
+output "gnomad_subnet_secondary_ranges" {
   value       = [for network in google_compute_subnetwork.gnomad_subnet.secondary_ip_range : range.range_name]
   description = "The secondary ranges associated with the gnomad subnet"
 }
