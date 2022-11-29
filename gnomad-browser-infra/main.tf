@@ -18,12 +18,28 @@ resource "google_project_iam_member" "gke_nodes_iam" {
   project = var.project_id
 }
 
+# A document containing the Broad's public IP subnets for allowing Office and VPN IPs in firewalls
+data "google_storage_bucket_object_content" "internal_networks" {
+  name   = "internal_networks.json"
+  bucket = "broad-institute-networking"
+}
+
 resource "google_container_cluster" "browser_cluster" {
   name            = "${var.infra_prefix}-cluster"
   location        = var.gke_control_plane_zone
   network         = var.vpc_network_name
   subnetwork      = var.vpc_subnet_name
   networking_mode = "VPC_NATIVE"
+
+  master_authorized_networks_config {
+    dynamic "cidr_blocks" {
+      for_each = toset(jsondecode(data.google_storage_bucket_object_content.internal_networks.content))
+      content {
+        cidr_block   = cidr_blocks.key
+        display_name = cidr_blocks.key
+      }
+    }
+  }
 
   ip_allocation_policy {
     cluster_secondary_range_name  = var.gke_cluster_secondary_range_name
