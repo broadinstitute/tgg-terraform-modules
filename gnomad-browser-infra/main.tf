@@ -33,8 +33,13 @@ resource "google_container_cluster" "browser_cluster" {
   }
 
   private_cluster_config {
-    enable_private_nodes   = true
-    master_ipv4_cidr_block = var.gke_control_plane_cidr_range
+    enable_private_nodes    = true
+    master_ipv4_cidr_block  = var.gke_control_plane_cidr_range
+    enable_private_endpoint = true
+  }
+
+  release_channel {
+    channel = "STABLE"
   }
 }
 
