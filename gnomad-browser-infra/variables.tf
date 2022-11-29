@@ -1,3 +1,8 @@
+variable "infra_prefix" {
+  description = "The string to use for a prefix on resource names (GKE cluster, GCS Buckets, Service Accounts, etc)"
+  type        = string
+}
+
 variable "vpc_network_name" {
   description = "The name of the VPC network that the GKE cluster should reside in."
   type        = string
