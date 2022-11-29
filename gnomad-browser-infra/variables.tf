@@ -17,10 +17,15 @@ variable "vpc_subnet_name" {
   type        = string
 }
 
-# variable "gke_master_node_cidr_range" {
-#   description = "The IPv4 CIDR Range that should be used for the GKE control plane"
-#   type        = string
-# }
+variable "gke_control_plane_zone" {
+  description = "The GCP zone where the GKE control plane will reside."
+  type        = string
+}
+
+variable "gke_control_plane_cidr_range" {
+  description = "The IPv4 CIDR Range that should be used for the GKE control plane"
+  type        = string
+}
 
 # variable "redis_pool_num_nodes" {
 #   description = "The number of nodes that the redis GKE node pool should contain"
@@ -33,16 +38,22 @@ variable "vpc_subnet_name" {
 #   default     = "e2-custom-6-49152" # TODO create this?
 # }
 
-# variable "main_pool_num_nodes" {
-#   description = "The number of nodes that the main/default GKE node pool should contain"
-#   type        = number
-# }
+variable "main_pool_num_nodes" {
+  description = "The number of nodes that the main/default GKE node pool should contain"
+  type        = number
+}
 
-# variable "main_pool_machine_type" {
-#   description = "The GCE machine type that should be used for the main/default GKE node pool"
-#   type        = string
-#   default     = "e2-standard-4"
-# }
+variable "main_pool_machine_type" {
+  description = "The GCE machine type that should be used for the main/default GKE node pool"
+  type        = string
+  default     = "e2-standard-4"
+}
+
+variable "main_pool_zone" {
+  description = "The zone where the GKE Main pool should be launched"
+  type        = string
+  default     = ""
+}
 
 # variable "es_data_pool_num_nodes" {
 #   description = "The number of nodes that the elasticsearch data GKE node pool should contain"
