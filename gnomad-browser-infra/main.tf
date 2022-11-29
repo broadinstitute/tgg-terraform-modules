@@ -35,8 +35,7 @@ resource "google_container_cluster" "browser_cluster" {
     dynamic "cidr_blocks" {
       for_each = toset(jsondecode(data.google_storage_bucket_object_content.internal_networks.content))
       content {
-        cidr_block   = cidr_blocks.key
-        display_name = cidr_blocks.key
+        cidr_block = cidr_blocks.key
       }
     }
   }
@@ -59,7 +58,7 @@ resource "google_container_cluster" "browser_cluster" {
   private_cluster_config {
     enable_private_nodes    = true
     master_ipv4_cidr_block  = var.gke_control_plane_cidr_range
-    enable_private_endpoint = true
+    enable_private_endpoint = false
   }
 
   release_channel {
