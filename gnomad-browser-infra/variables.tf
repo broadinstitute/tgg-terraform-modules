@@ -38,18 +38,18 @@ variable "gke_control_plane_cidr_range" {
 #   default     = "e2-custom-6-49152" # TODO create this?
 # }
 
-variable "main_pool_num_nodes" {
+variable "gke_main_pool_num_nodes" {
   description = "The number of nodes that the main/default GKE node pool should contain"
   type        = number
 }
 
-variable "main_pool_machine_type" {
+variable "gke_main_pool_machine_type" {
   description = "The GCE machine type that should be used for the main/default GKE node pool"
   type        = string
   default     = "e2-standard-4"
 }
 
-variable "main_pool_zone" {
+variable "gke_main_pool_zone" {
   description = "The zone where the GKE Main pool should be launched"
   type        = string
   default     = ""

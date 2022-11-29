@@ -47,11 +47,11 @@ resource "google_container_node_pool" "main_pool" {
   name       = "main-pool"
   location   = var.gke_main_pool_zone != "" ? var.gke_main_pool_zone : var.gke_control_plane_zone
   cluster    = google_container_cluster.browser_cluster.name
-  node_count = var.main_pool_num_nodes
+  node_count = var.gke_main_pool_num_nodes
 
   node_config {
     preemptible  = true
-    machine_type = var.main_pool_machine_type
+    machine_type = var.gke_main_pool_machine_type
 
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
     service_account = google_service_account.gke_cluster_sa.email
