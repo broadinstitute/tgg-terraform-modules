@@ -19,8 +19,16 @@ resource "google_project_iam_member" "gke_nodes_iam" {
 }
 
 resource "google_container_cluster" "browser_cluster" {
-  name     = "${var.infra_prefix}-cluster"
-  location = var.gke_control_plane_zone
+  name            = "${var.infra_prefix}-cluster"
+  location        = var.gke_control_plane_zone
+  network         = var.vpc_network_name
+  subnetwork      = var.vpc_subnet_name
+  networking_mode = "VPC_NATIVE"
+
+  ip_allocation_policy {
+    cluster_secondary_range_name  = var.gke_cluster_secondary_range_name
+    services_secondary_range_name = var.gke_services_secondary_range_name
+  }
 
   # We can't create a cluster with no node pool defined, but we want to only use
   # separately managed node pools. So we create the smallest possible default

@@ -27,6 +27,17 @@ variable "gke_control_plane_cidr_range" {
   type        = string
 }
 
+variable "gke_cluster_secondary_range_name" {
+  description = "The name of the secondary subnet IP range to use for Pods in the GKE cluster"
+  type        = string
+  default     = "gke-pods"
+}
+
+variable "gke_services_secondary_range_name" {
+  description = "The name of the secondary subnet IP range to use for GKE services"
+  type        = string
+  default     = "gke-services"
+}
 # variable "redis_pool_num_nodes" {
 #   description = "The number of nodes that the redis GKE node pool should contain"
 #   type        = number
