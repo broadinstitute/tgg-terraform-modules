@@ -67,6 +67,12 @@ resource "google_storage_bucket" "elastic_snapshots" {
   storage_class               = "STANDARD"
   uniform_bucket_level_access = true
   public_access_prevention    = "enforced"
+
+  labels = {
+    "deployment" = "${var.infra_prefix}"
+    "terraform"  = "true"
+    "component"  = "elasticsearch"
+  }
 }
 
 resource "google_storage_bucket" "data_pipeline" {
@@ -75,6 +81,12 @@ resource "google_storage_bucket" "data_pipeline" {
   storage_class               = "STANDARD"
   uniform_bucket_level_access = true
   public_access_prevention    = "enforced"
+
+  labels = {
+    "deployment" = "${var.infra_prefix}"
+    "terraform"  = "true"
+    "component"  = "data-pipeline"
+  }
 }
 
 # A document containing the Broad's public IP subnets for allowing Office and VPN IPs in firewalls
@@ -89,6 +101,11 @@ resource "google_container_cluster" "browser_cluster" {
   network         = var.vpc_network_name
   subnetwork      = var.vpc_subnet_name
   networking_mode = "VPC_NATIVE"
+  resource_labels = {
+    "deployment" = "${var.infra_prefix}"
+    "terraform"  = "true"
+    "component"  = "gke"
+  }
 
   master_authorized_networks_config {
     dynamic "cidr_blocks" {
