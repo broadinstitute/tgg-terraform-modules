@@ -10,6 +10,12 @@ resource "google_service_account" "es_snapshots" {
   display_name = "${var.infra_prefix} Elasticsearch Snapshots"
 }
 
+resource "google_service_account" "data_pipeline" {
+  account_id   = "${var.infra_prefix}-data-pipeline"
+  description  = "The service account for runnint the gnomAD data pipeline"
+  display_name = "${var.infra_prefix} Data pipeline Service Account"
+}
+
 resource "google_project_iam_member" "gke_nodes_iam" {
   for_each = toset([
     "logging.logWriter",
@@ -21,6 +27,19 @@ resource "google_project_iam_member" "gke_nodes_iam" {
 
   role    = "roles/${each.key}"
   member  = google_service_account.gke_cluster_sa.member
+  project = var.project_id
+}
+
+resource "google_project_iam_member" "data_pipeline_dataproc_worker" {
+  role    = "roles/dataproc.worker"
+  member  = google_service_account.data_pipeline.member
+  project = var.project_id
+}
+
+# required for requesterPays resources
+resource "google_project_iam_member" "data_pipeline_service_consumer" {
+  role    = "roles/serviceusage.serviceUsageConsumer"
+  member  = google_service_account.data_pipeline.member
   project = var.project_id
 }
 
@@ -36,14 +55,27 @@ resource "google_storage_bucket_iam_member" "es_snapshots" {
   member = google_service_account.es_snapshots.member
 }
 
+resource "google_storage_bucket_iam_member" "data_pipeline" {
+  bucket = google_storage_bucket.data_pipeline.name
+  role   = "roles/storage.admin"
+  member = google_service_account.data_pipeline.member
+}
+
 resource "google_storage_bucket" "elastic_snapshots" {
   name                        = "${var.infra_prefix}-elastic-snaps"
   location                    = var.es_snapshots_bucket_location
   storage_class               = "STANDARD"
   uniform_bucket_level_access = true
-  public_access_prevention    = enforced
+  public_access_prevention    = "enforced"
 }
 
+resource "google_storage_bucket" "data_pipeline" {
+  name                        = "${var.infra_prefix}-data-pipeline"
+  location                    = var.data_pipeline_bucket_location
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = true
+  public_access_prevention    = "enforced"
+}
 
 # A document containing the Broad's public IP subnets for allowing Office and VPN IPs in firewalls
 data "google_storage_bucket_object_content" "internal_networks" {
@@ -72,7 +104,7 @@ resource "google_container_cluster" "browser_cluster" {
     services_secondary_range_name = var.gke_services_secondary_range_name
   }
 
-  # We can't create a cluster with no node pool defined, but we want to only use
+  # The google API won't allow creating clusters without node pools, but we want to only use
   # separately managed node pools. So we create the smallest possible default
   # node pool and immediately delete it.
   remove_default_node_pool = true
@@ -175,4 +207,8 @@ resource "google_compute_firewall" "es_webbook" {
 
   source_ranges = [var.gke_control_plane_cidr_range]
   target_tags   = ["${var.infra_prefix}-gke-es-data"]
+}
+
+resource "google_compute_global_address" "public_ingress" {
+  name = "${var.infra_prefix}-global-ip"
 }

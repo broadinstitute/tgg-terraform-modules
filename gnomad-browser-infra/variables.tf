@@ -74,13 +74,13 @@ variable "gke_main_pool_zone" {
   default     = ""
 }
 
-variable "es_data_pool_num_nodes" {
+variable "gke_es_data_pool_num_nodes" {
   description = "The number of nodes that the elasticsearch data GKE node pool should contain"
   type        = number
   default     = 3
 }
 
-variable "es_data_pool_machine_type" {
+variable "gke_es_data_pool_machine_type" {
   description = "The GCE machine type that should be used for the elasticsearch data GKE node pool"
   type        = string
   default     = "e2-highmem-8"
@@ -94,6 +94,12 @@ variable "gke_es_data_pool_zone" {
 
 variable "es_snapshots_bucket_location" {
   description = "The GCS location for the elasticsearch snapshots bucket"
+  type        = string
+  default     = "us-east1"
+}
+
+variable "data_pipeline_bucket_location" {
+  description = "The GCS location for the data-pipeline bucket"
   type        = string
   default     = "us-east1"
 }
