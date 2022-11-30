@@ -87,3 +87,42 @@ resource "google_container_node_pool" "main_pool" {
     }
   }
 }
+
+resource "google_container_node_pool" "redis_pool" {
+  name       = "redis"
+  location   = var.gke_redis_pool_zone != "" ? var.gke_redis_pool_zone : var.gke_control_plane_zone
+  cluster    = google_container_cluster.browser_cluster.name
+  node_count = var.gke_redis_pool_num_nodes
+
+  node_config {
+    machine_type = var.gke_redis_pool_machine_type
+
+    service_account = google_service_account.gke_cluster_sa.email
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/cloud-platform"
+    ]
+
+    workload_metadata_config {
+      mode = "GKE_METADATA"
+    }
+  }
+}
+
+resource "google_container_node_pool" "es_data_pool" {
+  name       = "es-data"
+  location   = var.gke_es_data_pool_zone != "" ? var.gke_es_data_pool_zone : var.gke_control_plane_zone
+  cluster    = google_container_cluster.browser_cluster.name
+  node_count = var.gke_es_data_pool_num_nodes
+
+  node_config {
+    machine_type    = var.gke_es_data_pool_machine_type
+    service_account = google_service_account.gke_cluster_sa.email
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/cloud-platform"
+    ]
+
+    workload_metadata_config {
+      mode = "GKE_METADATA"
+    }
+  }
+}
