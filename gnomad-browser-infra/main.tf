@@ -4,6 +4,12 @@ resource "google_service_account" "gke_cluster_sa" {
   display_name = "${var.infra_prefix} GKE nodes"
 }
 
+resource "google_service_account" "es_snapshots" {
+  account_id   = "${var.infra_prefix}-es-snaps"
+  description  = "The service account for the elasticsearch snapshot lifecycle manager."
+  display_name = "${var.infra_prefix} Elasticsearch Snapshots"
+}
+
 resource "google_project_iam_member" "gke_nodes_iam" {
   for_each = toset([
     "logging.logWriter",
@@ -14,9 +20,30 @@ resource "google_project_iam_member" "gke_nodes_iam" {
   ])
 
   role    = "roles/${each.key}"
-  member  = "serviceAccount:${google_service_account.gke_cluster_sa.email}"
+  member  = google_service_account.gke_cluster_sa.member
   project = var.project_id
 }
+
+resource "google_service_account_iam_member" "es_snapshots" {
+  role               = "roles/iam.workloadIdentityUser"
+  service_account_id = google_service_account.es_snapshots.name
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[elasticsearch/es-snaps]"
+}
+
+resource "google_storage_bucket_iam_member" "es_snapshots" {
+  bucket = google_storage_bucket.elastic_snapshots.name
+  role   = "roles/storage.admin"
+  member = google_service_account.es_snapshots.member
+}
+
+resource "google_storage_bucket" "elastic_snapshots" {
+  name                        = "${var.infra_prefix}-elastic-snaps"
+  location                    = var.es_snapshots_bucket_location
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = true
+  public_access_prevention    = enforced
+}
+
 
 # A document containing the Broad's public IP subnets for allowing Office and VPN IPs in firewalls
 data "google_storage_bucket_object_content" "internal_networks" {
@@ -85,6 +112,9 @@ resource "google_container_node_pool" "main_pool" {
     workload_metadata_config {
       mode = "GKE_METADATA"
     }
+
+    tags = ["${var.infra_prefix}-gke", "${var.infra_prefix}-gke-main"]
+
   }
 }
 
@@ -105,6 +135,9 @@ resource "google_container_node_pool" "redis_pool" {
     workload_metadata_config {
       mode = "GKE_METADATA"
     }
+
+    tags = ["${var.infra_prefix}-gke", "${var.infra_prefix}-gke-redis"]
+
   }
 }
 
@@ -124,5 +157,22 @@ resource "google_container_node_pool" "es_data_pool" {
     workload_metadata_config {
       mode = "GKE_METADATA"
     }
+
+    tags = ["${var.infra_prefix}-gke", "${var.infra_prefix}-gke-es-data"]
+
   }
+}
+
+resource "google_compute_firewall" "es_webbook" {
+  name        = "${var.vpc_network_name}-es-webhook"
+  network     = var.vpc_network_name
+  description = "Creates firewall rule allowing ECK admission webhook"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["9443"]
+  }
+
+  source_ranges = [var.gke_control_plane_cidr_range]
+  target_tags   = ["${var.infra_prefix}-gke-es-data"]
 }

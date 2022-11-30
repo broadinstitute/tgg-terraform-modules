@@ -38,16 +38,24 @@ variable "gke_services_secondary_range_name" {
   type        = string
   default     = "gke-services"
 }
-# variable "redis_pool_num_nodes" {
-#   description = "The number of nodes that the redis GKE node pool should contain"
-#   type        = number
-# }
 
-# variable "redis_pool_machine_type" {
-#   description = "The GCE machine type that should be used for the redis GKE node pool"
-#   type        = string
-#   default     = "e2-custom-6-49152" # TODO create this?
-# }
+variable "gke_redis_pool_num_nodes" {
+  description = "The number of nodes that the redis GKE node pool should contain"
+  type        = number
+  default     = 1
+}
+
+variable "gke_redis_pool_machine_type" {
+  description = "The GCE machine type that should be used for the redis GKE node pool"
+  type        = string
+  default     = "e2-custom-6-49152"
+}
+
+variable "gke_redis_pool_zone" {
+  description = "The zone where the GKE Redis pool should be launched. Leaving this unspecified will result in the pool being launched in the same zone as the control plane."
+  type        = string
+  default     = ""
+}
 
 variable "gke_main_pool_num_nodes" {
   description = "The number of nodes that the main/default GKE node pool should contain"
@@ -61,18 +69,31 @@ variable "gke_main_pool_machine_type" {
 }
 
 variable "gke_main_pool_zone" {
-  description = "The zone where the GKE Main pool should be launched"
+  description = "The zone where the GKE Main pool should be launched. Leaving this unspecified will result in the pool being launched in the same zone as the control plane."
   type        = string
   default     = ""
 }
 
-# variable "es_data_pool_num_nodes" {
-#   description = "The number of nodes that the elasticsearch data GKE node pool should contain"
-#   type        = number
-# }
+variable "es_data_pool_num_nodes" {
+  description = "The number of nodes that the elasticsearch data GKE node pool should contain"
+  type        = number
+  default     = 3
+}
 
-# variable "es_data_pool_machine_type" {
-#   description = "The GCE machine type that should be used for the elasticsearch data GKE node pool"
-#   type        = string
-#   default     = "e2-highmem-8"
-# }
+variable "es_data_pool_machine_type" {
+  description = "The GCE machine type that should be used for the elasticsearch data GKE node pool"
+  type        = string
+  default     = "e2-highmem-8"
+}
+
+variable "gke_es_data_pool_zone" {
+  description = "The zone where the GKE Main pool should be launched. Leaving this unspecified will result in the pool being launched in the same zone as the control plane."
+  type        = string
+  default     = ""
+}
+
+variable "es_snapshots_bucket_location" {
+  description = "The GCS location for the elasticsearch snapshots bucket"
+  type        = string
+  default     = "us-east1"
+}
