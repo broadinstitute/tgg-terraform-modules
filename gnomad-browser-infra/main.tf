@@ -123,6 +123,28 @@ resource "google_container_cluster" "browser_cluster" {
   release_channel {
     channel = "STABLE"
   }
+
+  maintenance_policy {
+    dynamic "recurring_window" {
+      for_each = var.gke_recurring_maint_windows
+      content {
+        start_time = recurring_window.value.start_time
+        end_time   = recurring_window.value.end_time
+        recurrence = recurring_window.value.recurrence
+      }
+    }
+
+    dynamic "maintenance_exclusion" {
+      for_each = var.gke_maint_exclusions
+      content {
+        start_time     = maintenance_exclusion.value.start_time
+        end_time       = maintenance_exclusion.value.end_time
+        exclusion_name = maintenance_exclusion.value.name
+
+      }
+    }
+  }
+
 }
 
 resource "google_container_node_pool" "main_pool" {
