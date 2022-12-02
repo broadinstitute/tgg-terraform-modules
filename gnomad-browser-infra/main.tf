@@ -12,7 +12,7 @@ resource "google_service_account" "es_snapshots" {
 
 resource "google_service_account" "data_pipeline" {
   account_id   = "${var.infra_prefix}-data-pipeline"
-  description  = "The service account for runnint the gnomAD data pipeline"
+  description  = "The service account for running the gnomAD data pipeline"
   display_name = "${var.infra_prefix} Data pipeline Service Account"
 }
 
