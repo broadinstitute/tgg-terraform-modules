@@ -52,8 +52,11 @@ variable "gke_services_secondary_range_name" {
   default     = "gke-services"
 }
 
+# see https://cloud.google.com/kubernetes-engine/docs/how-to/maintenance-windows-and-exclusions#maintenance-window
+# for more information regarding timestamp formatting and recurrence spec syntax
 variable "gke_recurring_maint_windows" {
-  type = list(map(string))
+  description = "A start time, end time and recurrence pattern for GKE automated maintenance windows"
+  type        = list(map(string))
   default = [{
     start_time = "1970-01-01T07:00:00Z"
     end_time   = "1970-01-01T11:00:00Z"
@@ -61,9 +64,13 @@ variable "gke_recurring_maint_windows" {
   }]
 }
 
+# see https://cloud.google.com/kubernetes-engine/docs/how-to/maintenance-windows-and-exclusions##configuring_a_maintenance_exclusion
+# for more information regarding timestamp formatting
+# Example value: [{ start_time = "2021-04-30T19:25:44Z", end_time = "2021-05-04T19:25:44Z", name = "sre-on-vacation" }]
 variable "gke_maint_exclusions" {
-  type    = list(map(string))
-  default = []
+  description = "Specified times and dates that non-emergency GKE maintenance should pause"
+  type        = list(map(string))
+  default     = []
 }
 
 variable "gke_redis_pool_num_nodes" {
