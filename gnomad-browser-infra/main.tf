@@ -6,7 +6,7 @@ resource "google_service_account" "gke_cluster_sa" {
 
 resource "google_service_account" "es_snapshots" {
   account_id   = "${var.infra_prefix}-es-snaps"
-  description  = "The service account for the elasticsearch snapshot lifecycle manager."
+  description  = "The service account for the elasticsearch snapshot lifecycle manager"
   display_name = "${var.infra_prefix} Elasticsearch Snapshots"
 }
 

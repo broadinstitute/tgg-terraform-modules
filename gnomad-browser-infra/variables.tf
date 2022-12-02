@@ -1,5 +1,6 @@
 variable "project_id" {
-  description = "The name of the target GCP project, for creating IAM memberships."
+  description = "The name of the target GCP project, for creating IAM memberships"
+  type        = string
 }
 
 variable "infra_prefix" {
@@ -8,17 +9,17 @@ variable "infra_prefix" {
 }
 
 variable "vpc_network_name" {
-  description = "The name of the VPC network that the GKE cluster should reside in."
+  description = "The name of the VPC network that the GKE cluster should reside in"
   type        = string
 }
 
 variable "vpc_subnet_name" {
-  description = "The name of the VPC network subnet that the GKE cluster nodes should reside in."
+  description = "The name of the VPC network subnet that the GKE cluster nodes should reside in"
   type        = string
 }
 
 variable "gke_control_plane_zone" {
-  description = "The GCP zone where the GKE control plane will reside."
+  description = "The GCP zone where the GKE control plane will reside"
   type        = string
 }
 
@@ -66,7 +67,7 @@ variable "gke_redis_pool_machine_type" {
 }
 
 variable "gke_redis_pool_zone" {
-  description = "The zone where the GKE Redis pool should be launched. Leaving this unspecified will result in the pool being launched in the same zone as the control plane."
+  description = "The zone where the GKE Redis pool should be launched. Leaving this unspecified will result in the pool being launched in the same zone as the control plane"
   type        = string
   default     = ""
 }
@@ -83,7 +84,7 @@ variable "gke_main_pool_machine_type" {
 }
 
 variable "gke_main_pool_zone" {
-  description = "The zone where the GKE Main pool should be launched. Leaving this unspecified will result in the pool being launched in the same zone as the control plane."
+  description = "The zone where the GKE Main pool should be launched. Leaving this unspecified will result in the pool being launched in the same zone as the control plane"
   type        = string
   default     = ""
 }
@@ -101,7 +102,7 @@ variable "gke_es_data_pool_machine_type" {
 }
 
 variable "gke_es_data_pool_zone" {
-  description = "The zone where the GKE Main pool should be launched. Leaving this unspecified will result in the pool being launched in the same zone as the control plane."
+  description = "The zone where the GKE Main pool should be launched. Leaving this unspecified will result in the pool being launched in the same zone as the control plane"
   type        = string
   default     = ""
 }
