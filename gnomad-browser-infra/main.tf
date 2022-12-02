@@ -91,9 +91,15 @@ resource "google_storage_bucket" "data_pipeline" {
 
 # A document containing the Broad's public IP subnets for allowing Office and VPN IPs in firewalls
 data "google_storage_bucket_object_content" "internal_networks" {
+  count  = var.gke_include_broad_inst_authorized_networks ? 1 : 0
   name   = "internal_networks.json"
   bucket = "broad-institute-networking"
 }
+
+locals {
+  broad_networks = length(data.google_storage_bucket_object_content.internal_networks) > 0 ? jsondecode(data.google_storage_bucket_object_content.internal_networks[0].content) : []
+}
+
 
 resource "google_container_cluster" "browser_cluster" {
   name            = "${var.infra_prefix}-cluster"
@@ -109,7 +115,7 @@ resource "google_container_cluster" "browser_cluster" {
 
   master_authorized_networks_config {
     dynamic "cidr_blocks" {
-      for_each = toset(jsondecode(data.google_storage_bucket_object_content.internal_networks.content))
+      for_each = flatten([var.gke_control_plane_authorized_networks, local.broad_networks])
       content {
         cidr_block = cidr_blocks.key
       }

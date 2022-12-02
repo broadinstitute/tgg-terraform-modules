@@ -28,6 +28,18 @@ variable "gke_control_plane_cidr_range" {
   type        = string
 }
 
+variable "gke_control_plane_authorized_networks" {
+  description = "The IPv4 CIDR ranges that should be allowed to connect to the control plane"
+  type        = list(string)
+  default     = []
+}
+
+variable "gke_include_broad_inst_authorized_networks" {
+  description = "Include the Broad Institute network ranges in the GKE control plane authorized networks"
+  type        = bool
+  default     = false
+}
+
 variable "gke_cluster_secondary_range_name" {
   description = "The name of the secondary subnet IP range to use for Pods in the GKE cluster"
   type        = string
