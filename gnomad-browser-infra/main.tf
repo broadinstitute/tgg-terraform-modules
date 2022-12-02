@@ -97,7 +97,7 @@ data "google_storage_bucket_object_content" "internal_networks" {
 }
 
 locals {
-  broad_networks = length(data.google_storage_bucket_object_content.internal_networks) > 0 ? jsondecode(data.google_storage_bucket_object_content.internal_networks[0].content) : []
+  broad_networks = length(data.google_storage_bucket_object_content.internal_networks) > 0 ? toset(jsondecode(data.google_storage_bucket_object_content.internal_networks[0].content)) : []
 }
 
 
@@ -115,7 +115,14 @@ resource "google_container_cluster" "browser_cluster" {
 
   master_authorized_networks_config {
     dynamic "cidr_blocks" {
-      for_each = flatten([var.gke_control_plane_authorized_networks, local.broad_networks])
+      for_each = var.gke_control_plane_authorized_networks
+      content {
+        cidr_block = cidr_blocks.key
+      }
+    }
+
+    dynamic "cidr_blocks" {
+      for_each = local.broad_networks
       content {
         cidr_block = cidr_blocks.key
       }
