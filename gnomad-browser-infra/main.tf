@@ -69,7 +69,7 @@ resource "google_storage_bucket" "elastic_snapshots" {
   public_access_prevention    = "enforced"
 
   labels = {
-    "deployment" = "${var.infra_prefix}"
+    "deployment" = var.infra_prefix
     "terraform"  = "true"
     "component"  = "elasticsearch"
   }
@@ -83,7 +83,7 @@ resource "google_storage_bucket" "data_pipeline" {
   public_access_prevention    = "enforced"
 
   labels = {
-    "deployment" = "${var.infra_prefix}"
+    "deployment" = var.infra_prefix
     "terraform"  = "true"
     "component"  = "data-pipeline"
   }
@@ -102,7 +102,7 @@ resource "google_container_cluster" "browser_cluster" {
   subnetwork      = var.vpc_subnet_name
   networking_mode = "VPC_NATIVE"
   resource_labels = {
-    "deployment" = "${var.infra_prefix}"
+    "deployment" = var.infra_prefix
     "terraform"  = "true"
     "component"  = "gke"
   }
