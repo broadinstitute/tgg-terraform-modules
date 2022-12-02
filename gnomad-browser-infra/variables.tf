@@ -87,6 +87,7 @@ variable "gke_redis_pool_zone" {
 variable "gke_main_pool_num_nodes" {
   description = "The number of nodes that the main/default GKE node pool should contain"
   type        = number
+  default     = 2
 }
 
 variable "gke_main_pool_machine_type" {
