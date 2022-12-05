@@ -73,6 +73,12 @@ variable "gke_maint_exclusions" {
   default     = []
 }
 
+variable "gke_preemptible_nodes" {
+  description = "Whether or not GKE nodes should be deployed as preemptible"
+  type        = bool
+  default     = false
+}
+
 variable "gke_redis_pool_num_nodes" {
   description = "The number of nodes that the redis GKE node pool should contain"
   type        = number

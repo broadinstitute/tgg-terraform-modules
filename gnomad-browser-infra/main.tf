@@ -184,10 +184,8 @@ resource "google_container_node_pool" "main_pool" {
   node_count = var.gke_main_pool_num_nodes
 
   node_config {
-    preemptible  = true
-    machine_type = var.gke_main_pool_machine_type
-
-    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
+    machine_type    = var.gke_main_pool_machine_type
+    preemptible     = var.gke_preemptible_nodes
     service_account = google_service_account.gke_cluster_sa.email
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
@@ -209,8 +207,8 @@ resource "google_container_node_pool" "redis_pool" {
   node_count = var.gke_redis_pool_num_nodes
 
   node_config {
-    machine_type = var.gke_redis_pool_machine_type
-
+    machine_type    = var.gke_redis_pool_machine_type
+    preemptible     = var.gke_preemptible_nodes
     service_account = google_service_account.gke_cluster_sa.email
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
@@ -237,6 +235,7 @@ resource "google_container_node_pool" "es_data_pool" {
 
   node_config {
     machine_type    = var.gke_es_data_pool_machine_type
+    preemptible     = var.gke_preemptible_nodes
     service_account = google_service_account.gke_cluster_sa.email
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
