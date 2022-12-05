@@ -63,6 +63,7 @@ resource "google_compute_router_nat" "router_nat" {
 
 # A document containing the Broad's public IP subnets for allowing Office and VPN IPs in firewalls
 data "google_storage_bucket_object_content" "internal_networks" {
+  count  = var.allow_broad_institute_networks ? 0 : 1
   name   = "internal_networks.json"
   bucket = "broad-institute-networking"
 }
@@ -91,6 +92,7 @@ resource "google_compute_firewall" "dataproc_internal" {
 }
 
 resource "google_compute_firewall" "allow_ssh_broad_access" {
+  count   = var.allow_broad_institute_networks ? 0 : 1
   name    = "allow-ssh-broad-dataproc"
   network = google_compute_network.network.name
 
