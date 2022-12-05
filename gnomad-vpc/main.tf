@@ -68,6 +68,10 @@ data "google_storage_bucket_object_content" "internal_networks" {
   bucket = "broad-institute-networking"
 }
 
+locals {
+  broad_networks = length(data.google_storage_bucket_object_content.internal_networks) > 0 ? jsondecode(data.google_storage_bucket_object_content.internal_networks[0].content) : []
+}
+
 resource "google_compute_firewall" "dataproc_internal" {
   name        = "dataproc-internal-allow"
   network     = google_compute_network.network.name
@@ -101,7 +105,7 @@ resource "google_compute_firewall" "allow_ssh_broad_access" {
     ports    = ["22"]
   }
 
-  source_ranges = jsondecode(data.google_storage_bucket_object_content.internal_networks.content)
+  source_ranges = toset(local.broad_networks)
 
   target_tags = [
     "dataproc-node"
