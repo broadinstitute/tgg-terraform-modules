@@ -110,7 +110,7 @@ resource "google_container_cluster" "browser_cluster" {
   resource_labels = {
     "deployment" = var.infra_prefix
     "terraform"  = "true"
-    "component"  = "gke"
+    "cluster"    = "${var.infra_prefix}-cluster"
   }
 
   master_authorized_networks_config {
@@ -222,6 +222,10 @@ resource "google_container_node_pool" "redis_pool" {
 
     tags = ["${var.infra_prefix}-gke", "${var.infra_prefix}-gke-redis"]
 
+    labels = {
+      "component" = "redis"
+    }
+
   }
 }
 
@@ -243,6 +247,10 @@ resource "google_container_node_pool" "es_data_pool" {
     }
 
     tags = ["${var.infra_prefix}-gke", "${var.infra_prefix}-gke-es-data"]
+
+    labels = {
+      "component" = "elasticsearch"
+    }
 
   }
 }
