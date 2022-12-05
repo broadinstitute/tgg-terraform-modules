@@ -222,7 +222,7 @@ resource "google_container_node_pool" "redis_pool" {
 
     tags = ["${var.infra_prefix}-gke", "${var.infra_prefix}-gke-redis"]
 
-    labels = {
+    resource_labels = {
       "component" = "redis"
     }
 
@@ -248,7 +248,7 @@ resource "google_container_node_pool" "es_data_pool" {
 
     tags = ["${var.infra_prefix}-gke", "${var.infra_prefix}-gke-es-data"]
 
-    labels = {
+    resource_labels = {
       "component" = "elasticsearch"
     }
 
