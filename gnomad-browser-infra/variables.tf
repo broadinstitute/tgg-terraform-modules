@@ -114,11 +114,6 @@ variable "gke_node_pools" {
     }
   ]
 }
-variable "gke_preemptible_nodes" {
-  description = "Whether or not GKE nodes should be deployed as preemptible"
-  type        = bool
-  default     = false
-}
 
 variable "es_snapshots_bucket_location" {
   description = "The GCS location for the elasticsearch snapshots bucket"
