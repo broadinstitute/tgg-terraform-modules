@@ -75,7 +75,14 @@ variable "gke_maint_exclusions" {
 
 variable "gke_node_pools" {
   description = "A list of node pools and their configuration that should be created within the GKE cluster; pools with an empty string for the zone will deploy in the same region as the control plane"
-  type        = list(map(any))
+  type = list(object({
+    pool_name            = string
+    pool_num_nodes       = number
+    pool_machine_type    = string
+    pool_preemptible     = bool
+    pool_zone            = string
+    pool_resource_labels = map(string)
+  }))
   default = [
     {
       "pool_name"            = "main-pool"
