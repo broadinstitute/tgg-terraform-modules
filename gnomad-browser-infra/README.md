@@ -18,9 +18,36 @@ module "gnomad-browser-infra" {
 }
 ```
 
+### Networking / VPC
 This module assumes that you have provisioned a VPC in your GCP project, with a subnet of an appropriate size to run the GKE cluster (A minimum of 8 available IP addresses are needed in the subnet, though larger is highly recommended). That subnet must have two secondary ranges, one for the GKE pods, and one for the GKE services. The names of these ranges are the ones that should be passed in via the `gke_cluster_secondary_range_name` and `gke_services_secondary_range_name` respectively.
 
 If you don't already have a VPC, the [gnomAD VPC](https://github.com/broadinstitute/tgg-terraform-modules/tree/main/gnomad-vpc) module in this repository can provision a VPC that looks like the one this module expects.
+
+### Elasticsearch
+
+This module provisions a service account and GCS bucket for storing elasticsearch snapshots. The GKE cluster will be configured using [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity). The Google Cloud Service Account is associated with a service account called "es-snaps", and scoped to an "elasticsearch" namespace on the K8S cluster. When deploying elasticsearch, if you would like to take advantage of workload identity to avoid using a JSON service account key, you will need to create a K8S service account called "es-snaps" in the "elasticsearch" namespace. Then, the K8S service account needs to be annotated to pair it with the GCS service account created by this module:
+
+```bash
+kubectl -n elasticsearch apply -f - <<EOF
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: es-snaps
+EOF
+```
+
+```bash
+kubectl annotate serviceaccount es-snaps \
+    --namespace elasticsearch \
+    iam.gke.io/gcp-service-account=<your deployment prefix>-es-snaps@YOUR_PROJECT_ID.iam.gserviceaccount.com
+```
+
+If you are using the [ECK Operator](https://www.elastic.co/guide/en/cloud-on-k8s/current/index.html), you should associate your Elasticsearch resources with the K8S service account by adding the following to your `podTemplate.spec`:
+
+```yaml
+automountServiceAccountToken: true
+serviceAccountName: es-snaps
+```
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
