@@ -177,15 +177,16 @@ resource "google_container_cluster" "browser_cluster" {
 
 }
 
-resource "google_container_node_pool" "main_pool" {
-  name       = "main-pool"
-  location   = var.gke_main_pool_zone != "" ? var.gke_main_pool_zone : var.gke_control_plane_zone
+resource "google_container_node_pool" "node_pool" {
+  for_each   = { for pool in var.gke_node_pools : pool.pool_name => pool }
+  name       = each.value.pool_name
+  location   = each.value.pool_zone != "" ? each.value.pool_zone : var.gke_control_plane_zone
   cluster    = google_container_cluster.browser_cluster.name
-  node_count = var.gke_main_pool_num_nodes
+  node_count = each.value.pool_num_nodes
 
   node_config {
-    machine_type    = var.gke_main_pool_machine_type
-    preemptible     = var.gke_preemptible_nodes
+    machine_type    = each.value.pool_machine_type
+    preemptible     = each.value.pool_machine_type
     service_account = google_service_account.gke_cluster_sa.email
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
@@ -195,62 +196,9 @@ resource "google_container_node_pool" "main_pool" {
       mode = "GKE_METADATA"
     }
 
-    tags = ["${var.infra_prefix}-gke", "${var.infra_prefix}-gke-main"]
+    tags = ["${var.infra_prefix}-gke", "${var.infra_prefix}-gke-${each.value.pool_name}"]
 
-  }
-}
-
-resource "google_container_node_pool" "redis_pool" {
-  name       = "redis"
-  location   = var.gke_redis_pool_zone != "" ? var.gke_redis_pool_zone : var.gke_control_plane_zone
-  cluster    = google_container_cluster.browser_cluster.name
-  node_count = var.gke_redis_pool_num_nodes
-
-  node_config {
-    machine_type    = var.gke_redis_pool_machine_type
-    preemptible     = var.gke_preemptible_nodes
-    service_account = google_service_account.gke_cluster_sa.email
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/cloud-platform"
-    ]
-
-    workload_metadata_config {
-      mode = "GKE_METADATA"
-    }
-
-    tags = ["${var.infra_prefix}-gke", "${var.infra_prefix}-gke-redis"]
-
-    resource_labels = {
-      "component" = "redis"
-    }
-
-  }
-}
-
-resource "google_container_node_pool" "es_data_pool" {
-  name       = "es-data"
-  location   = var.gke_es_data_pool_zone != "" ? var.gke_es_data_pool_zone : var.gke_control_plane_zone
-  cluster    = google_container_cluster.browser_cluster.name
-  node_count = var.gke_es_data_pool_num_nodes
-
-  node_config {
-    machine_type    = var.gke_es_data_pool_machine_type
-    preemptible     = var.gke_preemptible_nodes
-    service_account = google_service_account.gke_cluster_sa.email
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/cloud-platform"
-    ]
-
-    workload_metadata_config {
-      mode = "GKE_METADATA"
-    }
-
-    tags = ["${var.infra_prefix}-gke", "${var.infra_prefix}-gke-es-data"]
-
-    resource_labels = {
-      "component" = "elasticsearch"
-    }
-
+    resource_labels = each.value.pool_resource_labels
   }
 }
 
@@ -265,7 +213,7 @@ resource "google_compute_firewall" "es_webbook" {
   }
 
   source_ranges = [var.gke_control_plane_cidr_range]
-  target_tags   = ["${var.infra_prefix}-gke-es-data"]
+  target_tags   = ["${var.infra_prefix}-gke"]
 }
 
 resource "google_compute_global_address" "public_ingress" {
