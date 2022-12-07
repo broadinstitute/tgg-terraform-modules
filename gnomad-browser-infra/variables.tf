@@ -73,64 +73,46 @@ variable "gke_maint_exclusions" {
   default     = []
 }
 
-variable "gke_preemptible_nodes" {
-  description = "Whether or not GKE nodes should be deployed as preemptible"
-  type        = bool
-  default     = false
-}
-
-variable "gke_redis_pool_num_nodes" {
-  description = "The number of nodes that the redis GKE node pool should contain"
-  type        = number
-  default     = 1
-}
-
-variable "gke_redis_pool_machine_type" {
-  description = "The GCE machine type that should be used for the redis GKE node pool"
-  type        = string
-  default     = "e2-custom-6-49152"
-}
-
-variable "gke_redis_pool_zone" {
-  description = "The zone where the GKE Redis pool should be launched. Leaving this unspecified will result in the pool being launched in the same zone as the control plane"
-  type        = string
-  default     = ""
-}
-
-variable "gke_main_pool_num_nodes" {
-  description = "The number of nodes that the main/default GKE node pool should contain"
-  type        = number
-  default     = 2
-}
-
-variable "gke_main_pool_machine_type" {
-  description = "The GCE machine type that should be used for the main/default GKE node pool"
-  type        = string
-  default     = "e2-standard-4"
-}
-
-variable "gke_main_pool_zone" {
-  description = "The zone where the GKE Main pool should be launched. Leaving this unspecified will result in the pool being launched in the same zone as the control plane"
-  type        = string
-  default     = ""
-}
-
-variable "gke_es_data_pool_num_nodes" {
-  description = "The number of nodes that the elasticsearch data GKE node pool should contain"
-  type        = number
-  default     = 3
-}
-
-variable "gke_es_data_pool_machine_type" {
-  description = "The GCE machine type that should be used for the elasticsearch data GKE node pool"
-  type        = string
-  default     = "e2-highmem-8"
-}
-
-variable "gke_es_data_pool_zone" {
-  description = "The zone where the GKE Main pool should be launched. Leaving this unspecified will result in the pool being launched in the same zone as the control plane"
-  type        = string
-  default     = ""
+variable "gke_node_pools" {
+  description = "A list of node pools and their configuration that should be created within the GKE cluster; pools with an empty string for the zone will deploy in the same region as the control plane"
+  type = list(object({
+    pool_name            = string
+    pool_num_nodes       = number
+    pool_machine_type    = string
+    pool_preemptible     = bool
+    pool_zone            = string
+    pool_resource_labels = map(string)
+  }))
+  default = [
+    {
+      "pool_name"            = "main-pool"
+      "pool_num_nodes"       = 2
+      "pool_machine_type"    = "e2-standard-4"
+      "pool_preemptible"     = false
+      "pool_zone"            = ""
+      "pool_resource_labels" = {}
+    },
+    {
+      "pool_name"         = "redis"
+      "pool_num_nodes"    = 1
+      "pool_machine_type" = "e2-custom-6-49152"
+      "pool_preemptible"  = false
+      "pool_zone"         = ""
+      "pool_resource_labels" = {
+        "component" = "redis"
+      }
+    },
+    {
+      "pool_name"         = "es-data"
+      "pool_num_nodes"    = 3
+      "pool_machine_type" = "e2-highmem-8"
+      "pool_preemptible"  = false
+      "pool_zone"         = ""
+      "pool_resource_labels" = {
+        "component" = "elasticsearch"
+      }
+    }
+  ]
 }
 
 variable "es_snapshots_bucket_location" {
