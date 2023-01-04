@@ -97,7 +97,7 @@ resource "google_compute_firewall" "dataproc_internal" {
 
 resource "google_compute_firewall" "allow_ssh_broad_access" {
   count   = var.allow_broad_institute_networks ? 1 : 0
-  name    = "allow-ssh-broad-dataproc"
+  name    = "${var.nework_name_prefix}-allow-ssh-broad-dataproc"
   network = google_compute_network.network.name
 
   allow {
@@ -114,7 +114,7 @@ resource "google_compute_firewall" "allow_ssh_broad_access" {
 
 # allows SSH access from the Identity Aware Proxy service (for cloud-console based SSH sessions)
 resource "google_compute_firewall" "iap_forwarding" {
-  name    = "iap-access"
+  name    = "${var.network_name_prefix}-iap-access"
   network = google_compute_network.network.name
 
   allow {
