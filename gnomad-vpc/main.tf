@@ -1,10 +1,10 @@
 resource "google_compute_network" "network" {
-  name                    = "${var.network_name_prefix}-network"
+  name                    = var.network_name_prefix
   auto_create_subnetworks = false
 }
 
 resource "google_compute_subnetwork" "gnomad_subnet" {
-  name          = "${var.network_name_prefix}-gnomad-subnet"
+  name          = "${var.network_name_prefix}-gke"
   ip_cidr_range = var.gnomad_primary_subnet_range # "192.168.0.0/20"
   network       = google_compute_network.network.id
 
@@ -29,7 +29,7 @@ resource "google_compute_subnetwork" "gnomad_subnet" {
 }
 
 resource "google_compute_subnetwork" "dataproc_subnet" {
-  name          = "${var.network_name_prefix}-dataproc-subnet"
+  name          = "${var.network_name_prefix}-dataproc"
   ip_cidr_range = var.dataproc_primary_subnet_range # "192.168.255.0/24"
   network       = google_compute_network.network.id
 
