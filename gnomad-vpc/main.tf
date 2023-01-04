@@ -73,7 +73,7 @@ locals {
 }
 
 resource "google_compute_firewall" "dataproc_internal" {
-  name        = "dataproc-internal-allow"
+  name        = "${var.network_name_prefix}-dataproc-internal-allow"
   network     = google_compute_network.network.name
   description = "Creates firewall rule allowing dataproc tagged instances to reach eachother"
 
