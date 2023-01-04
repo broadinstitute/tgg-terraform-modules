@@ -97,7 +97,7 @@ resource "google_compute_firewall" "dataproc_internal" {
 
 resource "google_compute_firewall" "allow_ssh_broad_access" {
   count   = var.allow_broad_institute_networks ? 1 : 0
-  name    = "${var.nework_name_prefix}-allow-ssh-broad-dataproc"
+  name    = "${var.network_name_prefix}-allow-ssh-broad-dataproc"
   network = google_compute_network.network.name
 
   allow {
