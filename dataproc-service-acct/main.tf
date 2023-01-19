@@ -16,6 +16,11 @@ resource "google_project_iam_member" "grant_sa_service_usage" {
   member  = "serviceAccount:${var.service_account_email}"
 }
 
+resource "google_project_iam_member" "grant_user_os_login" {
+  project = var.project_id
+  role    = "roles/compute.osLogin"
+  member  = "user:${var.user_principal}"
+}
 
 resource "google_storage_bucket" "user_dataproc_stage" {
   project                     = var.project_id
