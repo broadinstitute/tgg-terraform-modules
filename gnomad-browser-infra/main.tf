@@ -102,7 +102,7 @@ locals {
 
 
 resource "google_container_cluster" "browser_cluster" {
-  name            = "${var.infra_prefix}-cluster"
+  name            = "${var.infra_prefix}"
   location        = var.gke_control_plane_zone
   network         = var.vpc_network_name
   subnetwork      = var.vpc_subnet_name
@@ -110,7 +110,7 @@ resource "google_container_cluster" "browser_cluster" {
   resource_labels = {
     "deployment" = var.infra_prefix
     "terraform"  = "true"
-    "cluster"    = "${var.infra_prefix}-cluster"
+    "cluster"    = "${var.infra_prefix}"
   }
 
   master_authorized_networks_config {
