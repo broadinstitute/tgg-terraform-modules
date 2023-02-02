@@ -34,6 +34,19 @@ resource "google_project_iam_member" "default_compute_object_admin" {
   member  = "serviceAccount:${google_project.current_project.number}-compute@developer.gserviceaccount.com"
 }
 
+resource "google_project_iam_custom_role" "bucket_list_role" {
+  role_id     = "gnomADProjBucketList"
+  title       = "gnomAD Project Bucket List"
+  description = "Provides access to list GCS buckets"
+  permissions = ["storage.buckets.list"]
+}
+
+resource "google_project_iam_member" "default_compute_bucket_list" {
+  project = google_project.current_project.project_id
+  role    = google_project_iam_custom_role.bucket_list_role.role_id
+  member  = "serviceAccount:${google_project.current_project.number}-compute@developer.gserviceaccount.com"
+}
+
 resource "google_project_iam_member" "owner_group" {
   project = google_project.current_project.project_id
   role    = "roles/owner"
