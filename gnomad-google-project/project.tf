@@ -34,6 +34,12 @@ resource "google_project_iam_member" "default_compute_object_admin" {
   member  = "serviceAccount:${google_project.current_project.number}-compute@developer.gserviceaccount.com"
 }
 
+resource "google_project_iam_member" "default_compute_service_usage" {
+  project = google_project.current_project.project_id
+  role    = "roles/serviceusage.serviceUsageConsume"
+  member  = "serviceAccount:${google_project.current_project.number}-compute@developer.gserviceaccount.com"
+}
+
 resource "google_project_iam_custom_role" "bucket_list_role" {
   project     = google_project.current_project.project_id
   role_id     = "gnomADProjBucketList"
