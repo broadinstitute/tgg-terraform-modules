@@ -36,7 +36,7 @@ resource "google_project_iam_member" "default_compute_object_admin" {
 
 resource "google_project_iam_member" "default_compute_service_usage" {
   project = google_project.current_project.project_id
-  role    = "roles/serviceusage.serviceUsageConsume"
+  role    = "roles/serviceusage.serviceUsageConsumer"
   member  = "serviceAccount:${google_project.current_project.number}-compute@developer.gserviceaccount.com"
 }
 
