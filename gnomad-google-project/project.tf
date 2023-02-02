@@ -43,7 +43,7 @@ resource "google_project_iam_custom_role" "bucket_list_role" {
 
 resource "google_project_iam_member" "default_compute_bucket_list" {
   project = google_project.current_project.project_id
-  role    = google_project_iam_custom_role.bucket_list_role.role_id
+  role    = google_project_iam_custom_role.bucket_list_role.id
   member  = "serviceAccount:${google_project.current_project.number}-compute@developer.gserviceaccount.com"
 }
 
