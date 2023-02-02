@@ -35,6 +35,7 @@ resource "google_project_iam_member" "default_compute_object_admin" {
 }
 
 resource "google_project_iam_custom_role" "bucket_list_role" {
+  project     = google_project.current_project.project_id
   role_id     = "gnomADProjBucketList"
   title       = "gnomAD Project Bucket List"
   description = "Provides access to list GCS buckets"
