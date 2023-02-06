@@ -1,6 +1,6 @@
 variable "project_id" {
   type        = string
-  description = "The string that should be used to create the unique ID google project; Will be suffixed with a random identifier"
+  description = "The string that should be used to create the unique ID google project; Will be suffixed with a random identifier."
 
   validation {
     condition     = length(var.project_id) >= 3 && length(var.project_id) <= 26
@@ -15,7 +15,7 @@ variable "project_name" {
 
 variable "apis_to_enable" {
   type        = list(string)
-  description = "The list of additional APIs to enable. We always enable dataproc and cloudfunctions"
+  description = "The list of additional APIs to enable. We always enable dataproc and cloudfunctions."
   default     = []
 }
 
@@ -43,12 +43,29 @@ variable "owner_group_id" {
 
 variable "allow_broad_inst_ssh_access" {
   type        = bool
-  description = "Whether to create a firewall rule that allows access to TCP port 22 from Broad Institute networks"
+  description = "Whether to create a firewall rule that allows access to TCP port 22 from Broad Institute networks."
   default     = true
 }
 
 variable "configure_dataproc_firewall_rules" {
   type        = bool
   description = "Whether we should configure firewall rules to allow all traffic between nodes tagged 'dataproc-node'. If you intend to use dataproc, you will need this."
+  default     = true
+}
+
+variable "primary_user_principal" {
+  type        = string
+  description = "The primary user/group of the GCP project. This grants Editor access, and other permissions generally required to use services. Provide a IAM principal style {group/user/serviceAccount}:{email} string."
+}
+
+variable "default_resource_region" {
+  type        = string
+  description = "For managed items that require a region/location"
+  default     = "us-central1"
+}
+
+variable "create_default_buckets" {
+  type        = bool
+  description = "Specifies whether to create default general-use and tmp with 4-day auto-delete lifecycle buckets."
   default     = true
 }

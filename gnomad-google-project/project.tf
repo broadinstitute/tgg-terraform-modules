@@ -59,3 +59,15 @@ resource "google_project_iam_member" "owner_group" {
   role    = "roles/owner"
   member  = "group:${var.owner_group_id}"
 }
+
+resource "google_project_iam_member" "primary_user_editor" {
+  project = google_project.current_project.project_id
+  role    = "roles/editor"
+  member  = var.primary_user_principal
+}
+
+resource "google_project_iam_member" "primary_iap_tunnel_access" {
+  project = google_project.current_project.project_id
+  role    = "roles/iap.tunnelResourceAccessor"
+  member  = var.primary_user_principal
+}
