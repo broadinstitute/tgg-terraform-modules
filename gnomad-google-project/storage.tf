@@ -1,5 +1,6 @@
 resource "google_storage_bucket" "general_use_bucket" {
   count         = var.create_default_buckets ? 1 : 0
+  project       = google_project.current_project.project_id
   name          = "${var.project_id}-storage"
   location      = var.default_resource_region
   storage_class = "STANDARD"
@@ -11,6 +12,7 @@ resource "google_storage_bucket" "general_use_bucket" {
 # TODO: add a -tmp-4day bucket for auto-deletion
 resource "google_storage_bucket" "tmp_4day_bucket" {
   count         = var.create_default_buckets ? 1 : 0
+  project       = google_project.current_project.project_id
   name          = "${var.project_id}-tmp-4day"
   location      = var.default_resource_region
   storage_class = "STANDARD"
