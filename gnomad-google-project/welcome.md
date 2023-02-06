@@ -12,7 +12,7 @@ It comes pre-configured with a few things to aid activities that are typical for
 
 - The compute engine, dataproc, and google cloud storage APIs are enabled
 
-- A VPC network called <network-name> is created so that VMs and dataproc clusters may be launched
+- A VPC network called `<network-name>` is created so that VMs and dataproc clusters may be launched
 	- When launching VMs or Dataproc clusters, you should specify the network name:
 		- `hailctl dataproc start my-cluster --network=network-name, --tags=dataproc-node,ssh-broad`
 		- `gcloud dataproc cluster create my-cluster --network=network-name, --tags=dataproc-node,ssh-broad`
@@ -26,8 +26,8 @@ It comes pre-configured with a few things to aid activities that are typical for
 - A firewall rule to allow SSH access from the GCP Console.
 
 - Two GCS buckets
-	- <projec-name>-storage: A general use bucket that you can write data into
-	- <project-name>-tmp-4day: A scratch space bucket which automatically deletes data that is older than 4 days. Use this for storing temporary files that you don't intend to keep.
+	- `<projec-name>-storage`: A general use bucket that you can write data into
+	- `<project-name>-tmp-4day`: A scratch space bucket which automatically deletes data that is older than 4 days. Use this for storing temporary files that you don't intend to keep.
 
 Your default compute service account is: foobar@developer.googleapis.com. When you need to grant your VMs and clusters access to data and other resources, this is the service account that will need to be granted access.
 
