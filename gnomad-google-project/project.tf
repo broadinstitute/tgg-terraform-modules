@@ -41,6 +41,12 @@ resource "google_project_iam_member" "default_compute_service_usage" {
   member  = "serviceAccount:${google_project.current_project.number}-compute@developer.gserviceaccount.com"
 }
 
+resource "google_project_iam_member" "default_compute_artifact_read" {
+  project = google_project.current_project.project_id
+  role    = "roles/artifactregistry.reader"
+  member  = "serviceAccount:${google_project.current_project.number}-compute@developer.gserviceaccount.com"
+}
+
 resource "google_project_iam_custom_role" "bucket_list_role" {
   project     = google_project.current_project.project_id
   role_id     = "gnomADProjBucketList"
