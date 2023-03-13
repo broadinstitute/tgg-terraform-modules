@@ -75,6 +75,12 @@ resource "google_project_iam_member" "primary_iap_tunnel_access" {
   member  = var.primary_user_principal
 }
 
+resource "google_project_iam_member" "primary_user_artifact_reg_admin" {
+  project = google_project.current_project.project_id
+  role    = "roles/artifactregistry.admin"
+  member  = var.primary_user_principal
+}
+
 # If one is provided, grant storage read/write and artifact registry read access to a hail batch service account
 resource "google_project_iam_member" "hail_batch_object_admin" {
   count   = length(var.hail_batch_service_account) > 0 ? 1 : 0
