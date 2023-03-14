@@ -95,6 +95,13 @@ resource "google_project_iam_member" "hail_batch_object_admin" {
   member  = "serviceAccount:${var.hail_batch_service_account}"
 }
 
+resource "google_project_iam_member" "hail_batch_object_admin" {
+  count   = length(var.hail_batch_service_account) > 0 ? 1 : 0
+  project = google_project.current_project.project_id
+  role    = "roles/storage.legacyBucketWriter"
+  member  = "serviceAccount:${var.hail_batch_service_account}"
+}
+
 resource "google_project_iam_member" "hail_batch_bucket_list" {
   count   = length(var.hail_batch_service_account) > 0 ? 1 : 0
   project = google_project.current_project.project_id
