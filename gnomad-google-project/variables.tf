@@ -69,3 +69,9 @@ variable "create_default_buckets" {
   description = "Specifies whether to create default general-use and tmp with 4-day auto-delete lifecycle buckets."
   default     = true
 }
+
+variable "hail_batch_service_account" {
+  type        = string
+  description = "The email address of a Hail Batch service account, to be granted storage and docker registry access."
+  default     = ""
+}
