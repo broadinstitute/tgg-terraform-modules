@@ -29,6 +29,7 @@ resource "google_compute_subnetwork" "gnomad_subnet" {
 }
 
 resource "google_compute_subnetwork" "dataproc_subnet" {
+  count         = var.dataproc_enable_subnet ? 1 : 0
   name          = "${var.network_name_prefix}-dataproc"
   ip_cidr_range = var.dataproc_primary_subnet_range # "192.168.255.0/24"
   network       = google_compute_network.network.id
@@ -73,6 +74,7 @@ locals {
 }
 
 resource "google_compute_firewall" "dataproc_internal" {
+  count       = var.dataproc_enable_subnet ? 1 : 0
   name        = "${var.network_name_prefix}-dataproc-internal-allow"
   network     = google_compute_network.network.name
   description = "Creates firewall rule allowing dataproc tagged instances to reach eachother"

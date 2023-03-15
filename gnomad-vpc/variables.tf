@@ -18,6 +18,12 @@ variable "gnomad_primary_subnet_range" {
   type        = string
 }
 
+variable "dataproc_enable_subnet" {
+  description = "Specify whether or not to create a vpc subnet for dataproc nodes"
+  type        = bool
+  default     = true
+}
+
 variable "dataproc_primary_subnet_range" {
   description = "The IP address range to use for the primary dataproc subnet"
   type        = string
