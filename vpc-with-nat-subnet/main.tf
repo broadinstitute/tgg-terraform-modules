@@ -22,13 +22,13 @@ resource "google_compute_subnetwork" "subnet" {
 }
 
 resource "google_compute_router" "router" {
-  name    = "${var.network_name_prefix}-nat"
+  name    = "${var.network_name}-nat"
   network = google_compute_network.network.id
 }
 
 
 resource "google_compute_router_nat" "router_nat" {
-  name                               = "${var.network_name_prefix}-router-nat"
+  name                               = "${var.network_name}-router-nat"
   router                             = google_compute_router.router.name
   region                             = google_compute_router.router.region
   nat_ip_allocate_option             = "AUTO_ONLY"
