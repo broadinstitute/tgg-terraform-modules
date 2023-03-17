@@ -4,10 +4,16 @@ variable "network_name" {
   default     = "atlantis"
 }
 
-variable "subnet_name" {
-  description = "The name of the primary subnet"
+variable "subnet_name_suffix" {
+  description = "The suffix for the name of the primary subnet; resulting name is network_name-subnet_name_suffix"
   type        = string
   default     = "gke"
+}
+
+variable "primary_subnet_cidr" {
+  description = "The RFC1918 CIDR mask for the primary subnet range"
+  type        = string
+  default     = "192.168.0.0/20"
 }
 
 variable "secondary_network_ranges" {

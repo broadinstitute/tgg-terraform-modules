@@ -4,8 +4,8 @@ resource "google_compute_network" "network" {
 }
 
 resource "google_compute_subnetwork" "subnet" {
-  name          = "${var.network_name}-${var.subnet_name}"
-  ip_cidr_range = var.primary_subnet_cidr # "192.168.0.0/20"
+  name          = "${var.network_name}-${var.subnet_name_suffix}"
+  ip_cidr_range = var.primary_subnet_cidr
   network       = google_compute_network.network.name
 
   secondary_ip_range = var.secondary_ranges
