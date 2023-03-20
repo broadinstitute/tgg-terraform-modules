@@ -1,7 +1,7 @@
 # include GKE cluster
 
 module "atlantis-gke" {
-  source           = "github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster?ref=74237dbf5fa02ef045ca920f5907453477e2054a"
+  source           = "github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster?ref=d1f96ee484ffdc3f85461d8613c04054aca7ddbc"
   gke_cluster_name = "tgg-atlantis"
   project_name     = "tgg-automation"
   resource_labels = {
