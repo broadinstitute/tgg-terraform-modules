@@ -19,6 +19,12 @@ resource "google_service_account" "atlantis_runner" {
   display_name = "TGG Atlantis Runner"
 }
 
+resource "google_service_account_iam_member" "es_snapshots" {
+  role               = "roles/iam.workloadIdentityUser"
+  service_account_id = google_service_account.atlantis_runner.name
+  member             = "serviceAccount:tgg-automation.svc.id.goog[atlantis/atlantis]"
+}
+
 # static IP, tls cert etc
 resource "google_compute_global_address" "atlantis_ip" {
   name = "tgg-atlantis"
