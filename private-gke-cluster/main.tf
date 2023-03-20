@@ -33,6 +33,7 @@ resource "google_container_cluster" "gke_cluster" {
   network         = var.vpc_network_name
   subnetwork      = var.vpc_subnet_name
   networking_mode = "VPC_NATIVE"
+  location        = var.gke_control_plane_zone
   resource_labels = var.resource_labels
 
   master_authorized_networks_config {
