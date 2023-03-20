@@ -89,7 +89,7 @@ resource "google_container_node_pool" "node_pool" {
   node_config {
     machine_type    = each.value.pool_machine_type
     preemptible     = each.value.pool_preemptible
-    service_account = google_service_account.gke_cluster_sa.email
+    service_account = google_service_account.gke_nodes.email
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
