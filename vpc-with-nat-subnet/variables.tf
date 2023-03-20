@@ -18,7 +18,10 @@ variable "primary_subnet_cidr" {
 
 variable "secondary_network_ranges" {
   description = "A list of network range objects"
-  type        = list(object)
+  type = list(object({
+    range_name    = string
+    ip_cidr_range = string
+  }))
   default = [
     {
       range_name    = "gke-services"
