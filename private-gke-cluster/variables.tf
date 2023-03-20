@@ -8,6 +8,12 @@ variable "project_name" {
   type        = string
 }
 
+variable "gke_control_plane_zone" {
+  description = "The zone to launch the GKE cluster in"
+  type        = string
+  default     = "us-central1-c"
+}
+
 variable "gke_master_ipv4_cidr_block" {
   description = "The IPv4 CIDR Range (RFC1918) that should be used for the control plane"
   type        = string
