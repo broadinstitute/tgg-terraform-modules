@@ -21,5 +21,5 @@ resource "google_service_account" "atlantis_runner" {
 
 # static IP, tls cert etc
 resource "google_compute_global_address" "atlantis_ip" {
-  name = "TGG Atlantis"
+  name = "tgg-atlantis"
 }
