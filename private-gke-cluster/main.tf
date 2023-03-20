@@ -38,7 +38,7 @@ resource "google_container_cluster" "gke_cluster" {
   master_authorized_networks_config {
 
     dynamic "cidr_blocks" {
-      for_each = jsondecode(data.google_storage_bucket_object_content.internal_networks.content)
+      for_each = toset(jsondecode(data.google_storage_bucket_object_content.internal_networks.content))
       content {
         cidr_block = cidr_blocks.key
       }
