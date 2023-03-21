@@ -29,3 +29,40 @@ resource "google_service_account_iam_member" "es_snapshots" {
 resource "google_compute_global_address" "atlantis_ip" {
   name = "tgg-atlantis"
 }
+
+# Cloudarmor policy for restricting access to the atlantis events endpoint
+data "github_ip_ranges" "github_hook_ips" {}
+
+resource "google_compute_security_policy" "atlantis_cloudarmor_policy" {
+  name = "atlantis-events-policy"
+
+  # subnets for the Broad
+  # only 5 cidrs allowed per rule
+  rule {
+    action   = "allow"
+    priority = "0"
+
+    match {
+      versioned_expr = "SRC_IPS_V1"
+
+      config {
+        src_ip_ranges = data.github_ip_ranges.github_hook_ips.hooks
+      }
+    }
+  }
+
+  # deny traffic here that doesn't match any of the above rules
+  rule {
+    action      = "deny(403)"
+    priority    = "2147483647"
+    description = "Default rule: deny all"
+
+    match {
+      versioned_expr = "SRC_IPS_V1"
+
+      config {
+        src_ip_ranges = ["*"]
+      }
+    }
+  }
+}
