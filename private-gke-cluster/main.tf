@@ -11,7 +11,8 @@ resource "google_project_iam_member" "gke_nodes_iam" {
     "monitoring.metricWriter",
     "monitoring.viewer",
     "stackdriver.resourceMetadata.writer",
-    "storage.objectViewer"
+    "storage.objectViewer",
+    "artifactregistry.reader"
   ])
 
   role    = "roles/${each.key}"
