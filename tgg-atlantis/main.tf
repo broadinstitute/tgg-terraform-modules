@@ -9,6 +9,16 @@ module "atlantis-gke" {
     "deployment" = "atlantis"
     "component"  = "gke"
   }
+  node_pools = [
+    {
+      "pool_name"            = "main-pool"
+      "pool_num_nodes"       = 2
+      "pool_machine_type"    = "e2-standard-2"
+      "pool_preemptible"     = true
+      "pool_zone"            = ""
+      "pool_resource_labels" = {}
+    }
+  ]
   vpc_network_name = var.vpc_network_name
   vpc_subnet_name  = var.vpc_subnet_name
 }
