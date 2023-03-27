@@ -12,7 +12,7 @@ module "atlantis-gke" {
   node_pools = [
     {
       "pool_name"            = "main-pool"
-      "pool_num_nodes"       = 2
+      "pool_num_nodes"       = 3
       "pool_machine_type"    = "e2-standard-2"
       "pool_preemptible"     = true
       "pool_zone"            = ""
