@@ -78,7 +78,7 @@ resource "google_compute_security_policy" "atlantis_cloudarmor_policy" {
 }
 
 # Cloudarmor policy for restricting argocd UI access to Broad networks
-data "google_storage_buckte_object_content" "broad_networks" {
+data "google_storage_bucket_object_content" "broad_networks" {
   name   = "internal_networks.json"
   bucket = "broad-institute-networking"
 }
