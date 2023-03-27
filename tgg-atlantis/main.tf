@@ -46,8 +46,8 @@ data "github_ip_ranges" "github_hook_ips" {}
 resource "google_compute_security_policy" "atlantis_cloudarmor_policy" {
   name = "atlantis-events-policy"
 
-  # subnets for the Broad
-  # only 5 cidrs allowed per rule
+  # subnets for GitHub
+  # only 10 cidrs allowed per rule
   rule {
     action   = "allow"
     priority = "0"
@@ -76,3 +76,43 @@ resource "google_compute_security_policy" "atlantis_cloudarmor_policy" {
     }
   }
 }
+
+# Cloudarmor policy for restricting argocd UI access to Broad networks
+data "google_storage_buckte_object_content" "broad_networks" {
+  name   = "internal_networks.json"
+  bucket = "broad-institute-networking"
+}
+
+resource "google_compute_security_policy" "argocd_cloudarmor_policy" {
+  name = "argocd-policy"
+
+  # subnets for the Broad
+  rule {
+    action   = "allow"
+    priority = "0"
+
+    match {
+      versioned_expr = "SRC_IPS_V1"
+
+      config {
+        src_ip_ranges = jsondecode(data.google_storage_bucket_object_content.broad_networks.content)
+      }
+    }
+  }
+
+  # deny traffic here that doesn't match any of the above rules
+  rule {
+    action      = "deny(403)"
+    priority    = "2147483647"
+    description = "Default rule: deny all"
+
+    match {
+      versioned_expr = "SRC_IPS_V1"
+
+      config {
+        src_ip_ranges = ["*"]
+      }
+    }
+  }
+}
+#  
