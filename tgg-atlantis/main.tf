@@ -32,7 +32,7 @@ resource "google_service_account" "atlantis_runner" {
 resource "google_service_account_iam_member" "atlantis_identity" {
   role               = "roles/iam.workloadIdentityUser"
   service_account_id = google_service_account.atlantis_runner.name
-  member             = "serviceAccount:tgg-automation.svc.id.goog[atlantis/atlantis]"
+  member             = "serviceAccount:tgg-automation.svc.id.goog[tgg-services/atlantis]"
 }
 
 # static IP, tls cert etc
