@@ -90,7 +90,10 @@ When creating a GCP project for collaboration, the following actions are typical
 | [google_compute_network.project_network](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_network) | resource |
 | [google_project.current_project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project) | resource |
 | [google_project_iam_custom_role.bucket_list_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_custom_role) | resource |
+| [google_project_iam_member.billing_browser_access](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_project_iam_member.billing_manager_access](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.default_compute_admin](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_project_iam_member.default_compute_artifact_read](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.default_compute_bucket_list](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.default_compute_dataproc_worker](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.default_compute_object_admin](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
@@ -115,8 +118,10 @@ When creating a GCP project for collaboration, the following actions are typical
 | <a name="input_apis_to_enable"></a> [apis\_to\_enable](#input\_apis\_to\_enable) | The list of additional APIs to enable. We always enable dataproc and cloudfunctions. | `list(string)` | `[]` | no |
 | <a name="input_billing_account_id"></a> [billing\_account\_id](#input\_billing\_account\_id) | The ID of the billing account that the project should be associated with. | `string` | n/a | yes |
 | <a name="input_configure_dataproc_firewall_rules"></a> [configure\_dataproc\_firewall\_rules](#input\_configure\_dataproc\_firewall\_rules) | Whether we should configure firewall rules to allow all traffic between nodes tagged 'dataproc-node'. If you intend to use dataproc, you will need this. | `bool` | `true` | no |
+| <a name="input_cost_control_service_account"></a> [cost\_control\_service\_account](#input\_cost\_control\_service\_account) | The email address of the service account that handles your cost control script | `string` | `"gnomad-cost-control@billing-rehm-gnomad.iam.gserviceaccount.com"` | no |
 | <a name="input_create_default_buckets"></a> [create\_default\_buckets](#input\_create\_default\_buckets) | Specifies whether to create default general-use and tmp with 4-day auto-delete lifecycle buckets. | `bool` | `true` | no |
 | <a name="input_default_resource_region"></a> [default\_resource\_region](#input\_default\_resource\_region) | For managed items that require a region/location | `string` | `"us-central1"` | no |
+| <a name="input_enable_cost_control"></a> [enable\_cost\_control](#input\_enable\_cost\_control) | Whether to add cost control measures to the project | `bool` | `true` | no |
 | <a name="input_enable_default_services"></a> [enable\_default\_services](#input\_enable\_default\_services) | Whether or not to enable the default cloudfunction or dataproc services. Set to false if you don't want to enable these, or if you want to manage them via apis\_to\_enable. | `bool` | `true` | no |
 | <a name="input_gcp_folder_id"></a> [gcp\_folder\_id](#input\_gcp\_folder\_id) | The ID numder of the GCP Organization folder to place the project in. | `string` | n/a | yes |
 | <a name="input_hail_batch_service_account"></a> [hail\_batch\_service\_account](#input\_hail\_batch\_service\_account) | The email address of a Hail Batch service account, to be granted storage and docker registry access. | `string` | `""` | no |
