@@ -75,3 +75,15 @@ variable "hail_batch_service_account" {
   description = "The email address of a Hail Batch service account, to be granted storage and docker registry access."
   default     = ""
 }
+
+variable "enable_cost_control" {
+  type        = bool
+  description = "Whether to add cost control measures to the project"
+  default     = true
+}
+
+variable "cost_control_service_account" {
+  type        = string
+  description = "The email address of the service account that handles your cost control script"
+  default     = "gnomad-cost-control@billing-rehm-gnomad.iam.gserviceaccount.com"
+}
