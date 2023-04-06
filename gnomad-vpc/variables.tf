@@ -3,24 +3,10 @@ variable "network_name_prefix" {
   type        = string
 }
 
-variable "gke_services_secondary_range" {
-  description = "The IP address range to use for the secondary IP address range for GKE Services"
-  type        = string
-}
-
-variable "gke_pods_secondary_range" {
-  description = "The IP address range to use for the secondary IP address range for GKE Pods"
-  type        = string
-}
-
-variable "gnomad_primary_subnet_range" {
-  description = "The IP address range to use for the primary gnomad subnet"
-  type        = string
-}
-
 variable "dataproc_primary_subnet_range" {
   description = "The IP address range to use for the primary dataproc subnet"
   type        = string
+  default     = "192.168.255.0/24"
 }
 
 variable "allow_broad_institute_networks" {
