@@ -1,37 +1,14 @@
-resource "google_compute_network" "network" {
-  name                    = var.network_name_prefix
-  auto_create_subnetworks = false
+module "gnomad-vpc" {
+  source             = "github.com/broadinstitute/tgg-terraform-modules//vpc-with-nat-subnet?ref=vpc-with-nat-subnet-v0.0.1"
+  network_name       = var.network_name_prefix
+  subnet_name_suffix = "gke"
 }
 
-resource "google_compute_subnetwork" "gnomad_subnet" {
-  name          = "${var.network_name_prefix}-gke"
-  ip_cidr_range = var.gnomad_primary_subnet_range # "192.168.0.0/20"
-  network       = google_compute_network.network.id
-
-  secondary_ip_range = [
-    {
-      range_name    = "gke-services"
-      ip_cidr_range = var.gke_services_secondary_range # "10.0.32.0/20"
-    },
-    {
-      range_name    = "gke-pods"
-      ip_cidr_range = var.gke_pods_secondary_range # "10.4.0.0/14"
-    }
-  ]
-
-  private_ip_google_access = true
-
-  log_config {
-    aggregation_interval = "INTERVAL_5_SEC"
-    flow_sampling        = 0.5
-    metadata             = "EXCLUDE_ALL_METADATA"
-  }
-}
-
+# add a second subnet for dataproc activities
 resource "google_compute_subnetwork" "dataproc_subnet" {
   name          = "${var.network_name_prefix}-dataproc"
-  ip_cidr_range = var.dataproc_primary_subnet_range # "192.168.255.0/24"
-  network       = google_compute_network.network.id
+  ip_cidr_range = var.dataproc_primary_subnet_range
+  network       = module.gnomad-vpc.vpc_network_name
 
   private_ip_google_access = true
 
@@ -42,24 +19,7 @@ resource "google_compute_subnetwork" "dataproc_subnet" {
   }
 }
 
-resource "google_compute_router" "router" {
-  name    = "${var.network_name_prefix}-gnomad-nat"
-  network = google_compute_network.network.id
-}
-
-
-resource "google_compute_router_nat" "router_nat" {
-  name                               = "${var.network_name_prefix}-gnomad-router-nat"
-  router                             = google_compute_router.router.name
-  region                             = google_compute_router.router.region
-  nat_ip_allocate_option             = "AUTO_ONLY"
-  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
-
-  log_config {
-    enable = true
-    filter = "ERRORS_ONLY"
-  }
-}
+# Firewalls
 
 # A document containing the Broad's public IP subnets for allowing Office and VPN IPs in firewalls
 data "google_storage_bucket_object_content" "internal_networks" {
@@ -74,7 +34,7 @@ locals {
 
 resource "google_compute_firewall" "dataproc_internal" {
   name        = "${var.network_name_prefix}-dataproc-internal-allow"
-  network     = google_compute_network.network.name
+  network     = module.gnomad-vpc.network_name
   description = "Creates firewall rule allowing dataproc tagged instances to reach eachother"
 
   allow {
@@ -98,7 +58,7 @@ resource "google_compute_firewall" "dataproc_internal" {
 resource "google_compute_firewall" "allow_ssh_broad_access" {
   count   = var.allow_broad_institute_networks ? 1 : 0
   name    = "${var.network_name_prefix}-allow-ssh-broad-dataproc"
-  network = google_compute_network.network.name
+  network = module.gnomad-vpc.network_name
 
   allow {
     protocol = "tcp"
@@ -115,7 +75,7 @@ resource "google_compute_firewall" "allow_ssh_broad_access" {
 # allows SSH access from the Identity Aware Proxy service (for cloud-console based SSH sessions)
 resource "google_compute_firewall" "iap_forwarding" {
   name    = "${var.network_name_prefix}-iap-access"
-  network = google_compute_network.network.name
+  network = module.gnomad-vpc.network_name
 
   allow {
     protocol = "tcp"
