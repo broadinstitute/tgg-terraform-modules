@@ -4,15 +4,11 @@ resource "google_compute_network" "network" {
 }
 
 resource "google_compute_subnetwork" "subnet" {
-  name          = "${var.network_name}-${var.subnet_name_suffix}"
-  ip_cidr_range = var.primary_subnet_cidr
-  network       = google_compute_network.network.name
+  for_each = { for subnet in var.subnets : subnet.subnet_name_suffix => subnet }
+  name     = "${var.network_name}-${each.value.subnet_name_suffix}"
+  network  = google_compute_network.network.name
 
-  secondary_ip_range = var.secondary_network_ranges
-
-
-
-  private_ip_google_access = var.enable_google_private_access
+  private_ip_google_access = each.value.enable_private_google_access
 
   log_config {
     aggregation_interval = "INTERVAL_5_SEC"
