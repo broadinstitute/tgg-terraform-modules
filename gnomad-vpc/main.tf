@@ -1,5 +1,5 @@
 module "gnomad-vpc" {
-  source       = "github.com/broadinstitute/tgg-terraform-modules//vpc-with-nat-subnet?ref=vpc-with-nat-subnet-v0.0.1"
+  source       = "github.com/broadinstitute/tgg-terraform-modules//vpc-with-nat-subnet?ref=dc75b7916e6513481a2641f182b7adcbcb9b0a49"
   network_name = var.network_name_prefix
   subnets = [
     {
@@ -18,17 +18,6 @@ module "gnomad-vpc" {
 }
 
 # Firewalls
-
-# A document containing the Broad's public IP subnets for allowing Office and VPN IPs in firewalls
-data "google_storage_bucket_object_content" "internal_networks" {
-  count  = var.allow_broad_institute_networks ? 1 : 0
-  name   = "internal_networks.json"
-  bucket = "broad-institute-networking"
-}
-
-locals {
-  broad_networks = length(data.google_storage_bucket_object_content.internal_networks) > 0 ? jsondecode(data.google_storage_bucket_object_content.internal_networks[0].content) : []
-}
 
 resource "google_compute_firewall" "dataproc_internal" {
   name        = "${var.network_name_prefix}-dataproc-internal-allow"
@@ -51,23 +40,6 @@ resource "google_compute_firewall" "dataproc_internal" {
 
   source_tags = ["dataproc-node"]
   target_tags = ["dataproc-node"]
-}
-
-resource "google_compute_firewall" "allow_ssh_broad_access" {
-  count   = var.allow_broad_institute_networks ? 1 : 0
-  name    = "${var.network_name_prefix}-allow-ssh-broad-dataproc"
-  network = module.gnomad-vpc.network_name
-
-  allow {
-    protocol = "tcp"
-    ports    = ["22"]
-  }
-
-  source_ranges = toset(local.broad_networks)
-
-  target_tags = [
-    "dataproc-node"
-  ]
 }
 
 # allows SSH access from the Identity Aware Proxy service (for cloud-console based SSH sessions)
