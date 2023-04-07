@@ -4,9 +4,10 @@ resource "google_compute_network" "network" {
 }
 
 resource "google_compute_subnetwork" "subnet" {
-  for_each = { for subnet in var.subnets : subnet.subnet_name_suffix => subnet }
-  name     = "${var.network_name}-${each.value.subnet_name_suffix}"
-  network  = google_compute_network.network.name
+  for_each      = { for subnet in var.subnets : subnet.subnet_name_suffix => subnet }
+  name          = "${var.network_name}-${each.value.subnet_name_suffix}"
+  ip_cidr_range = each.value.ip_cidr_range
+  network       = google_compute_network.network.name
 
   private_ip_google_access = each.value.enable_private_google_access
 
