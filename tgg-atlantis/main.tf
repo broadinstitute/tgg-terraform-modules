@@ -1,4 +1,8 @@
 # include GKE cluster
+data "google_storage_bucket_object_content" "internal_networks" {
+  name   = "internal_networks.json"
+  bucket = "broad-institute-networking"
+}
 
 module "atlantis-gke" {
   source           = "github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster?ref=3d72a49349c979bda0b3de82d50dd07d23c4ff11"
@@ -19,8 +23,9 @@ module "atlantis-gke" {
       "pool_resource_labels" = {}
     }
   ]
-  vpc_network_name = var.vpc_network_name
-  vpc_subnet_name  = var.vpc_subnet_name
+  vpc_network_name                      = var.vpc_network_name
+  vpc_subnet_name                       = var.vpc_subnet_name
+  gke_control_plane_authorized_networks = toset(jsondecode(data.google_storage_bucket_object_content.internal_networks.content))
 }
 
 # atlantis service account

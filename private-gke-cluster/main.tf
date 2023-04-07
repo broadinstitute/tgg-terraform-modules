@@ -20,15 +20,7 @@ resource "google_project_iam_member" "gke_nodes_iam" {
   project = var.project_name
 }
 
-# firewall for atlantis?
-# Static IP for Atlantis / Ingress
 # GKE Cluster
-# A document containing the Broad's public IP subnets for allowing Office and VPN IPs in firewalls
-data "google_storage_bucket_object_content" "internal_networks" {
-  name   = "internal_networks.json"
-  bucket = "broad-institute-networking"
-}
-
 resource "google_container_cluster" "gke_cluster" {
   name            = var.gke_cluster_name
   network         = var.vpc_network_name
@@ -40,7 +32,7 @@ resource "google_container_cluster" "gke_cluster" {
   master_authorized_networks_config {
 
     dynamic "cidr_blocks" {
-      for_each = toset(jsondecode(data.google_storage_bucket_object_content.internal_networks.content))
+      for_each = toset(var.gke_control_plane_authorized_networks)
       content {
         cidr_block = cidr_blocks.key
       }
@@ -48,8 +40,8 @@ resource "google_container_cluster" "gke_cluster" {
   }
 
   ip_allocation_policy {
-    cluster_secondary_range_name  = var.gke_pods_range_name
-    services_secondary_range_name = var.gke_services_range_name
+    cluster_ipv4_cidr_block  = var.gke_pods_range_slice
+    services_ipv4_cidr_block = var.gke_services_range_slice
   }
 
   # The google API won't allow creating clusters without node pools, but we want to only use
@@ -73,10 +65,23 @@ resource "google_container_cluster" "gke_cluster" {
   }
 
   maintenance_policy {
-    recurring_window {
-      start_time = "1970-01-01T07:00:00Z"
-      end_time   = "1970-01-01T11:00:00Z"
-      recurrence = "FREQ=DAILY"
+    dynamic "recurring_window" {
+      for_each = var.gke_recurring_maint_windows
+      content {
+        start_time = recurring_window.value.start_time
+        end_time   = recurring_window.value.end_time
+        recurrence = recurring_window.value.recurrence
+      }
+    }
+
+    dynamic "maintenance_exclusion" {
+      for_each = var.gke_maint_exclusions
+      content {
+        start_time     = maintenance_exclusion.value.start_time
+        end_time       = maintenance_exclusion.value.end_time
+        exclusion_name = maintenance_exclusion.value.name
+
+      }
     }
   }
 }
