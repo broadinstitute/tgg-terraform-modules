@@ -5,7 +5,7 @@ data "google_storage_bucket_object_content" "internal_networks" {
 }
 
 module "atlantis-gke" {
-  source           = "github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster?ref=3d72a49349c979bda0b3de82d50dd07d23c4ff11"
+  source           = "github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster?ref=f5f734b6fbc6ba08ce5f9898c51bf560ef80aa8a"
   gke_cluster_name = "tgg-atlantis"
   project_name     = "tgg-automation"
   resource_labels = {
