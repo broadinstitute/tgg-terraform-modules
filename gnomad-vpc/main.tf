@@ -1,22 +1,20 @@
 module "gnomad-vpc" {
-  source             = "github.com/broadinstitute/tgg-terraform-modules//vpc-with-nat-subnet?ref=vpc-with-nat-subnet-v0.0.1"
-  network_name       = var.network_name_prefix
-  subnet_name_suffix = "gke"
-}
-
-# add a second subnet for dataproc activities
-resource "google_compute_subnetwork" "dataproc_subnet" {
-  name          = "${var.network_name_prefix}-dataproc"
-  ip_cidr_range = var.dataproc_primary_subnet_range
-  network       = module.gnomad-vpc.vpc_network_name
-
-  private_ip_google_access = true
-
-  log_config {
-    aggregation_interval = "INTERVAL_5_SEC"
-    flow_sampling        = 0.5
-    metadata             = "EXCLUDE_ALL_METADATA"
-  }
+  source       = "github.com/broadinstitute/tgg-terraform-modules//vpc-with-nat-subnet?ref=vpc-with-nat-subnet-v0.0.1"
+  network_name = var.network_name_prefix
+  subnets = [
+    {
+      subnet_name_suffix           = "gke"
+      subnet_region                = "us-east1"
+      ip_cidr_range                = var.gke_primary_subnet_range
+      enable_private_google_access = true
+    },
+    {
+      subnet_name_suffix           = "dataproc"
+      subnet_region                = "us-east1"
+      ip_cidr_range                = var.dataproc_primary_subnet_range
+      enable_private_google_access = true
+    }
+  ]
 }
 
 # Firewalls
