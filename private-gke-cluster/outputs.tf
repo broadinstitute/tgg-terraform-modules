@@ -10,5 +10,5 @@ output "gke_cluster_name" {
 
 # ipv4 control plane cidr
 output "gke_control_plane_cidr" {
-  value = google_container_cluster.gke_cluster.private_cluster_config.master_ipv4_cidr_block
+  value = google_container_cluster.gke_cluster.private_cluster_config[0].master_ipv4_cidr_block
 }
