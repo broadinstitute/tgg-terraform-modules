@@ -14,7 +14,7 @@ variable "subnets" {
   }))
   default = [
     {
-      subnet_name_suffix           = "gke"
+      subnet_name_suffix           = ""
       subnet_region                = "us-central1"
       ip_cidr_range                = "192.168.0.0/20"
       enable_private_google_access = true
