@@ -6,7 +6,7 @@ variable "network_name_prefix" {
 variable "gke_primary_subnet_range" {
   description = "The IP address range to use for the primary gke subnet"
   type        = string
-  default     = "192.168.255.0/24"
+  default     = "192.168.0.0/20"
 }
 
 variable "dataproc_primary_subnet_range" {
