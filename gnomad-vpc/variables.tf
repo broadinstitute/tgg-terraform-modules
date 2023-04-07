@@ -14,9 +14,3 @@ variable "dataproc_primary_subnet_range" {
   type        = string
   default     = "192.168.255.0/24"
 }
-
-variable "allow_broad_institute_networks" {
-  description = "Allow broad's network/ip ranges in various firewall rules"
-  type        = bool
-  default     = true
-}
