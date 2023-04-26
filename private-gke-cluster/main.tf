@@ -61,7 +61,7 @@ resource "google_container_cluster" "gke_cluster" {
   }
 
   release_channel {
-    channel = "STABLE"
+    channel = var.release_channel
   }
 
   maintenance_policy {
