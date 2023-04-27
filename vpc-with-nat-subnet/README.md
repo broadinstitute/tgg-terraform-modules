@@ -30,18 +30,15 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_enable_google_private_access"></a> [enable\_google\_private\_access](#input\_enable\_google\_private\_access) | Whether to enable private network access for google services in the primary subnet | `bool` | `true` | no |
 | <a name="input_network_name"></a> [network\_name](#input\_network\_name) | The name that should be given to the VPC network | `string` | `"atlantis"` | no |
-| <a name="input_primary_subnet_cidr"></a> [primary\_subnet\_cidr](#input\_primary\_subnet\_cidr) | The RFC1918 CIDR mask for the primary subnet range | `string` | `"192.168.0.0/20"` | no |
-| <a name="input_secondary_network_ranges"></a> [secondary\_network\_ranges](#input\_secondary\_network\_ranges) | A list of network range objects | <pre>list(object({<br>    range_name    = string<br>    ip_cidr_range = string<br>  }))</pre> | <pre>[<br>  {<br>    "ip_cidr_range": "10.0.32.0/20",<br>    "range_name": "gke-services"<br>  },<br>  {<br>    "ip_cidr_range": "10.4.0.0/14",<br>    "range_name": "gke-pods"<br>  }<br>]</pre> | no |
-| <a name="input_subnet_name_suffix"></a> [subnet\_name\_suffix](#input\_subnet\_name\_suffix) | The suffix for the name of the primary subnet; resulting name is network\_name-subnet\_name\_suffix | `string` | `"gke"` | no |
+| <a name="input_subnets"></a> [subnets](#input\_subnets) | The subnet definitions that you'd like to create for the network | <pre>list(object({<br>    subnet_name_suffix           = string<br>    subnet_region                = string<br>    ip_cidr_range                = string<br>    enable_private_google_access = bool<br>    subnet_flow_logs             = bool<br>    subnet_flow_logs_sampling    = string<br>    subnet_flow_logs_metadata    = string<br>    subnet_flow_logs_filter      = string<br>  }))</pre> | <pre>[<br>  {<br>    "enable_private_google_access": true,<br>    "ip_cidr_range": "192.168.0.0/20",<br>    "subnet_flow_logs": false,<br>    "subnet_flow_logs_filter": "true",<br>    "subnet_flow_logs_metadata": "EXCLUDE_ALL_METADATA",<br>    "subnet_flow_logs_sampling": "0.5",<br>    "subnet_name_suffix": "gke",<br>    "subnet_region": "us-central1"<br>  }<br>]</pre> | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
 | <a name="output_vpc_network_name"></a> [vpc\_network\_name](#output\_vpc\_network\_name) | n/a |
-| <a name="output_vpc_subnet_name"></a> [vpc\_subnet\_name](#output\_vpc\_subnet\_name) | n/a |
+| <a name="output_vpc_subnet_names"></a> [vpc\_subnet\_names](#output\_vpc\_subnet\_names) | n/a |
 <!-- END_TF_DOCS -->
 
 ## Misc
