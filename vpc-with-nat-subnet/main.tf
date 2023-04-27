@@ -11,10 +11,19 @@ resource "google_compute_subnetwork" "subnet" {
 
   private_ip_google_access = each.value.enable_private_google_access
 
-  log_config {
-    aggregation_interval = "INTERVAL_5_SEC"
-    flow_sampling        = 0.5
-    metadata             = "EXCLUDE_ALL_METADATA"
+  dynamic "log_config" {
+    for_each = lookup(each.value, "subnet_flow_logs", false) ? [{
+      aggregation_interval = lookup(each.value, "subnet_flow_logs_interval", "INTERVAL_5_SEC")
+      flow_sampling        = lookup(each.value, "subnet_flow_logs_sampling", "0.5")
+      metadata             = lookup(each.value, "subnet_flow_logs_metadata", "EXCLUDE_ALL_METADATA")
+      filter_expr          = lookup(each.value, "subnet_flow_logs_filter", "true")
+    }] : []
+    content {
+      aggregation_interval = log_config.value.aggregation_interval
+      flow_sampling        = log_config.value.flow_sampling
+      metadata             = log_config.value.metadata
+      filter_expr          = log_config.value.filter_expr
+    }
   }
 }
 
