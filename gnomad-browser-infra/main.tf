@@ -26,7 +26,7 @@ resource "google_project_iam_member" "data_pipeline_service_consumer" {
 resource "google_service_account_iam_member" "es_snapshots" {
   role               = "roles/iam.workloadIdentityUser"
   service_account_id = google_service_account.es_snapshots.name
-  member             = "serviceAccount:${var.project_id}.svc.id.goog[elasticsearch/es-snaps]"
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[default/es-snaps]"
 }
 
 resource "google_storage_bucket_iam_member" "es_snapshots" {
