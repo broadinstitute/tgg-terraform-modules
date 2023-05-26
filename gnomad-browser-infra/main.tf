@@ -79,36 +79,7 @@ module "gnomad-gke" {
     "deployment" = "gnomad_browser"
     "component"  = "gke"
   }
-  node_pools = [
-    {
-      "pool_name"            = "main-pool"
-      "pool_num_nodes"       = 2
-      "pool_machine_type"    = "e2-standard-4"
-      "pool_preemptible"     = false
-      "pool_zone"            = ""
-      "pool_resource_labels" = {}
-    },
-    {
-      "pool_name"         = "redis"
-      "pool_num_nodes"    = 1
-      "pool_machine_type" = "e2-custom-6-49152"
-      "pool_preemptible"  = false
-      "pool_zone"         = ""
-      "pool_resource_labels" = {
-        "component" = "redis"
-      }
-    },
-    {
-      "pool_name"         = "es-data"
-      "pool_num_nodes"    = 3
-      "pool_machine_type" = "e2-highmem-8"
-      "pool_preemptible"  = false
-      "pool_zone"         = ""
-      "pool_resource_labels" = {
-        "component" = "elasticsearch"
-      }
-    }
-  ]
+  node_pools = var.gke_node_pools
 
   vpc_network_name                      = var.vpc_network_name
   vpc_subnet_name                       = var.vpc_subnet_name
