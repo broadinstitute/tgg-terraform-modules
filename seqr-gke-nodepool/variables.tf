@@ -34,3 +34,8 @@ variable "node_pool_image_type" {
   description = "The GKE image to use for the node pool. Should usually be COS_CONTAINERD."
   default     = "COS_CONTAINERD"
 }
+
+variable "node_pool_local_ssd_count" {
+  type    = string
+  default = "0"
+}

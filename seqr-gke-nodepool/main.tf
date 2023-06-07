@@ -16,7 +16,7 @@ resource "google_container_node_pool" "node_pool" {
 
     labels = var.node_pool_labels
 
-    local_ssd_count = "0"
+    local_ssd_count = var.node_pool_local_ssd_count
     machine_type    = var.node_pool_machine_type
 
     metadata = {
