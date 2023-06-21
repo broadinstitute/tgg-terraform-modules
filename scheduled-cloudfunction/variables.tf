@@ -66,3 +66,15 @@ variable "function_timeout" {
     error_message = "The function_timeout must be greater than or equal to 10, and less than or equal to 540."
   }
 }
+
+variable "min_instances" {
+  type        = number
+  default     = 0
+  description = "The minimum number of function instances that should be running. Set to non-zero to ensure always-available capacity."
+}
+
+variable "max_instances" {
+  type        = number
+  default     = 3000
+  description = "The maximum number of function instance that should be allowed to run. Google default is 3000."
+}

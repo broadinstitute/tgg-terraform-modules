@@ -9,6 +9,8 @@ resource "google_cloudfunctions_function" "scheduled-cloudfunction" {
   ingress_settings      = "ALLOW_INTERNAL_ONLY"
   service_account_email = var.service_account_email
   timeout               = var.function_timeout
+  min_instances         = var.min_instances
+  max_instances         = var.max_instances
   labels = {
     managed-by = "terraform"
   }
