@@ -12,3 +12,8 @@ output "gke_cluster_name" {
 output "gke_control_plane_cidr" {
   value = google_container_cluster.gke_cluster.private_cluster_config[0].master_ipv4_cidr_block
 }
+
+# ipv4 cidr block for pods running in the cluster
+output "gke_pods_ipv4_cidr_block" {
+  value = google_container_cluster.gke_cluster.ip_allocation_policy[0].cluster_ipv4_cidr_block
+}
