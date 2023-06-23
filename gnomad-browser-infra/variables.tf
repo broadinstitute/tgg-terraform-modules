@@ -30,6 +30,18 @@ variable "gke_control_plane_authorized_networks" {
   default     = []
 }
 
+variable "gke_services_range_slice" {
+  description = "The full (e.g. 10.0.0.0/20) or simple (e.g. /20) CIDR range slice to assign for internal service IP addresses"
+  type        = string
+  default     = "/20"
+}
+
+variable "gke_pods_range_slice" {
+  description = "The full (e.g. 10.0.0.0/14) or simple (e.g. /14) CIDR range slice to assign for internal pod IP addresses"
+  type        = string
+  default     = "/14"
+}
+
 # see https://cloud.google.com/kubernetes-engine/docs/how-to/maintenance-windows-and-exclusions#maintenance-window
 # for more information regarding timestamp formatting and recurrence spec syntax
 variable "gke_recurring_maint_windows" {
