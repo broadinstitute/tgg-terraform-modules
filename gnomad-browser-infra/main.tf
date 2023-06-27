@@ -115,6 +115,8 @@ module "gnomad-gke" {
   gke_control_plane_authorized_networks = toset(var.gke_control_plane_authorized_networks)
   gke_recurring_maint_windows           = var.gke_recurring_maint_windows
   gke_maint_exclusions                  = var.gke_maint_exclusions
+  gke_pods_range_slice                  = var.gke_pods_range_slice
+  gke_services_range_slice              = var.gke_services_range_slice
 }
 
 resource "google_compute_firewall" "es_webbook" {
