@@ -70,7 +70,7 @@ resource "google_storage_bucket" "data_pipeline" {
 }
 
 module "gnomad-gke" {
-  source                 = "github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster?ref=private-gke-cluster-v1.0.0"
+  source                 = "github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster?ref=private-gke-cluster-v1.0.2"
   gke_cluster_name       = var.infra_prefix
   project_name           = var.project_id
   gke_control_plane_zone = var.gke_control_plane_zone
