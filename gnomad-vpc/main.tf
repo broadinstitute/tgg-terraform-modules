@@ -22,7 +22,7 @@ module "gnomad-vpc" {
 resource "google_compute_firewall" "dataproc_internal" {
   name        = "${var.network_name_prefix}-dataproc-internal-allow"
   network     = module.gnomad-vpc.vpc_network_name
-  description = "Creates firewall rule allowing dataproc tagged instances to reach eachother"
+  description = "Creates firewall rule allowing dataproc tagged instances to reach all other hosts on the network"
 
   allow {
     protocol = "tcp"
@@ -39,7 +39,6 @@ resource "google_compute_firewall" "dataproc_internal" {
   }
 
   source_tags = ["dataproc-node"]
-  target_tags = ["dataproc-node"]
 }
 
 # allows SSH access from the Identity Aware Proxy service (for cloud-console based SSH sessions)
