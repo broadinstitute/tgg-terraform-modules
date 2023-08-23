@@ -1,32 +1,78 @@
 # Scheduled Google Cloud Functions
 
-This attempts to provide a reusable module for creating scheduled cloudfunctions as described here: https://cloud.google.com/scheduler/docs/tut-pub-sub
+This modules creates the resources necessary to deploy a cloud scheduler triggered cloudfunction. The outputs include the following information that is necessary for deploying a cloudfunction via something like GitHub Actions:
 
-The idea is that you end up with a cloudscheduler schedule, which sends a message to a pub/sub queue that triggers the desired function. The module needs to be provided a service account email. The service accounts needs to have the IAM permissions required for running the function -- you are responsible for creating the service account, and granting it permissions.
+- the name we expect the function to use
+- the service account ID that the function will use at deploy/runtime
+- the name of the pub/sub trigger topic
 
-## Required inputs
+## Upgrading
 
-- `scheduled_function_name`: The name of your scheduled function, less than 32 characters in length.
-- `scheduled_function_description`: The description of the function.
-- `service_account_email`: The email address of a google service account. This SA must be granted any permissions required by the runtime of your function
-- `function_entrypoint`: The function that cloudfunctions should invoke to run your code.
-- `source_repository_url`: The google Source Repository URL where your code is hosted
-- `cron_schedule`: The cron-syntax schedule that your function should run on.
+### Breaking changes for v1.0.0
+
+As of v1.0.0, this module no longer creates a cloudfunction for you. It only configures the necessary resources to run and trigger a cloudfunction which you deploy by other means. This is because deploying functions via terraform was janky, and we usually had a github action/cloudbuild trigger to update the function anyway. The module now also creates a service account on your behalf, and no longer requires one to be provided ahead of time.
+
+It's recommended that you delete any pre-v1.0.0 deployments of this module, apply v1.0.0, and then update your github deployment actions to use the new service account and trigger topic configuration that it generates.
 
 ## Example
 
 ```terraform
-module "my-scheduled-cloudfunction" {
-    source = "github.com/broadinstitute/tgg-terraform-modules//scheduled-cloudfunction?ref=v0.0.1"
+module "my_scheduled_cloudfunction" {
+    source = "github.com/broadinstitute/tgg-terraform-modules//scheduled-cloudfunction?ref=v1.0.0"
     scheduled_function_name = "run-a-doodad"
-    scheduled_function_description = "Runs a doodad that checks a thingamabob"
-    service_account_email = "my-service-account-ex@iam.gserviceaccount.com"
-    function_environment_variables = {
-      GCP_PROJECT   = "${data.google_project.project.project_id}"
-      SLACK_CHANNEL = "#doodad-notifications"
-    }
-    function_entrypoint = "run_routine"
-    source_repository_url = "https://source.developers.google.com/projects/projectname/repos/github_broadinstitute_reponame/moveable-aliases/main/paths/functions/function_name"
+    cloudbuild_service_account_email = "cloubuild@myproj.iam.gserviceaccount.com"
     cron_schedule = "30 7 * * 1"
+    required_gcp_secrets = ["my-slack-token-gcp-secret-name", "database-password-secret-name"]
+    service_account_roles = ["roles/storage.objectViewer", "roles/monitoring.viewer"]
+    project_id = "my-gcp-project"
 }
 ```
+
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
+| <a name="requirement_google"></a> [google](#requirement\_google) | >= 4.42.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_google"></a> [google](#provider\_google) | >= 4.42.0 |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [google_cloud_scheduler_job.cloud_scheduler_schedule](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloud_scheduler_job) | resource |
+| [google_project_iam_member.service_account_project_permissions](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_pubsub_topic.scheduled_function_trigger_topic](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/pubsub_topic) | resource |
+| [google_secret_manager_secret_iam_member.function_secret_access](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_iam_member) | resource |
+| [google_service_account.scheduled_function_service_account](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
+| [google_service_account_iam_member.cloudbuild_impersonate](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account_iam_member) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_cloudbuild_service_account_email"></a> [cloudbuild\_service\_account\_email](#input\_cloudbuild\_service\_account\_email) | The email address of the cloudbuild service account | `string` | n/a | yes |
+| <a name="input_cron_schedule"></a> [cron\_schedule](#input\_cron\_schedule) | A string representing the cron-format schedule for which to trigger the cloud function | `string` | n/a | yes |
+| <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The project id of the project in which to create the scheduled function | `string` | n/a | yes |
+| <a name="input_required_gcp_secrets"></a> [required\_gcp\_secrets](#input\_required\_gcp\_secrets) | A list of the names of GCP Secret Manager secrets that the scheudled function requires to run | `list(string)` | `[]` | no |
+| <a name="input_scheduled_function_name"></a> [scheduled\_function\_name](#input\_scheduled\_function\_name) | The string that should be used to create resources associated with the module, svc account, pubsub queue, etc | `string` | n/a | yes |
+| <a name="input_service_account_roles"></a> [service\_account\_roles](#input\_service\_account\_roles) | A list of roles to assign to the service account created for the scheduled function | `list(string)` | <pre>[<br>  "roles/cloudfunctions.invoker"<br>]</pre> | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_scheduled_function_name"></a> [scheduled\_function\_name](#output\_scheduled\_function\_name) | n/a |
+| <a name="output_scheduled_function_trigger_topic"></a> [scheduled\_function\_trigger\_topic](#output\_scheduled\_function\_trigger\_topic) | n/a |
+| <a name="output_service_account_member"></a> [service\_account\_member](#output\_service\_account\_member) | n/a |
+<!-- END_TF_DOCS -->
