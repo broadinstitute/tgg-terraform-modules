@@ -3,7 +3,8 @@
 This modules creates the resources necessary to deploy a cloud scheduler triggered cloudfunction. The outputs include the following information that is necessary for deploying a cloudfunction via something like GitHub Actions:
 
 - the name we expect the function to use
-- the service account ID that the function will use at deploy/runtime
+- the service account ID that the function will use at runtime
+- the service account ID that the github action will authenticate as for deployment
 - the name of the pub/sub trigger topic
 
 ## Upgrading
@@ -28,6 +29,12 @@ module "my_scheduled_cloudfunction" {
 }
 ```
 
+## Workload Identity Federation
+
+This module configures workload identity federation with GitHub Actions, to allow the github action to authenticate for function deployment. The default set of conditions that governs what actions will be able to do things is: Only commits to `refs/heads/main` on the [gnomAD storage monitoring](https://github.com/broadinstitute/gnomad-storage-monitoring) repository will be allowed to authenticate.
+
+If you need to use another branch / repository, adjust the `workload_identity_attr_condition` (the assertion rule) and the `workload_identity_attr` (the target repository) accordingly.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -44,18 +51,23 @@ module "my_scheduled_cloudfunction" {
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_gh_oidc_wif"></a> [gh\_oidc\_wif](#module\_gh\_oidc\_wif) | terraform-google-modules/github-actions-runners/google//modules/gh-oidc | 3.1.1 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
 | [google_cloud_scheduler_job.cloud_scheduler_schedule](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloud_scheduler_job) | resource |
+| [google_project_iam_member.deployment_service_account_project_permissions](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.service_account_project_permissions](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_pubsub_topic.scheduled_function_trigger_topic](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/pubsub_topic) | resource |
 | [google_secret_manager_secret_iam_member.function_secret_access](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_iam_member) | resource |
+| [google_service_account.deployment_service_account](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
 | [google_service_account.scheduled_function_service_account](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
 | [google_service_account_iam_member.cloudbuild_impersonate](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account_iam_member) | resource |
+| [google_service_account_iam_member.deployer_impersonate](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account_iam_member) | resource |
 
 ## Inputs
 
@@ -67,11 +79,14 @@ No modules.
 | <a name="input_required_gcp_secrets"></a> [required\_gcp\_secrets](#input\_required\_gcp\_secrets) | A list of the names of GCP Secret Manager secrets that the scheudled function requires to run | `list(string)` | `[]` | no |
 | <a name="input_scheduled_function_name"></a> [scheduled\_function\_name](#input\_scheduled\_function\_name) | The string that should be used to create resources associated with the module, svc account, pubsub queue, etc | `string` | n/a | yes |
 | <a name="input_service_account_roles"></a> [service\_account\_roles](#input\_service\_account\_roles) | A list of roles to assign to the service account created for the scheduled function | `list(string)` | <pre>[<br>  "roles/cloudfunctions.invoker"<br>]</pre> | no |
+| <a name="input_workload_identity_attr"></a> [workload\_identity\_attr](#input\_workload\_identity\_attr) | value of the workload identity attribute to use for the scheduled function workload identity mapping | `string` | `"attribute.repository/broadinstitute/gnomad-storage-monitoring"` | no |
+| <a name="input_workload_identity_attr_condition"></a> [workload\_identity\_attr\_condition](#input\_workload\_identity\_attr\_condition) | The workload identity attribute condition to use for the scheduled function workload identity mapping | `string` | `"assertion.ref=='refs/heads/main'"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
+| <a name="output_deployment_service_account_member"></a> [deployment\_service\_account\_member](#output\_deployment\_service\_account\_member) | n/a |
 | <a name="output_scheduled_function_name"></a> [scheduled\_function\_name](#output\_scheduled\_function\_name) | n/a |
 | <a name="output_scheduled_function_trigger_topic"></a> [scheduled\_function\_trigger\_topic](#output\_scheduled\_function\_trigger\_topic) | n/a |
 | <a name="output_service_account_member"></a> [service\_account\_member](#output\_service\_account\_member) | n/a |

@@ -34,3 +34,15 @@ variable "project_id" {
   type        = string
   description = "The project id of the project in which to create the scheduled function"
 }
+
+variable "workload_identity_attr_condition" {
+  type        = string
+  description = "The workload identity attribute condition to use for the scheduled function workload identity mapping"
+  default     = "assertion.ref=='refs/heads/main'"
+}
+
+variable "workload_identity_attr" {
+  type        = string
+  description = "value of the workload identity attribute to use for the scheduled function workload identity mapping"
+  default     = "attribute.repository/broadinstitute/gnomad-storage-monitoring"
+}

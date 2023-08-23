@@ -42,12 +42,57 @@ resource "google_secret_manager_secret_iam_member" "function_secret_access" {
   member    = google_service_account.scheduled_function_service_account.member
 }
 
+resource "google_service_account" "deployment_service_account" {
+  account_id   = "${var.scheduled_function_name}-deployer"
+  project      = var.project_id
+  display_name = "Service account for scheduled function deployment: ${var.scheduled_function_name}"
+}
+
+resource "google_project_iam_member" "deployment_service_account_project_permissions" {
+  project = var.project_id
+  role    = "roles/cloudfunctions.admin"
+  member  = google_service_account.deployment_service_account.member
+}
+
+resource "google_service_account_iam_member" "deployer_impersonate" {
+  service_account_id = google_service_account.scheduled_function_service_account.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = google_service_account.deployment_service_account.member
+}
+
+module "gh_oidc_wif" {
+  source      = "terraform-google-modules/github-actions-runners/google//modules/gh-oidc"
+  version     = "3.1.1"
+  project_id  = var.project_id
+  pool_id     = "${var.scheduled_function_name}-actions-pool"
+  provider_id = "${var.scheduled_function_name}-github-actions"
+  attribute_mapping = {
+    "google.subject"       = "assertion.sub"
+    "attribute.actor"      = "assertion.actor"
+    "attribute.aud"        = "assertion.aud"
+    "attribute.repository" = "assertion.repository"
+    "attribute.ref"        = "assertion.ref"
+  }
+  attribute_condition = var.workload_identity_attr_condition
+  sa_mapping = {
+    "${var.scheduled_function_name}-deployer" = {
+      sa_name   = google_service_account.deployment_service_account.id
+      attribute = var.workload_identity_attr
+    }
+  }
+}
+
+
 output "scheduled_function_trigger_topic" {
   value = google_pubsub_topic.scheduled_function_trigger_topic.name
 }
 
 output "service_account_member" {
   value = google_service_account.scheduled_function_service_account.member
+}
+
+output "deployment_service_account_member" {
+  value = google_service_account.deployment_service_account.member
 }
 
 output "scheduled_function_name" {
