@@ -4,7 +4,7 @@ variable "scheduled_function_name" {
 
   validation {
     condition     = length(var.scheduled_function_name) >= 6 && length(var.scheduled_function_name) < 30
-    error_message = "The name_prefix must be less than 32 characters to conform to google's naming requirements."
+    error_message = "The function name must be greater than 6 chars and less than 30 characters to conform to google's naming requirements."
   }
 }
 
