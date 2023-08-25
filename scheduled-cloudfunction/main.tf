@@ -17,12 +17,14 @@ resource "google_cloud_scheduler_job" "cloud_scheduler_schedule" {
 }
 
 resource "google_service_account" "scheduled_function_service_account" {
+  count        = var.manage_service_accounts ? 1 : 0
   account_id   = var.scheduled_function_name
   project      = var.project_id
   display_name = "Service account for scheduled function: ${var.scheduled_function_name}"
 }
 
 resource "google_service_account_iam_member" "cloudbuild_impersonate" {
+  count              = var.manage_service_accounts ? 1 : 0
   service_account_id = google_service_account.scheduled_function_service_account.name
   role               = "roles/iam.serviceAccountUser"
   member             = "serviceAccount:${var.cloudbuild_service_account_email}"
@@ -43,24 +45,28 @@ resource "google_secret_manager_secret_iam_member" "function_secret_access" {
 }
 
 resource "google_service_account" "deployment_service_account" {
+  count        = var.manage_service_accounts ? 1 : 0
   account_id   = "${var.scheduled_function_name}-deployer"
   project      = var.project_id
   display_name = "Service account for scheduled function deployment: ${var.scheduled_function_name}"
 }
 
 resource "google_project_iam_member" "deployment_service_account_project_permissions" {
+  count   = var.manage_service_accounts ? 1 : 0
   project = var.project_id
   role    = "roles/cloudfunctions.admin"
   member  = google_service_account.deployment_service_account.member
 }
 
 resource "google_service_account_iam_member" "deployer_impersonate" {
+  count              = var.manage_service_accounts ? 1 : 0
   service_account_id = google_service_account.scheduled_function_service_account.name
   role               = "roles/iam.serviceAccountUser"
   member             = google_service_account.deployment_service_account.member
 }
 
 module "gh_oidc_wif" {
+  count       = var.configure_workload_identity ? 1 : 0
   source      = "terraform-google-modules/github-actions-runners/google//modules/gh-oidc"
   version     = "3.1.1"
   project_id  = var.project_id
@@ -88,11 +94,11 @@ output "scheduled_function_trigger_topic" {
 }
 
 output "service_account_member" {
-  value = google_service_account.scheduled_function_service_account.member
+  value = var.manage_service_accounts ? google_service_account.scheduled_function_service_account.member : null
 }
 
 output "deployment_service_account_member" {
-  value = google_service_account.deployment_service_account.member
+  value = var.manage_service_accounts ? google_service_account.deployment_service_account.member : null
 }
 
 output "scheduled_function_name" {

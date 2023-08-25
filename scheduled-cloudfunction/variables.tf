@@ -13,10 +13,16 @@ variable "cron_schedule" {
   description = "A string representing the cron-format schedule for which to trigger the cloud function"
 }
 
+variable "manage_service_accounts" {
+  type        = bool
+  description = "Whether or not to manage the service accounts for the scheduled function and the deployment service account"
+  default     = true
+}
+
 variable "service_account_roles" {
   type        = list(string)
-  description = "A list of roles to assign to the service account created for the scheduled function"
-  default     = ["roles/cloudfunctions.invoker"]
+  description = "A list of roles to assign to the service account created for the scheduled function. Cannot be specified if manage_service_accounts is false"
+  default     = []
 }
 
 variable "cloudbuild_service_account_email" {
@@ -26,13 +32,19 @@ variable "cloudbuild_service_account_email" {
 
 variable "required_gcp_secrets" {
   type        = list(string)
-  description = "A list of the names of GCP Secret Manager secrets that the scheudled function requires to run"
+  description = "A list of the names of GCP Secret Manager secrets that the scheudled function requires to run. Cannot be specified if manage_service_accounts is false"
   default     = []
 }
 
 variable "project_id" {
   type        = string
   description = "The project id of the project in which to create the scheduled function"
+}
+
+variable "configure_workload_identity" {
+  type        = bool
+  description = "Whether or not to configure workload identity federation for the scheduled function and github actions. Cannot be specified if manage_service_accounts is false"
+  default     = true
 }
 
 variable "workload_identity_attr_condition" {
