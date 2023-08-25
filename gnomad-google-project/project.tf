@@ -109,6 +109,7 @@ resource "google_project_iam_member" "hail_batch_artifact_read" {
   member  = "serviceAccount:${var.hail_batch_service_account}"
 }
 
+# Grant serviceusage.use permissions to Batch SA (allow SA to use project)
 resource "google_project_iam_member" "hail_batch_service_usage" {
   count   = length(var.hail_batch_service_account) > 0 ? 1 : 0
   project = google_project.current_project.project_id
