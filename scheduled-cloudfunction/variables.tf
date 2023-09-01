@@ -30,13 +30,13 @@ variable "cloudbuild_service_account_email" {
 
 variable "service_account_roles" {
   type        = list(string)
-  description = "A list of roles to assign to the service account created for the scheduled function. Cannot be specified if manage_service_accounts is false"
+  description = "A list of roles to assign to the service account created for the scheduled function"
   default     = []
 }
 
 variable "required_gcp_secrets" {
   type        = list(string)
-  description = "A list of the names of GCP Secret Manager secrets that the scheudled function requires to run. Cannot be specified if manage_service_accounts is false"
+  description = "A list of the names of GCP Secret Manager secrets that the scheudled function requires to run"
   default     = []
 }
 
@@ -47,7 +47,7 @@ variable "project_id" {
 
 variable "configure_workload_identity" {
   type        = bool
-  description = "Whether or not to configure workload identity federation for the scheduled function and github actions. Cannot be specified if manage_service_accounts is false"
+  description = "Whether or not to configure workload identity federation for the scheduled function and github actions"
   default     = true
 }
 
