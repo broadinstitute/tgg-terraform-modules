@@ -1,11 +1,9 @@
 resource "google_pubsub_topic" "scheduled_function_trigger_topic" {
-  name    = var.scheduled_function_name
-  project = var.project_id
+  name = var.scheduled_function_name
 }
 
 resource "google_cloud_scheduler_job" "cloud_scheduler_schedule" {
   name        = var.scheduled_function_name
-  project     = var.project_id
   description = "Cron schedule for: ${var.scheduled_function_name}"
   schedule    = var.cron_schedule
   time_zone   = "America/New_York"
