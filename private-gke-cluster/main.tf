@@ -98,6 +98,16 @@ resource "google_container_cluster" "gke_cluster" {
         enabled  = network_policy.value.enabled
       }
     }
+
+    dynamic "database_encryption" {
+      for_each = var.gke_database_encryption
+
+      content {
+        state = database_encryption.value.state
+        key   = database_encryption.value.key
+      }
+    }
+
   }
 }
 

@@ -125,3 +125,12 @@ variable "gke_network_policy" {
     enabled  = false
   }]
 }
+
+variable "gke_database_encryption_config" {
+  description = "Configs and KMS key IDs for etcd/secrets database encryption"
+  type = list(object({
+    state = string # one of "ENCRYPTED", "DECRYPTED"
+    key   = string # projects/MY_PROJECT/locations/global/keyRings/MY_KEYRING/cryptoKeys/MY_KEY
+  }))
+  default = []
+}
