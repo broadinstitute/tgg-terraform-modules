@@ -83,6 +83,21 @@ resource "google_container_cluster" "gke_cluster" {
 
       }
     }
+
+    addons_config {
+      network_policy_config {
+        disabled = !var.gke_network_policy_enabled
+      }
+    }
+
+    dynamic "network_policy" {
+      for_each = var.gke_network_policy
+
+      content {
+        provider = network_policy.value.provider
+        enabled  = network_policy.value.enabled
+      }
+    }
   }
 }
 

@@ -105,3 +105,23 @@ variable "gke_maint_exclusions" {
   type        = list(map(string))
   default     = []
 }
+
+# Network Policy Configuration
+# When enabled, uses the default network policy provider to satisfy BITS infosec requirements
+variable "gke_network_policy_enabled" {
+  description = "Whether to enable the GKE network policy addon"
+  type        = bool
+  default     = false
+}
+
+variable "gke_network_policy" {
+  description = "The network provider definition to be used when network policies are enabled"
+  type = list(object({
+    provider = string
+    enabled  = bool
+  }))
+  default = [{
+    provider = "PROVIDER_UNSPECIFIED"
+    enabled  = false
+  }]
+}
