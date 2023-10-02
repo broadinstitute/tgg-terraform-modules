@@ -104,8 +104,8 @@ resource "google_container_cluster" "gke_cluster" {
     for_each = var.gke_database_encryption_config
 
     content {
-      state = database_encryption.value.state
-      key   = database_encryption.value.key
+      state    = database_encryption.value.state
+      key_name = database_encryption.value.key
     }
   }
 }
