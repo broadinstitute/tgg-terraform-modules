@@ -69,6 +69,31 @@ resource "google_storage_bucket" "data_pipeline" {
   }
 }
 
+resource "google_kms_key_ring" "gke_database_encryption_keyring" {
+  name     = "${var.infra_prefix}-gke-keyring"
+  location = var.gke_kms_keyring_location
+}
+
+resource "google_kms_crypto_key" "gke_database_encryption_key" {
+  name            = "${var.infra_prefix}-gke-key"
+  key_ring        = google_kms_key_ring.gke_database_encryption_keyring.id
+  rotation_period = "100000s"
+
+  lifecycle {
+    prevent_destroy = var.prevent_destroy
+  }
+}
+
+data "google_project" "project_number_for_kms_grant" {
+  project_id = var.project_id
+}
+
+resource "google_kms_crypto_key_iam_member" "gke_sa_crypto_access" {
+  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+  crypto_key_id = google_kms_crypto_key.gke_database_encryption_key.id
+  member        = "serviceAccount:service-${data.google_project.project_number_for_kms_grant.number}@container-engine-robot.iam.gserviceaccount.com"
+}
+
 module "gnomad-gke" {
   source                 = "github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster?ref=private-gke-cluster-v1.0.2"
   gke_cluster_name       = var.infra_prefix
@@ -88,6 +113,15 @@ module "gnomad-gke" {
   gke_maint_exclusions                  = var.gke_maint_exclusions
   gke_pods_range_slice                  = var.gke_pods_range_slice
   gke_services_range_slice              = var.gke_services_range_slice
+  gke_network_policy_enabled            = true
+  gke_network_policy = [{
+    provider = "CALICO"
+    enabled  = true
+  }]
+  gke_database_encryption_config = [{
+    state    = "ENCRYPTED"
+    key_name = google_kms_crypto_key.gke_database_encryption_key.id
+  }]
 }
 
 resource "google_compute_firewall" "es_webbook" {

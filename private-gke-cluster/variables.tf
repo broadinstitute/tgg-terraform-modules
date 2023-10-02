@@ -121,7 +121,7 @@ variable "gke_network_policy" {
     enabled  = bool
   }))
   default = [{
-    provider = "PROVIDER_UNSPECIFIED"
+    provider = "CALICO"
     enabled  = false
   }]
 }

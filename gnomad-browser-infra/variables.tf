@@ -116,3 +116,15 @@ variable "data_pipeline_bucket_location" {
   type        = string
   default     = "us-east1"
 }
+
+variable "gke_kms_keyring_location" {
+  description = "The location of the KMS keyring to use for GKE database encryption. Must match the region your cluster is deployed in"
+  type        = string
+  default     = "us-east1"
+}
+
+variable "gke_kms_key_prevent_destroy" {
+  description = "value to set the lifecycle prevent_destroy flag on the KMS key. Set to false before destroying your cluster"
+  type        = bool
+  default     = true
+}
