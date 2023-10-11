@@ -108,6 +108,8 @@ resource "google_container_cluster" "gke_cluster" {
       key_name = database_encryption.value.key
     }
   }
+
+  deletion_protection = var.gke_deletion_protection
 }
 
 resource "google_container_node_pool" "node_pool" {

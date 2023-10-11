@@ -134,3 +134,9 @@ variable "gke_database_encryption_config" {
   }))
   default = []
 }
+
+variable "gke_deletion_protection" {
+  description = "Whether to set the deletion_protection flag on the GKE cluster object"
+  type        = bool
+  default     = false
+}
