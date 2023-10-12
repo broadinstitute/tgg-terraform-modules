@@ -80,7 +80,7 @@ resource "google_kms_crypto_key" "gke_database_encryption_key" {
   rotation_period = "100000s"
 
   lifecycle {
-    prevent_destroy = var.gke_kms_key_prevent_destroy
+    prevent_destroy = true
   }
 }
 
