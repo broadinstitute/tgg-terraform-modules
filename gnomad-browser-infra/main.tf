@@ -119,8 +119,8 @@ module "gnomad-gke" {
     enabled  = true
   }]
   gke_database_encryption_config = [{
-    state    = "ENCRYPTED"
-    key_name = google_kms_crypto_key.gke_database_encryption_key.id
+    state = "ENCRYPTED"
+    key   = google_kms_crypto_key.gke_database_encryption_key.id
   }]
 }
 
