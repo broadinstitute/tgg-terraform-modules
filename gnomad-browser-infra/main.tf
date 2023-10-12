@@ -79,9 +79,6 @@ resource "google_kms_crypto_key" "gke_database_encryption_key" {
   key_ring        = google_kms_key_ring.gke_database_encryption_keyring.id
   rotation_period = "100000s"
 
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 data "google_project" "project_number_for_kms_grant" {
