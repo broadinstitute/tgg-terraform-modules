@@ -95,7 +95,7 @@ resource "google_kms_crypto_key_iam_member" "gke_sa_crypto_access" {
 }
 
 module "gnomad-gke" {
-  source                 = "github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster?ref=private-gke-cluster-v1.0.2"
+  source                 = "github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster?ref=infosec-whack-a-mole"
   gke_cluster_name       = var.infra_prefix
   project_name           = var.project_id
   gke_control_plane_zone = var.gke_control_plane_zone
