@@ -33,11 +33,19 @@ resource "google_container_node_pool" "node_pool" {
     }
   }
 
-  node_count     = var.node_pool_count
   node_locations = [var.node_location]
 
   upgrade_settings {
     max_surge       = "1"
     max_unavailable = "0"
+  }
+
+  node_count         = (var.max_node_pool_count > 0) ? null : var.min_node_pool_count
+  dynamic "autoscaling" {
+    for_each = (var.min_node_pool_count > 0 && var.max_node_pool_count > 0) ? [1] : []
+    content {
+      min_node_count = var.min_node_pool_count
+      max_node_count = var.max_node_pool_count
+    }
   }
 }
