@@ -1,7 +1,3 @@
-variable "node_pool_count" {
-  type = string
-}
-
 variable "node_location" {
   type    = string
   default = "us-central1-b"
@@ -38,4 +34,16 @@ variable "node_pool_image_type" {
 variable "node_pool_local_ssd_count" {
   type    = string
   default = "0"
+}
+
+variable "min_node_pool_count" {
+  type  = number
+  default = 0
+  description = "The minimum number of nodes in the node pool."
+}
+
+variable "max_node_pool_count" {
+  type  = number
+  default = 0
+  description = "The maximum number of nodes in the node pool.  If unsupplied, the node pool will be configured without autoscaling"
 }

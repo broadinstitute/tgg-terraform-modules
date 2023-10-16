@@ -1,5 +1,6 @@
 # Main cluster configuration
 resource "google_container_cluster" "cluster" {
+  provider                    = google-beta
   name                        = var.cluster_name
   project                     = var.project
   monitoring_service          = "monitoring.googleapis.com/kubernetes"
@@ -35,8 +36,8 @@ resource "google_container_cluster" "cluster" {
 
   cluster_autoscaling {
     enabled = "false"
+    autoscaling_profile = "OPTIMIZE_UTILIZATION"
   }
-
 
   database_encryption {
     state = "DECRYPTED"
