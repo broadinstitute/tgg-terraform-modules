@@ -8,7 +8,6 @@ resource "google_container_cluster" "cluster" {
   subnetwork                  = "projects/${var.project}/regions/us-central1/subnetworks/default"
   cluster_ipv4_cidr           = var.cluster_ipv4_cidr
   default_max_pods_per_node   = "110"
-  enable_binary_authorization = "false"
   enable_intranode_visibility = "false"
   enable_kubernetes_alpha     = "false"
   enable_legacy_abac          = "false"
@@ -32,6 +31,10 @@ resource "google_container_cluster" "cluster" {
     network_policy_config {
       disabled = "true"
     }
+  }
+
+  binary_authorization {
+    evaluation_mode = "DISABLED"
   }
 
   cluster_autoscaling {
