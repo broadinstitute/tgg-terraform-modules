@@ -105,3 +105,38 @@ variable "gke_maint_exclusions" {
   type        = list(map(string))
   default     = []
 }
+
+# Network Policy Configuration
+# When enabled, uses the default network policy provider to satisfy BITS infosec requirements
+variable "gke_network_policy_enabled" {
+  description = "Whether to enable the GKE network policy addon"
+  type        = bool
+  default     = false
+}
+
+variable "gke_network_policy" {
+  description = "The network provider definition to be used when network policies are enabled"
+  type = list(object({
+    provider = string
+    enabled  = bool
+  }))
+  default = [{
+    provider = "CALICO"
+    enabled  = false
+  }]
+}
+
+variable "gke_database_encryption_config" {
+  description = "Configs and KMS key IDs for etcd/secrets database encryption"
+  type = list(object({
+    state = string # one of "ENCRYPTED", "DECRYPTED"
+    key   = string # projects/MY_PROJECT/locations/global/keyRings/MY_KEYRING/cryptoKeys/MY_KEY
+  }))
+  default = []
+}
+
+variable "gke_deletion_protection" {
+  description = "Whether to set the deletion_protection flag on the GKE cluster object"
+  type        = bool
+  default     = false
+}
