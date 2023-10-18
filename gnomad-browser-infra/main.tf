@@ -107,3 +107,16 @@ resource "google_compute_firewall" "es_webbook" {
 resource "google_compute_global_address" "public_ingress" {
   name = "${var.infra_prefix}-global-ip"
 }
+
+data "google_compute_subnetwork" "gke_vpc" {
+  name = var.vpc_subnet_name
+}
+
+resource "kubernetes_config_map" "gnomad_proxy_ips" {
+  metadata {
+    name = "proxy-ips"
+  }
+  data = {
+    ips = "127.0.0.1,${data.google_compute_subnetwork.gke_vpc.ip_cidr_range},${module.gnomad-gke.gke_pods_ipv4_cidr_block},${module.gnomad-gke.gke_services_ipv4_cidr_block},35.191.0.0/16,130.211.0.0/22,${google_compute_global_address.public_ingress.address}"
+  }
+}
