@@ -17,3 +17,17 @@ output "gke_control_plane_cidr" {
 output "gke_pods_ipv4_cidr_block" {
   value = google_container_cluster.gke_cluster.ip_allocation_policy[0].cluster_ipv4_cidr_block
 }
+
+output "gke_services_ipv4_cidr_block" {
+  value = google_container_cluster.gke_cluster.ip_allocation_policy[0].services_ipv4_cidr_block
+}
+
+# cluster API endpoint
+output "gke_cluster_api_endpoint" {
+  value = google_container_cluster.gke_cluster.endpoint
+}
+
+# cluster CA certificate
+output "gke_cluster_ca_cert" {
+  value = google_container_cluster.gke_cluster.master_auth[0].cluster_ca_certificate
+}
