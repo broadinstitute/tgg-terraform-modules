@@ -116,3 +116,10 @@ variable "data_pipeline_bucket_location" {
   type        = string
   default     = "us-east1"
 }
+
+
+variable "public_static_ip" {
+  description = "The public IP address that has been reserved for your browser"
+  type        = string
+  default     = null
+}
