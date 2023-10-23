@@ -69,7 +69,7 @@ serviceAccountName: es-snaps
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_gnomad-gke"></a> [gnomad-gke](#module\_gnomad-gke) | github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster | automate-proxy-ips |
+| <a name="module_gnomad-gke"></a> [gnomad-gke](#module\_gnomad-gke) | github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster | private-gke-cluster-v1.0.3 |
 
 ## Resources
 
@@ -86,6 +86,7 @@ serviceAccountName: es-snaps
 | [google_storage_bucket_iam_member.data_pipeline](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_iam_member) | resource |
 | [google_storage_bucket_iam_member.es_snapshots](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_iam_member) | resource |
 | [kubernetes_config_map.gnomad_proxy_ips](https://registry.terraform.io/providers/hashicorp/kubernetes/2.23.0/docs/resources/config_map) | resource |
+| [kubernetes_service_account.es_snaps](https://registry.terraform.io/providers/hashicorp/kubernetes/2.23.0/docs/resources/service_account) | resource |
 | [google_compute_subnetwork.gke_vpc](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_subnetwork) | data source |
 
 ## Inputs
