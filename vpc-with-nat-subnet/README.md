@@ -30,6 +30,8 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_nat_ip_allocate_option"></a> [nat\_ip\_allocate\_option](#input\_nat\_ip\_allocate\_option) | AUTO\_ONLY or MANUAL\_ONLY, for configuring a stable outbound IP | `string` | `"AUTO_ONLY"` | no |
+| <a name="input_nat_ips"></a> [nat\_ips](#input\_nat\_ips) | A list of self\_links to static IP reservations used as stable outbound IPs | `list(string)` | `null` | no |
 | <a name="input_network_name"></a> [network\_name](#input\_network\_name) | The name that should be given to the VPC network | `string` | `"atlantis"` | no |
 | <a name="input_subnets"></a> [subnets](#input\_subnets) | The subnet definitions that you'd like to create for the network | <pre>list(object({<br>    subnet_name_suffix           = string<br>    subnet_region                = string<br>    ip_cidr_range                = string<br>    enable_private_google_access = bool<br>    subnet_flow_logs             = bool<br>    subnet_flow_logs_sampling    = string<br>    subnet_flow_logs_metadata    = string<br>    subnet_flow_logs_filter      = string<br>  }))</pre> | <pre>[<br>  {<br>    "enable_private_google_access": true,<br>    "ip_cidr_range": "192.168.0.0/20",<br>    "subnet_flow_logs": false,<br>    "subnet_flow_logs_filter": "true",<br>    "subnet_flow_logs_metadata": "EXCLUDE_ALL_METADATA",<br>    "subnet_flow_logs_sampling": "0.5",<br>    "subnet_name_suffix": "gke",<br>    "subnet_region": "us-central1"<br>  }<br>]</pre> | no |
 
