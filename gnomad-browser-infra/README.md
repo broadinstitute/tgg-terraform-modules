@@ -18,6 +18,43 @@ module "gnomad-browser-infra" {
 }
 ```
 
+## Upgrading
+### Breaking Changes in v1.0.0
+
+The module was updated in 1.0.0 to handle the creation of a kubernetes configmap, a kubernetes service account, and the static IP reservation was removed from the module. In order for a pre-1.0 config to work, **before applying**, you need:
+
+- To configure the kubernetes provider with the gnomad-browser-infra's authentication endpoint outputs:
+
+```
+data "google_client_config" "tf_sa" {}
+
+provider "kubernetes" {
+  host  = "https://${module.gnomad-browser-infra.gke_cluster_api_endpoint}"
+  token = data.google_client_config.tf_sa.access_token
+  cluster_ca_certificate = base64decode(
+    module.gnomad-browser-infra.gke_cluster_ca_cert,
+  )
+}
+```
+
+- If they already exist, import the proxy-ips configmap and es-snaps service account into your configuration:
+
+```bash
+terraform import module.gnomad-browser-infra.kubernetes_service_account.es_snaps default/es-snaps
+terraform import module.gnomad-browser-infra.kubernetes_config_map.gnomad_proxy_ips default/proxy-ips
+```
+
+- Move your static IP reservation outside of the module:
+```
+# create a global address resource to move state to
+resource "google_compute_global_address" "my_static_ip" {
+  name = "<YOUR INFRA PREFIX>-global-ip"
+}
+
+# then, in a shell
+terraform state mv module.gnomad-browser-infra.google_compute_global_address.public_ingress google_compute_global_address.my_static_ip
+```
+
 ### Networking / VPC
 This module assumes that you have provisioned a VPC in your GCP project, with a subnet of an appropriate size to run the GKE cluster. That subnet must have two secondary ranges, one for the GKE pods, and one for the GKE services. The names of these ranges are the ones that should be passed in via the `gke_cluster_secondary_range_name` and `gke_services_secondary_range_name` respectively.
 
@@ -25,22 +62,7 @@ If you don't already have a VPC, the [gnomAD VPC](https://github.com/broadinstit
 
 ### Elasticsearch
 
-This module provisions a service account and GCS bucket for storing elasticsearch snapshots. The GKE cluster will be configured using [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity). The Google Cloud Service Account is associated with a service account called "es-snaps", and scoped to an "elasticsearch" namespace on the K8S cluster. When deploying elasticsearch, if you would like to take advantage of workload identity to avoid using a JSON service account key, you will need to create a K8S service account called "es-snaps" in the "elasticsearch" namespace. Then, the K8S service account needs to be annotated to pair it with the GCS service account created by this module:
-
-```bash
-kubectl -n elasticsearch apply -f - <<EOF
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: es-snaps
-EOF
-```
-
-```bash
-kubectl annotate serviceaccount es-snaps \
-    --namespace elasticsearch \
-    iam.gke.io/gcp-service-account=<your deployment prefix>-es-snaps@YOUR_PROJECT_ID.iam.gserviceaccount.com
-```
+This module provisions a service account (both GCP IAM and K8S service accounts) and GCS bucket for storing elasticsearch snapshots. The GKE cluster will be configured using [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity).
 
 If you are using the [ECK Operator](https://www.elastic.co/guide/en/cloud-on-k8s/current/index.html), you should associate your Elasticsearch resources with the K8S service account by adding the following to your `podTemplate.spec`:
 
