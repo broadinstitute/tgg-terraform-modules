@@ -56,25 +56,26 @@ serviceAccountName: es-snaps
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.0 |
 | <a name="requirement_google"></a> [google](#requirement\_google) | >= 4.45.0 |
+| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | 2.23.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_google"></a> [google](#provider\_google) | >= 4.45.0 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.23.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_gnomad-gke"></a> [gnomad-gke](#module\_gnomad-gke) | github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster | private-gke-cluster-v1.0.0 |
+| <a name="module_gnomad-gke"></a> [gnomad-gke](#module\_gnomad-gke) | github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster | automate-proxy-ips |
 
 ## Resources
 
 | Name | Type |
 |------|------|
 | [google_compute_firewall.es_webbook](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
-| [google_compute_global_address.public_ingress](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_global_address) | resource |
 | [google_project_iam_member.data_pipeline_dataproc_worker](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.data_pipeline_service_consumer](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_service_account.data_pipeline](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
@@ -84,6 +85,8 @@ serviceAccountName: es-snaps
 | [google_storage_bucket.elastic_snapshots](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | resource |
 | [google_storage_bucket_iam_member.data_pipeline](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_iam_member) | resource |
 | [google_storage_bucket_iam_member.es_snapshots](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_iam_member) | resource |
+| [kubernetes_config_map.gnomad_proxy_ips](https://registry.terraform.io/providers/hashicorp/kubernetes/2.23.0/docs/resources/config_map) | resource |
+| [google_compute_subnetwork.gke_vpc](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_subnetwork) | data source |
 
 ## Inputs
 
@@ -95,9 +98,12 @@ serviceAccountName: es-snaps
 | <a name="input_gke_control_plane_zone"></a> [gke\_control\_plane\_zone](#input\_gke\_control\_plane\_zone) | The GCP zone where the GKE control plane will reside | `string` | `"us-east1-c"` | no |
 | <a name="input_gke_maint_exclusions"></a> [gke\_maint\_exclusions](#input\_gke\_maint\_exclusions) | Specified times and dates that non-emergency GKE maintenance should pause | `list(map(string))` | `[]` | no |
 | <a name="input_gke_node_pools"></a> [gke\_node\_pools](#input\_gke\_node\_pools) | A list of node pools and their configuration that should be created within the GKE cluster; pools with an empty string for the zone will deploy in the same region as the control plane | <pre>list(object({<br>    pool_name            = string<br>    pool_num_nodes       = number<br>    pool_machine_type    = string<br>    pool_preemptible     = bool<br>    pool_zone            = string<br>    pool_resource_labels = map(string)<br>  }))</pre> | <pre>[<br>  {<br>    "pool_machine_type": "e2-standard-4",<br>    "pool_name": "main-pool",<br>    "pool_num_nodes": 2,<br>    "pool_preemptible": false,<br>    "pool_resource_labels": {},<br>    "pool_zone": ""<br>  },<br>  {<br>    "pool_machine_type": "e2-custom-6-49152",<br>    "pool_name": "redis",<br>    "pool_num_nodes": 1,<br>    "pool_preemptible": false,<br>    "pool_resource_labels": {<br>      "component": "redis"<br>    },<br>    "pool_zone": ""<br>  },<br>  {<br>    "pool_machine_type": "e2-highmem-8",<br>    "pool_name": "es-data",<br>    "pool_num_nodes": 3,<br>    "pool_preemptible": false,<br>    "pool_resource_labels": {<br>      "component": "elasticsearch"<br>    },<br>    "pool_zone": ""<br>  }<br>]</pre> | no |
+| <a name="input_gke_pods_range_slice"></a> [gke\_pods\_range\_slice](#input\_gke\_pods\_range\_slice) | The full (e.g. 10.0.0.0/14) or simple (e.g. /14) CIDR range slice to assign for internal pod IP addresses | `string` | `"/14"` | no |
 | <a name="input_gke_recurring_maint_windows"></a> [gke\_recurring\_maint\_windows](#input\_gke\_recurring\_maint\_windows) | A start time, end time and recurrence pattern for GKE automated maintenance windows | `list(map(string))` | <pre>[<br>  {<br>    "end_time": "1970-01-01T11:00:00Z",<br>    "recurrence": "FREQ=DAILY",<br>    "start_time": "1970-01-01T07:00:00Z"<br>  }<br>]</pre> | no |
+| <a name="input_gke_services_range_slice"></a> [gke\_services\_range\_slice](#input\_gke\_services\_range\_slice) | The full (e.g. 10.0.0.0/20) or simple (e.g. /20) CIDR range slice to assign for internal service IP addresses | `string` | `"/20"` | no |
 | <a name="input_infra_prefix"></a> [infra\_prefix](#input\_infra\_prefix) | The string to use for a prefix on resource names (GKE cluster, GCS Buckets, Service Accounts, etc) | `string` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The name of the target GCP project, for creating IAM memberships | `string` | n/a | yes |
+| <a name="input_public_static_ip"></a> [public\_static\_ip](#input\_public\_static\_ip) | The public IP address that has been reserved for your browser | `string` | `null` | no |
 | <a name="input_vpc_network_name"></a> [vpc\_network\_name](#input\_vpc\_network\_name) | The name of the VPC network that the GKE cluster should reside in | `string` | n/a | yes |
 | <a name="input_vpc_subnet_name"></a> [vpc\_subnet\_name](#input\_vpc\_subnet\_name) | The name of the VPC network subnet that the GKE cluster nodes should reside in | `string` | n/a | yes |
 
@@ -105,8 +111,10 @@ serviceAccountName: es-snaps
 
 | Name | Description |
 |------|-------------|
+| <a name="output_gke_cluster_api_endpoint"></a> [gke\_cluster\_api\_endpoint](#output\_gke\_cluster\_api\_endpoint) | n/a |
+| <a name="output_gke_cluster_ca_cert"></a> [gke\_cluster\_ca\_cert](#output\_gke\_cluster\_ca\_cert) | n/a |
 | <a name="output_gke_cluster_name"></a> [gke\_cluster\_name](#output\_gke\_cluster\_name) | n/a |
-| <a name="output_public_web_address"></a> [public\_web\_address](#output\_public\_web\_address) | n/a |
+| <a name="output_gke_pods_ipv4_cidr_block"></a> [gke\_pods\_ipv4\_cidr\_block](#output\_gke\_pods\_ipv4\_cidr\_block) | for obtaining the internal network value that should be set in gnomad's PROXY\_IPS env variable |
 <!-- END_TF_DOCS -->
 
 ## Misc
