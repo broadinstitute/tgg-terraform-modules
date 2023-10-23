@@ -29,3 +29,15 @@ variable "subnets" {
     }
   ]
 }
+
+variable "nat_ip_allocate_option" {
+  description = "AUTO_ONLY or MANUAL_ONLY, for configuring a stable outbound IP"
+  type        = string
+  default     = "AUTO_ONLY"
+}
+
+variable "nat_ips" {
+  description = "A list of self_links to static IP reservations used as stable outbound IPs"
+  type        = list(string)
+  default     = null
+}
