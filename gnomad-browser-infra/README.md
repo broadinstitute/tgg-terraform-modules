@@ -7,6 +7,16 @@ This module configures the base set of cloud infrastructure for the [gnomAD Brow
 This module can be used by including a module block in your terraform configuration, using a [github module source block](https://developer.hashicorp.com/terraform/language/modules/sources#github), and providing the [required inputs](#inputs):
 
 ```terraform
+data "google_client_config" "tf_sa" {}
+
+provider "kubernetes" {
+  host  = "https://${module.gnomad-browser-infra.gke_cluster_api_endpoint}"
+  token = data.google_client_config.tf_sa.access_token
+  cluster_ca_certificate = base64decode(
+    module.gnomad-browser-infra.gke_cluster_ca_cert,
+  )
+}
+
 module "gnomad-browser-infra" {
   source = "github.com/broadinstitute/tgg-terraform-modules//gnomad-browser-infra?ref=<git commit SHA ID or Tag>"
   infra_prefix = "my-gnomad-browser"
@@ -23,19 +33,7 @@ module "gnomad-browser-infra" {
 
 The module was updated in 1.0.0 to handle the creation of a kubernetes configmap, a kubernetes service account, and the static IP reservation was removed from the module. In order for a pre-1.0 config to work, **before applying**, you need:
 
-- To configure the kubernetes provider with the gnomad-browser-infra's authentication endpoint outputs:
-
-```
-data "google_client_config" "tf_sa" {}
-
-provider "kubernetes" {
-  host  = "https://${module.gnomad-browser-infra.gke_cluster_api_endpoint}"
-  token = data.google_client_config.tf_sa.access_token
-  cluster_ca_certificate = base64decode(
-    module.gnomad-browser-infra.gke_cluster_ca_cert,
-  )
-}
-```
+- To configure the kubernetes provider with the gnomad-browser-infra's authentication endpoint outputs, as documented above in [Usage](#usage)
 
 - If they already exist, import the proxy-ips configmap and es-snaps service account into your configuration:
 
