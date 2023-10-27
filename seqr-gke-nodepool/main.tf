@@ -48,4 +48,8 @@ resource "google_container_node_pool" "node_pool" {
       max_node_count = var.max_node_pool_count
     }
   }
+
+  workload_metadata_config {
+    mode = "GKE_METADATA"
+  }
 }
