@@ -49,7 +49,4 @@ resource "google_container_node_pool" "node_pool" {
     }
   }
 
-  workload_metadata_config {
-    mode = "GKE_METADATA"
-  }
 }

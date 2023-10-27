@@ -183,6 +183,10 @@ resource "google_container_node_pool" "default_pool" {
       enable_integrity_monitoring = "true"
       enable_secure_boot          = "false"
     }
+
+    workload_metadata_config {
+      mode = "GKE_METADATA"
+    }
   }
 
   node_count = var.default_pool_node_count
