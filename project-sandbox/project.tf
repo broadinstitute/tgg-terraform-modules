@@ -42,6 +42,7 @@ resource "google_project_iam_member" "default_compute_service_usage" {
 }
 
 resource "google_project_iam_member" "default_compute_artifact_read" {
+  count   = contains(var.apis_to_enable, "artifactregistry.googleapis.com") ? 1 : 0
   project = google_project.current_project.project_id
   role    = "roles/artifactregistry.reader"
   member  = "serviceAccount:${google_project.current_project.number}-compute@developer.gserviceaccount.com"
@@ -49,8 +50,8 @@ resource "google_project_iam_member" "default_compute_artifact_read" {
 
 resource "google_project_iam_custom_role" "bucket_list_role" {
   project     = google_project.current_project.project_id
-  role_id     = "gnomADProjBucketList"
-  title       = "gnomAD Project Bucket List"
+  role_id     = "ProjBucketList"
+  title       = "Project Bucket List"
   description = "Provides access to list GCS buckets"
   permissions = ["storage.buckets.list"]
 }
@@ -82,6 +83,7 @@ resource "google_project_iam_member" "primary_iap_tunnel_access" {
 }
 
 resource "google_project_iam_member" "primary_user_artifact_reg_admin" {
+  count   = contains(var.apis_to_enable, "artifactregistry.googleapis.com") ? 1 : 0
   project = google_project.current_project.project_id
   role    = "roles/artifactregistry.admin"
   member  = var.primary_user_principal
