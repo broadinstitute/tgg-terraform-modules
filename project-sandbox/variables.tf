@@ -16,7 +16,7 @@ variable "project_name" {
 variable "apis_to_enable" {
   type        = list(string)
   description = "The list of additional APIs to enable. We always enable dataproc and cloudfunctions."
-  default     = []
+  default     = ["artifactregistry.googleapis.com"]
 }
 
 variable "enable_default_services" {

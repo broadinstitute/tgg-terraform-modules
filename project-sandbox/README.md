@@ -1,6 +1,6 @@
 # gnomAD Terraform Project
 
-This module is designed to easily spin up a google cloud project in a configuration that is suitable for typical gnomAD activities.
+This module is designed to easily spin up a google cloud project in a configuration that is suitable for typical seqr/gnomAD activities.
 
 ## Inventory
 
