@@ -103,31 +103,3 @@ resource "google_compute_firewall" "es_webbook" {
   source_ranges = [module.gnomad-gke.gke_control_plane_cidr]
   target_tags   = ["${var.infra_prefix}-gke"]
 }
-
-data "google_compute_subnetwork" "gke_vpc" {
-  name = var.vpc_subnet_name
-}
-
-locals {
-  static_ip = var.public_static_ip == null ? "" : ",${var.public_static_ip}"
-}
-
-# Expected configuration for the browser deployments PROXY_IPS environment variable
-resource "kubernetes_config_map" "gnomad_proxy_ips" {
-  metadata {
-    name = "proxy-ips"
-  }
-  data = {
-    ips = "127.0.0.1,${data.google_compute_subnetwork.gke_vpc.ip_cidr_range},${module.gnomad-gke.gke_pods_ipv4_cidr_block},${module.gnomad-gke.gke_services_ipv4_cidr_block},35.191.0.0/16,130.211.0.0/22${local.static_ip}"
-  }
-}
-
-# Pre-configures the service account that we use for ES snapshots
-resource "kubernetes_service_account" "es_snaps" {
-  metadata {
-    name = "es-snaps"
-    annotations = {
-      "iam.gke.io/gcp-service-account" = google_service_account.es_snapshots.email
-    }
-  }
-}
