@@ -117,7 +117,11 @@ variable "data_pipeline_bucket_location" {
   default     = "us-east1"
 }
 
-
+variable "gene_cache_bucket_location" {
+  description = "The GCS location for the JSON gene cache bucket"
+  type        = string
+  default     = "us-east1"
+}
 variable "public_static_ip" {
   description = "The public IP address that has been reserved for your browser"
   type        = string
