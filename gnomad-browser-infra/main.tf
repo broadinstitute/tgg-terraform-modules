@@ -1,9 +1,37 @@
+# ES Snapshots
 resource "google_service_account" "es_snapshots" {
   account_id   = "${var.infra_prefix}-es-snaps"
   description  = "The service account for the elasticsearch snapshot lifecycle manager"
   display_name = "${var.infra_prefix} Elasticsearch Snapshots"
 }
 
+resource "google_service_account_iam_member" "es_snapshots" {
+  role               = "roles/iam.workloadIdentityUser"
+  service_account_id = google_service_account.es_snapshots.name
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[default/es-snaps]"
+}
+
+resource "google_storage_bucket_iam_member" "es_snapshots" {
+  bucket = google_storage_bucket.elastic_snapshots.name
+  role   = "roles/storage.admin"
+  member = google_service_account.es_snapshots.member
+}
+
+resource "google_storage_bucket" "elastic_snapshots" {
+  name                        = "${var.infra_prefix}-elastic-snaps"
+  location                    = var.es_snapshots_bucket_location
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = true
+  public_access_prevention    = "enforced"
+
+  labels = {
+    "deployment" = var.infra_prefix
+    "terraform"  = "true"
+    "component"  = "elasticsearch"
+  }
+}
+
+# Data Pipeline
 resource "google_service_account" "data_pipeline" {
   account_id   = "${var.infra_prefix}-data-pipeline"
   description  = "The service account for running the gnomAD data pipeline"
@@ -23,38 +51,6 @@ resource "google_project_iam_member" "data_pipeline_service_consumer" {
   project = var.project_id
 }
 
-resource "google_service_account_iam_member" "es_snapshots" {
-  role               = "roles/iam.workloadIdentityUser"
-  service_account_id = google_service_account.es_snapshots.name
-  member             = "serviceAccount:${var.project_id}.svc.id.goog[default/es-snaps]"
-}
-
-resource "google_storage_bucket_iam_member" "es_snapshots" {
-  bucket = google_storage_bucket.elastic_snapshots.name
-  role   = "roles/storage.admin"
-  member = google_service_account.es_snapshots.member
-}
-
-resource "google_storage_bucket_iam_member" "data_pipeline" {
-  bucket = google_storage_bucket.data_pipeline.name
-  role   = "roles/storage.admin"
-  member = google_service_account.data_pipeline.member
-}
-
-resource "google_storage_bucket" "elastic_snapshots" {
-  name                        = "${var.infra_prefix}-elastic-snaps"
-  location                    = var.es_snapshots_bucket_location
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = true
-  public_access_prevention    = "enforced"
-
-  labels = {
-    "deployment" = var.infra_prefix
-    "terraform"  = "true"
-    "component"  = "elasticsearch"
-  }
-}
-
 resource "google_storage_bucket" "data_pipeline" {
   name                        = "${var.infra_prefix}-data-pipeline"
   location                    = var.data_pipeline_bucket_location
@@ -69,6 +65,41 @@ resource "google_storage_bucket" "data_pipeline" {
   }
 }
 
+# gnomAD API
+resource "google_service_account" "gnomad_api" {
+  account_id   = "${var.infra_prefix}-api"
+  description  = "The service account associated with the gnomad browser API pods"
+  display_name = "${var.infra_prefix} API Pods"
+}
+
+resource "google_service_account_iam_member" "gnomad_api" {
+  role               = "roles/iam.workloadIdentityUser"
+  service_account_id = google_service_account.gnomad_api.name
+  member             = "serviceAccount:gnomadev.svc.id.goog[default/gnomad-api]"
+}
+
+
+resource "google_storage_bucket" "gene_cache" {
+  name                        = "${var.infra_prefix}-gene-cache"
+  location                    = var.gene_cache_bucket_location
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = true
+  public_access_prevention    = "enforced"
+
+  labels = {
+    "deployment" = var.infra_prefix
+    "terraform"  = "true"
+    "component"  = "gnomad-api"
+  }
+}
+
+resource "google_storage_bucket_iam_member" "gene_cache" {
+  bucket = google_storage_bucket.gene_cache.name
+  role   = "roles/storage.objectUser"
+  member = google_service_account.gnomad_api.member
+}
+
+# GKE Cluster
 module "gnomad-gke" {
   source                 = "github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster?ref=private-gke-cluster-v1.0.3"
   gke_cluster_name       = var.infra_prefix
