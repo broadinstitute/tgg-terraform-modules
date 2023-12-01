@@ -168,3 +168,13 @@ resource "kubernetes_service_account" "es_snaps" {
     }
   }
 }
+
+# Pre-configures the service account we need for read/write on the JSON gene cache
+resource "kubernetes_service_account" "gnomad_api" {
+  metadata {
+    name = "gnomad-api"
+    annotations = {
+      "iam.gke.io/gcp-service-account" = google_service_account.gnomad_api.email
+    }
+  }
+}
