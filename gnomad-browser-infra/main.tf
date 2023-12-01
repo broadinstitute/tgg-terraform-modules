@@ -65,6 +65,12 @@ resource "google_storage_bucket" "data_pipeline" {
   }
 }
 
+resource "google_storage_bucket_iam_member" "data_pipeline" {
+  bucket = google_storage_bucket.data_pipeline.name
+  role   = "roles/storage.admin"
+  member = google_service_account.data_pipeline.member
+}
+
 # gnomAD API
 resource "google_service_account" "gnomad_api" {
   account_id   = "${var.infra_prefix}-api"
