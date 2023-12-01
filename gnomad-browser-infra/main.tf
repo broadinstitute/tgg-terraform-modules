@@ -81,7 +81,7 @@ resource "google_service_account" "gnomad_api" {
 resource "google_service_account_iam_member" "gnomad_api" {
   role               = "roles/iam.workloadIdentityUser"
   service_account_id = google_service_account.gnomad_api.name
-  member             = "serviceAccount:gnomadev.svc.id.goog[default/gnomad-api]"
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[default/gnomad-api]"
 }
 
 
