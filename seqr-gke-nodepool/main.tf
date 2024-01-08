@@ -52,7 +52,7 @@ resource "google_container_node_pool" "node_pool" {
   }
 
   dynamic "ephemeral_storage_local_ssd_config" {
-    for_each (var.node_pool_local_ssd_count > 0) ? [var.node_pool_local_ssd_count] : []
+    for_each = (var.node_pool_local_ssd_count > 0) ? [var.node_pool_local_ssd_count] : []
     content {
       local_ssd_count  = var.node_pool_local_ssd_count
     }
