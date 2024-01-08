@@ -34,6 +34,10 @@ resource "google_container_node_pool" "node_pool" {
       enable_secure_boot          = "false"
     }
 
+    workload_metadata_config {
+      mode = "GKE_METADATA"
+    }
+
     dynamic "ephemeral_storage_local_ssd_config" {
       for_each = (var.node_pool_local_ssd_count > 0) ? [var.node_pool_local_ssd_count] : []
       content {
