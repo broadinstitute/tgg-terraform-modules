@@ -33,6 +33,13 @@ resource "google_container_node_pool" "node_pool" {
       enable_integrity_monitoring = "true"
       enable_secure_boot          = "false"
     }
+
+    dynamic "ephemeral_storage_local_ssd_config" {
+      for_each = (var.node_pool_local_ssd_count > 0) ? [var.node_pool_local_ssd_count] : []
+      content {
+        local_ssd_count  = var.node_pool_local_ssd_count
+      }
+    }
   }
 
   node_locations = [var.node_location]
@@ -48,13 +55,6 @@ resource "google_container_node_pool" "node_pool" {
     content {
       min_node_count = var.min_node_pool_count
       max_node_count = var.max_node_pool_count
-    }
-  }
-
-  dynamic "ephemeral_storage_local_ssd_config" {
-    for_each = (var.node_pool_local_ssd_count > 0) ? [var.node_pool_local_ssd_count] : []
-    content {
-      local_ssd_count  = var.node_pool_local_ssd_count
     }
   }
 }
