@@ -16,7 +16,9 @@ resource "google_container_node_pool" "node_pool" {
 
     labels = var.node_pool_labels
 
-    local_ssd_count = var.node_pool_local_ssd_count
+    # Per note here: https://cloud.google.com/kubernetes-engine/docs/how-to/persistent-volumes/local-ssd#creating_a_node_pool_using_ephemeral_storage_on_local_ssds
+    # we prefer ephemeral-storage-local-ssd to take advantage of NVMe.
+    local_ssd_count = 0
     machine_type    = var.node_pool_machine_type
 
     metadata = {
@@ -30,6 +32,17 @@ resource "google_container_node_pool" "node_pool" {
     shielded_instance_config {
       enable_integrity_monitoring = "true"
       enable_secure_boot          = "false"
+    }
+
+    workload_metadata_config {
+      mode = "GKE_METADATA"
+    }
+
+    dynamic "ephemeral_storage_local_ssd_config" {
+      for_each = (var.node_pool_local_ssd_count > 0) ? [var.node_pool_local_ssd_count] : []
+      content {
+        local_ssd_count  = var.node_pool_local_ssd_count
+      }
     }
   }
 
@@ -48,5 +61,4 @@ resource "google_container_node_pool" "node_pool" {
       max_node_count = var.max_node_pool_count
     }
   }
-
 }
