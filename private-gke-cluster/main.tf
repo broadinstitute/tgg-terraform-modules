@@ -22,12 +22,13 @@ resource "google_project_iam_member" "gke_nodes_iam" {
 
 # GKE Cluster
 resource "google_container_cluster" "gke_cluster" {
-  name            = var.gke_cluster_name
-  network         = var.vpc_network_name
-  subnetwork      = var.vpc_subnet_name
-  networking_mode = "VPC_NATIVE"
-  location        = var.gke_control_plane_zone
-  resource_labels = var.resource_labels
+  name                = var.gke_cluster_name
+  network             = var.vpc_network_name
+  subnetwork          = var.vpc_subnet_name
+  networking_mode     = "VPC_NATIVE"
+  location            = var.gke_control_plane_zone
+  resource_labels     = var.resource_labels
+  deletion_protection = var.deletion_protection
 
   master_authorized_networks_config {
 

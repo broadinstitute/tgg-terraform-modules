@@ -107,7 +107,7 @@ resource "google_storage_bucket_iam_member" "gene_cache" {
 
 # GKE Cluster
 module "gnomad-gke" {
-  source                 = "github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster?ref=private-gke-cluster-v1.0.3"
+  source                 = "github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster?ref=deletion-protection"
   gke_cluster_name       = var.infra_prefix
   project_name           = var.project_id
   gke_control_plane_zone = var.gke_control_plane_zone

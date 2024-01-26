@@ -105,3 +105,9 @@ variable "gke_maint_exclusions" {
   type        = list(map(string))
   default     = []
 }
+
+variable "deletion_protection" {
+  description = "Whether or not to enable deletion protection on the GKE cluster. Default false."
+  type        = bool
+  default     = false
+}
