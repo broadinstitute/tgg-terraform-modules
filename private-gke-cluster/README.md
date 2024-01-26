@@ -32,6 +32,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_deletion_protection"></a> [deletion\_protection](#input\_deletion\_protection) | Whether or not to enable deletion protection on the GKE cluster. Default false. | `bool` | `false` | no |
 | <a name="input_gke_cluster_name"></a> [gke\_cluster\_name](#input\_gke\_cluster\_name) | The name of the GKE cluster you want to manage | `string` | n/a | yes |
 | <a name="input_gke_control_plane_authorized_networks"></a> [gke\_control\_plane\_authorized\_networks](#input\_gke\_control\_plane\_authorized\_networks) | The IPv4 CIDR ranges that should be allowed to connect to the control plane | `list(string)` | `[]` | no |
 | <a name="input_gke_control_plane_zone"></a> [gke\_control\_plane\_zone](#input\_gke\_control\_plane\_zone) | The zone to launch the GKE cluster in | `string` | `"us-central1-c"` | no |
@@ -51,9 +52,13 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_gke_cluster_api_endpoint"></a> [gke\_cluster\_api\_endpoint](#output\_gke\_cluster\_api\_endpoint) | cluster API endpoint |
+| <a name="output_gke_cluster_ca_cert"></a> [gke\_cluster\_ca\_cert](#output\_gke\_cluster\_ca\_cert) | cluster CA certificate |
 | <a name="output_gke_cluster_name"></a> [gke\_cluster\_name](#output\_gke\_cluster\_name) | cluster name |
 | <a name="output_gke_control_plane_cidr"></a> [gke\_control\_plane\_cidr](#output\_gke\_control\_plane\_cidr) | ipv4 control plane cidr |
+| <a name="output_gke_pods_ipv4_cidr_block"></a> [gke\_pods\_ipv4\_cidr\_block](#output\_gke\_pods\_ipv4\_cidr\_block) | ipv4 cidr block for pods running in the cluster |
 | <a name="output_gke_service_account_email"></a> [gke\_service\_account\_email](#output\_gke\_service\_account\_email) | service account email |
+| <a name="output_gke_services_ipv4_cidr_block"></a> [gke\_services\_ipv4\_cidr\_block](#output\_gke\_services\_ipv4\_cidr\_block) | n/a |
 <!-- END_TF_DOCS -->
 
 ## Misc
