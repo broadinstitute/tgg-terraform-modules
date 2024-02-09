@@ -75,7 +75,7 @@ variable "node_pools" {
       "pool_preemptible"     = true
       "pool_zone"            = ""
       "pool_resource_labels" = {}
-      "pool_taints"          = {}
+      "pool_taints"          = []
     }
   ]
 }
