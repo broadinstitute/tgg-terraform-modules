@@ -65,7 +65,7 @@ variable "node_pools" {
     pool_preemptible     = bool
     pool_zone            = string
     pool_resource_labels = map(string)
-    pool_taints          = map(list(object({ key = string, value = string, effect = string })))
+    pool_taints          = list(object({ key = string, value = string, effect = string }))
   }))
   default = [
     {
