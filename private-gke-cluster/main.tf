@@ -109,5 +109,14 @@ resource "google_container_node_pool" "node_pool" {
     tags = ["${var.gke_cluster_name}", "${var.gke_cluster_name}-${each.value.pool_name}"]
 
     resource_labels = each.value.pool_resource_labels
+
+    dynamic "taint" {
+      for_each = each.value.pool_taints
+      content {
+        effect = taint.value.effect
+        key    = taint.value.key
+        value  = taint.value.value
+      }
+    }
   }
 }
