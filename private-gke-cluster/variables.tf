@@ -63,6 +63,7 @@ variable "node_pools" {
     pool_num_nodes       = number
     pool_machine_type    = string
     pool_preemptible     = bool
+    pool_spot            = bool
     pool_zone            = string
     pool_resource_labels = map(string)
     pool_taints          = list(object({ key = string, value = string, effect = string }))
@@ -73,6 +74,7 @@ variable "node_pools" {
       "pool_num_nodes"       = 2
       "pool_machine_type"    = "e2-medium"
       "pool_preemptible"     = true
+      "pool_spot"            = false
       "pool_zone"            = ""
       "pool_resource_labels" = {}
       "pool_taints"          = []
