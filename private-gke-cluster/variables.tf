@@ -60,13 +60,13 @@ variable "node_pools" {
   description = "A list of node pools and their configuration that should be created within the GKE cluster; pools with an empty string for the zone will deploy in the same region as the control plane"
   type = list(object({
     pool_name            = string
-    pool_num_nodes       = number
-    pool_machine_type    = string
-    pool_preemptible     = bool
-    pool_spot            = bool
-    pool_zone            = string
-    pool_resource_labels = map(string)
-    pool_taints          = list(object({ key = string, value = string, effect = string }))
+    pool_num_nodes       = optional(number, 2)
+    pool_machine_type    = optional(string, "e2-medium")
+    pool_preemptible     = optional(bool, false)
+    pool_spot            = optional(bool, true)
+    pool_zone            = optional(string, "")
+    pool_resource_labels = optional(map(string), {})
+    pool_taints          = optional(list(object({ key = string, value = string, effect = string })), [])
   }))
   default = [
     {
