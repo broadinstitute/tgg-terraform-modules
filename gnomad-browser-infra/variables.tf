@@ -67,27 +67,26 @@ variable "gke_node_pools" {
   description = "A list of node pools and their configuration that should be created within the GKE cluster; pools with an empty string for the zone will deploy in the same region as the control plane"
   type = list(object({
     pool_name            = string
-    pool_num_nodes       = number
-    pool_machine_type    = string
-    pool_preemptible     = bool
-    pool_zone            = string
-    pool_resource_labels = map(string)
+    pool_num_nodes       = optional(number, 2)
+    pool_machine_type    = optional(string, "e2-medium")
+    pool_preemptible     = optional(bool, false)
+    pool_spot            = optional(bool, true)
+    pool_zone            = optional(string, "")
+    pool_resource_labels = optional(map(string), {})
+    pool_taints          = optional(list(object({ key = string, value = string, effect = string })), [])
   }))
   default = [
     {
-      "pool_name"            = "main-pool"
-      "pool_num_nodes"       = 2
-      "pool_machine_type"    = "e2-standard-4"
-      "pool_preemptible"     = false
-      "pool_zone"            = ""
-      "pool_resource_labels" = {}
+      "pool_name"         = "main-pool"
+      "pool_num_nodes"    = 2
+      "pool_machine_type" = "e2-standard-4"
+      "pool_spot"         = false
     },
     {
       "pool_name"         = "redis"
       "pool_num_nodes"    = 1
       "pool_machine_type" = "e2-custom-6-49152"
-      "pool_preemptible"  = false
-      "pool_zone"         = ""
+      "pool_spot"         = false
       "pool_resource_labels" = {
         "component" = "redis"
       }
@@ -96,8 +95,8 @@ variable "gke_node_pools" {
       "pool_name"         = "es-data"
       "pool_num_nodes"    = 3
       "pool_machine_type" = "e2-highmem-8"
-      "pool_preemptible"  = false
       "pool_zone"         = ""
+      "pool_spot"         = false
       "pool_resource_labels" = {
         "component" = "elasticsearch"
       }
