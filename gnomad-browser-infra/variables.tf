@@ -48,8 +48,8 @@ variable "gke_recurring_maint_windows" {
   description = "A start time, end time and recurrence pattern for GKE automated maintenance windows"
   type        = list(map(string))
   default = [{
-    start_time = "1970-01-01T07:00:00Z"
-    end_time   = "1970-01-01T11:00:00Z"
+    start_time = "1970-01-01T01:00:00Z"
+    end_time   = "1970-01-01T06:00:00Z"
     recurrence = "FREQ=DAILY"
   }]
 }
