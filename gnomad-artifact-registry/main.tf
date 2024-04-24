@@ -7,14 +7,6 @@ resource "google_artifact_registry_repository" "gnomad_repository" {
   cleanup_policy_dry_run = var.cleanup_policy_dry_run
   # Cleanup Policy durations MUST be specified in seconds
   cleanup_policies {
-    id     = "delete-untagged"
-    action = "DELETE"
-    condition {
-      tag_state  = "UNTAGGED"
-      older_than = "5184000s" # 60 days
-    }
-  }
-  cleanup_policies {
     id     = "delete-demo"
     action = "DELETE"
     condition {
@@ -24,11 +16,11 @@ resource "google_artifact_registry_repository" "gnomad_repository" {
     }
   }
   cleanup_policies {
-    id     = "keep-tagged-prod-release"
-    action = "KEEP"
+    id     = "delete-older-than-1y"
+    action = "DELETE"
     condition {
-      tag_state    = "TAGGED"
-      tag_prefixes = ["prod"]
+      tag_state  = "ANY"
+      older_than = "31536000s" # 1 year
     }
   }
   cleanup_policies {
