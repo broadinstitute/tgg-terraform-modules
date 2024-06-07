@@ -126,3 +126,9 @@ variable "public_static_ip" {
   type        = string
   default     = null
 }
+
+variable "enable_external_dns" {
+  description = "When enabled, creates service accounts and workload identity bindings that can be used for configuring External DNS"
+  type        = bool
+  default     = true
+}

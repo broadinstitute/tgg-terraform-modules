@@ -105,6 +105,23 @@ resource "google_storage_bucket_iam_member" "gene_cache" {
   member = google_service_account.gnomad_api.member
 }
 
+
+# External DNS
+
+resource "google_service_account" "external_dns" {
+  count        = var.enable_external_dns ? 1 : 0
+  account_id   = "${var.infra_prefix}-external-dns"
+  display_name = "${var.infra_prefix} External DNS"
+}
+
+resource "google_service_account_iam_member" "external_dns_identity" {
+  count              = var.enable_external_dns ? 1 : 0
+  role               = "roles/iam.workloadIdentityUser"
+  service_account_id = google_service_account.external_dns.id
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[external-dns/external-dns]"
+}
+
+
 # GKE Cluster
 module "gnomad-gke" {
   source                 = "github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster?ref=private-gke-cluster-v1.1.0"
