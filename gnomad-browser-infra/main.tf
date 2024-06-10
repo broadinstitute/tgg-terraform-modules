@@ -117,7 +117,7 @@ resource "google_service_account" "external_dns" {
 resource "google_service_account_iam_member" "external_dns_identity" {
   count              = var.enable_external_dns ? 1 : 0
   role               = "roles/iam.workloadIdentityUser"
-  service_account_id = google_service_account.external_dns.id
+  service_account_id = google_service_account.external_dns[0].id
   member             = "serviceAccount:${var.project_id}.svc.id.goog[external-dns/external-dns]"
 }
 
