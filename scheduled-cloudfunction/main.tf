@@ -59,8 +59,8 @@ module "gh_oidc_wif" {
   source      = "terraform-google-modules/github-actions-runners/google//modules/gh-oidc"
   version     = "3.1.1"
   project_id  = var.project_id
-  pool_id     = "${var.scheduled_function_name}-actions-pool"
-  provider_id = "${var.scheduled_function_name}-github-actions"
+  pool_id     = "${substr(var.scheduled_function_name, 0, 15)}-actions-pool"
+  provider_id = "${substr(var.scheduled_function_name, 0, 15)}-github-actions"
   attribute_mapping = {
     "google.subject"       = "assertion.sub"
     "attribute.actor"      = "assertion.actor"
