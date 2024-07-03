@@ -11,7 +11,10 @@ This modules creates the resources necessary to deploy a cloud scheduler trigger
 
 ### Breaking changes for v1.0.0
 
-As of v1.0.0, this module no longer creates a cloudfunction for you. It only configures the necessary resources to run and trigger a cloudfunction which you deploy by other means. This is because deploying functions via terraform was janky, and we usually had a github action/cloudbuild trigger to update the function anyway. The module now also creates a service account on your behalf, and no longer requires one to be provided ahead of time.
+As of v1.0.0, this module no longer creates a cloudfunction for you. It only configures the necessary resources to run and trigger a cloudfunction which you deploy by other means. This is because deploying functions via terraform was janky, and we usually had a github action/cloudbuild trigger to update the function anyway. The module now also optionally:
+
+- (on my default) configures Github <-> GCP workload identity federation for you
+- Can assign project-level IAM roles  to your runtime service account for you.
 
 It's recommended that you delete any pre-v1.0.0 deployments of this module, apply v1.0.0, and then update your github deployment actions to use the new service account and trigger topic configuration that it generates.
 
