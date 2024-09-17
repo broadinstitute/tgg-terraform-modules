@@ -103,6 +103,11 @@ resource "google_container_node_pool" "node_pool" {
       "https://www.googleapis.com/auth/cloud-platform"
     ]
 
+    kubelet_config {
+      cpu_manager_policy                     = "none"
+      insecure_kubelet_readonly_port_enabled = var.disable_insecure_kubelet_port
+    }
+
     workload_metadata_config {
       mode = "GKE_METADATA"
     }

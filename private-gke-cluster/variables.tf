@@ -115,3 +115,10 @@ variable "deletion_protection" {
   type        = bool
   default     = false
 }
+
+# see: https://cloud.google.com/kubernetes-engine/docs/how-to/disable-kubelet-readonly-port
+variable "disable_insecure_kubelet_port" {
+  description = "Disables the unauthenticated readonly kubelet port"
+  type        = bool
+  default     = true
+}
