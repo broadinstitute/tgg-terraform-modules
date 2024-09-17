@@ -51,6 +51,12 @@ resource "google_container_cluster" "gke_cluster" {
   remove_default_node_pool = true
   initial_node_count       = 1
 
+  node_pool_defaults {
+    node_config_defaults {
+      insecure_kubelet_readonly_port_enabled = var.disable_insecure_kubelet_port
+    }
+  }
+
   workload_identity_config {
     workload_pool = "${var.project_name}.svc.id.goog"
   }
