@@ -7,13 +7,13 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_google"></a> [google](#requirement\_google) | >= 4.57.0 |
+| <a name="requirement_google"></a> [google](#requirement\_google) | >= 5.44.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | >= 4.57.0 |
+| <a name="provider_google"></a> [google](#provider\_google) | 6.3.0 |
 
 ## Modules
 
@@ -33,6 +33,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_deletion_protection"></a> [deletion\_protection](#input\_deletion\_protection) | Whether or not to enable deletion protection on the GKE cluster. Default false. | `bool` | `false` | no |
+| <a name="input_disable_insecure_kubelet_port"></a> [disable\_insecure\_kubelet\_port](#input\_disable\_insecure\_kubelet\_port) | Disables the unauthenticated readonly kubelet port | `bool` | `true` | no |
 | <a name="input_gke_cluster_name"></a> [gke\_cluster\_name](#input\_gke\_cluster\_name) | The name of the GKE cluster you want to manage | `string` | n/a | yes |
 | <a name="input_gke_control_plane_authorized_networks"></a> [gke\_control\_plane\_authorized\_networks](#input\_gke\_control\_plane\_authorized\_networks) | The IPv4 CIDR ranges that should be allowed to connect to the control plane | `list(string)` | `[]` | no |
 | <a name="input_gke_control_plane_zone"></a> [gke\_control\_plane\_zone](#input\_gke\_control\_plane\_zone) | The zone to launch the GKE cluster in | `string` | `"us-central1-c"` | no |
