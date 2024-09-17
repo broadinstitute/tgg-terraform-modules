@@ -33,7 +33,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_deletion_protection"></a> [deletion\_protection](#input\_deletion\_protection) | Whether or not to enable deletion protection on the GKE cluster. Default false. | `bool` | `false` | no |
-| <a name="input_disable_insecure_kubelet_port"></a> [disable\_insecure\_kubelet\_port](#input\_disable\_insecure\_kubelet\_port) | Disables the unauthenticated readonly kubelet port | `bool` | `true` | no |
+| <a name="input_enable_insecure_kubelet_port"></a> [enable\_insecure\_kubelet\_port](#input\_enable\_insecure\_kubelet\_port) | Disables the unauthenticated readonly kubelet port | `string` | `"FALSE"` | no |
 | <a name="input_gke_cluster_name"></a> [gke\_cluster\_name](#input\_gke\_cluster\_name) | The name of the GKE cluster you want to manage | `string` | n/a | yes |
 | <a name="input_gke_control_plane_authorized_networks"></a> [gke\_control\_plane\_authorized\_networks](#input\_gke\_control\_plane\_authorized\_networks) | The IPv4 CIDR ranges that should be allowed to connect to the control plane | `list(string)` | `[]` | no |
 | <a name="input_gke_control_plane_zone"></a> [gke\_control\_plane\_zone](#input\_gke\_control\_plane\_zone) | The zone to launch the GKE cluster in | `string` | `"us-central1-c"` | no |

@@ -117,8 +117,12 @@ variable "deletion_protection" {
 }
 
 # see: https://cloud.google.com/kubernetes-engine/docs/how-to/disable-kubelet-readonly-port
-variable "disable_insecure_kubelet_port" {
+variable "enable_insecure_kubelet_port" {
   description = "Disables the unauthenticated readonly kubelet port"
-  type        = bool
-  default     = true
+  type        = string
+  default     = "FALSE"
+  validation {
+    condition     = contains(["TRUE", "FALSE"], var.enable_insecure_kubelet_port)
+    error_message = "The value provided must be a string matching either TRUE or FALSE"
+  }
 }

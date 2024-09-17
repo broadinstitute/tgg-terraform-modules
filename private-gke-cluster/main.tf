@@ -53,7 +53,7 @@ resource "google_container_cluster" "gke_cluster" {
 
   node_pool_defaults {
     node_config_defaults {
-      insecure_kubelet_readonly_port_enabled = var.disable_insecure_kubelet_port
+      insecure_kubelet_readonly_port_enabled = var.enable_insecure_kubelet_port
     }
   }
 
@@ -111,7 +111,7 @@ resource "google_container_node_pool" "node_pool" {
 
     kubelet_config {
       cpu_manager_policy                     = "none"
-      insecure_kubelet_readonly_port_enabled = var.disable_insecure_kubelet_port
+      insecure_kubelet_readonly_port_enabled = var.enable_insecure_kubelet_port
     }
 
     workload_metadata_config {
