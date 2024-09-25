@@ -67,7 +67,7 @@ variable "node_pools" {
     pool_zone            = optional(string, "")
     pool_resource_labels = optional(map(string), {})
     pool_taints          = optional(list(object({ key = string, value = string, effect = string })), [])
-    pool_autoscale       = optional(object({ min_pool_nodes = string, max_pool_nodes = string }))
+    pool_autoscaling     = optional(object({ min_pool_nodes = string, max_pool_nodes = string }))
   }))
   default = [
     {
@@ -79,7 +79,6 @@ variable "node_pools" {
       "pool_zone"            = ""
       "pool_resource_labels" = {}
       "pool_taints"          = []
-      "pool_autoscale"       = {}
     }
   ]
 }
