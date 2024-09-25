@@ -98,14 +98,14 @@ resource "google_container_node_pool" "node_pool" {
   name     = each.value.pool_name
   location = each.value.pool_zone != "" ? each.value.pool_zone : var.gke_control_plane_zone
   cluster  = google_container_cluster.gke_cluster.name
-  // if we are using autoscale, null this parameter, else, use the defined value
-  node_count = (each.value.autoscale == null) ? each.value.pool_num_nodes : null
+  // if we are using autoscaling, null this parameter, else, use the defined value
+  node_count = (each.value.pool_autoscaling == null) ? each.value.pool_num_nodes : null
 
-  dynamic "autoscale" {
-    for_each = each.value.pool_autoscale
+  dynamic "autoscaling" {
+    for_each = each.value.pool_autoscaling[*]
     content {
-      min_node_count = autoscale.value.min_node_count
-      max_node_count = autoscale.value.max_node_count
+      min_node_count = autoscaling.value.min_pool_nodes
+      max_node_count = autoscaling.value.max_pool_nodes
     }
   }
 
