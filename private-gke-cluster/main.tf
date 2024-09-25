@@ -94,11 +94,20 @@ resource "google_container_cluster" "gke_cluster" {
 }
 
 resource "google_container_node_pool" "node_pool" {
-  for_each   = { for pool in var.node_pools : pool.pool_name => pool }
-  name       = each.value.pool_name
-  location   = each.value.pool_zone != "" ? each.value.pool_zone : var.gke_control_plane_zone
-  cluster    = google_container_cluster.gke_cluster.name
-  node_count = each.value.pool_num_nodes
+  for_each = { for pool in var.node_pools : pool.pool_name => pool }
+  name     = each.value.pool_name
+  location = each.value.pool_zone != "" ? each.value.pool_zone : var.gke_control_plane_zone
+  cluster  = google_container_cluster.gke_cluster.name
+  // if we are using autoscale, null this parameter, else, use the defined value
+  node_count = (each.value.autoscale == null) ? each.value.pool_num_nodes : null
+
+  dynamic "autoscale" {
+    for_each = each.value.pool_autoscale
+    content {
+      min_node_count = autoscale.value.min_node_count
+      max_node_count = autoscale.value.max_node_count
+    }
+  }
 
   node_config {
     machine_type    = each.value.pool_machine_type
