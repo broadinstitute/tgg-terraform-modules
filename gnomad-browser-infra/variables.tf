@@ -73,7 +73,8 @@ variable "gke_node_pools" {
     pool_spot            = optional(bool, true)
     pool_zone            = optional(string, "")
     pool_resource_labels = optional(map(string), {})
-    pool_taints          = optional(list(object({ key = string, value = string, effect = string })), [])
+    pool_taints          = optional(list(object({ key = string, value = string, effect = string })), []),
+    pool_autoscaling     = optional(object({ min_pool_nodes = string, max_pool_nodes = string }))
   }))
   default = [
     {
