@@ -23,6 +23,8 @@ module "default-project-services" {
     "dataproc.googleapis.com",
     "cloudfunctions.googleapis.com",
     "compute.googleapis.com",
+    "iam.googleapis.com",
+    "serviceusage.googleapis.com"
   ]
 
   disable_dependent_services  = false
