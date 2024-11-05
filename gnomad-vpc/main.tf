@@ -1,5 +1,5 @@
 module "gnomad-vpc" {
-  source       = "github.com/broadinstitute/tgg-terraform-modules//vpc-with-nat-subnet?ref=vpc-with-nat-subnet-v1.0.0"
+  source       = "github.com/broadinstitute/tgg-terraform-modules//vpc-with-nat-subnet?ref=cloudbuild-private-pools"
   network_name = var.network_name_prefix
   subnets = [
     {
