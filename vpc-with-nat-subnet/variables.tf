@@ -11,10 +11,10 @@ variable "subnets" {
     subnet_region                = string
     ip_cidr_range                = string
     enable_private_google_access = bool
-    subnet_flow_logs             = bool
-    subnet_flow_logs_sampling    = string
-    subnet_flow_logs_metadata    = string
-    subnet_flow_logs_filter      = string
+    subnet_flow_logs             = optional(bool, false)
+    subnet_flow_logs_sampling    = optional(string, "0.5")
+    subnet_flow_logs_metadata    = optional(string, "EXCLUDE_ALL_METADATA")
+    subnet_flow_logs_filter      = optional(string, "true")
   }))
   default = [
     {
