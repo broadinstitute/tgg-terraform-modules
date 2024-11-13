@@ -70,7 +70,7 @@ resource "google_container_cluster" "gke_cluster" {
   private_cluster_config {
     enable_private_nodes    = true
     master_ipv4_cidr_block  = var.gke_master_ipv4_cidr_block
-    enable_private_endpoint = false
+    enable_private_endpoint = var.enable_private_only_ip_endpoint
   }
 
   release_channel {

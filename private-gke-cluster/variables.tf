@@ -133,3 +133,9 @@ variable "enable_dns_endpoint_config" {
   type        = bool
   default     = false
 }
+
+variable "enable_private_only_ip_endpoint" {
+  description = "Disables or Enabels the public IP address on your GKE control plane"
+  type        = bool
+  default     = false
+}
