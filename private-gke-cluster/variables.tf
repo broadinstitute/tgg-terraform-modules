@@ -127,3 +127,9 @@ variable "enable_insecure_kubelet_port" {
     error_message = "The value provided must be a string matching either TRUE or FALSE"
   }
 }
+
+variable "enable_dns_endpoint_config" {
+  description = "Disables or Enables the DNS endpoint for the GKE control plane"
+  type        = bool
+  default     = false
+}

@@ -40,6 +40,12 @@ resource "google_container_cluster" "gke_cluster" {
     }
   }
 
+  control_plane_endpoints_config {
+    dns_endpoint_config {
+      allow_external_traffic = var.enable_dns_endpoint_config
+    }
+  }
+
   ip_allocation_policy {
     cluster_ipv4_cidr_block  = var.gke_pods_range_slice
     services_ipv4_cidr_block = var.gke_services_range_slice
