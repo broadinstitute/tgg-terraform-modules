@@ -107,7 +107,7 @@ resource "google_container_cluster" "gke_cluster" {
     for_each = local.cluster_secrets_manager_config
 
     content {
-      enabled = secrets_manager.value.enable_secrets_manager
+      enabled = secret_manager_config.value.enable_secrets_manager
     }
   }
 }
