@@ -22,7 +22,7 @@ resource "google_project_iam_member" "gke_nodes_iam" {
 
 locals {
   cluster_secrets_manager_config = var.enable_secrets_manager ? [{
-  enable_certificates = var.enable_secrets_manager }] : []
+  enable_secrets_manager = var.enable_secrets_manager }] : []
 }
 
 # GKE Cluster
