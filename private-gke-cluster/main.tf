@@ -20,6 +20,11 @@ resource "google_project_iam_member" "gke_nodes_iam" {
   project = var.project_name
 }
 
+locals {
+  cluster_secrets_manager_config = var.enable_secrets_manager ? [{
+  enable_certificates = var.enable_secrets_manager }] : []
+}
+
 # GKE Cluster
 resource "google_container_cluster" "gke_cluster" {
   name                = var.gke_cluster_name
@@ -95,6 +100,14 @@ resource "google_container_cluster" "gke_cluster" {
         exclusion_name = maintenance_exclusion.value.name
 
       }
+    }
+  }
+
+  dynamic "secret_manager_config" {
+    for_each = local.cluster_secrets_manager_config
+
+    content {
+      enabled = secrets_manager.value.enable_secrets_manager
     }
   }
 }

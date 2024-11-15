@@ -139,3 +139,9 @@ variable "enable_private_only_ip_endpoint" {
   type        = bool
   default     = false
 }
+
+variable "enable_secrets_manager" {
+  description = "Enables or disables the secrets manager add-on for mounting Google Secret Manager secrets as volumes"
+  type        = bool
+  default     = false
+}
