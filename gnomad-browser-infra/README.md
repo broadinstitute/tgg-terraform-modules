@@ -75,21 +75,21 @@ serviceAccountName: es-snaps
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_google"></a> [google](#requirement\_google) | >= 4.45.0 |
+| <a name="requirement_google"></a> [google](#requirement\_google) | >= 6.11.1 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | 2.23.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | >= 4.45.0 |
+| <a name="provider_google"></a> [google](#provider\_google) | >= 6.11.1 |
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.23.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_gnomad-gke"></a> [gnomad-gke](#module\_gnomad-gke) | github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster | private-gke-cluster-v1.1.0 |
+| <a name="module_gnomad-gke"></a> [gnomad-gke](#module\_gnomad-gke) | github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster | private-gke-cluster-v1.2.0 |
 
 ## Resources
 
@@ -124,9 +124,9 @@ serviceAccountName: es-snaps
 | <a name="input_gke_control_plane_authorized_networks"></a> [gke\_control\_plane\_authorized\_networks](#input\_gke\_control\_plane\_authorized\_networks) | The IPv4 CIDR ranges that should be allowed to connect to the control plane | `list(string)` | `[]` | no |
 | <a name="input_gke_control_plane_zone"></a> [gke\_control\_plane\_zone](#input\_gke\_control\_plane\_zone) | The GCP zone where the GKE control plane will reside | `string` | `"us-east1-c"` | no |
 | <a name="input_gke_maint_exclusions"></a> [gke\_maint\_exclusions](#input\_gke\_maint\_exclusions) | Specified times and dates that non-emergency GKE maintenance should pause | `list(map(string))` | `[]` | no |
-| <a name="input_gke_node_pools"></a> [gke\_node\_pools](#input\_gke\_node\_pools) | A list of node pools and their configuration that should be created within the GKE cluster; pools with an empty string for the zone will deploy in the same region as the control plane | <pre>list(object({<br>    pool_name            = string<br>    pool_num_nodes       = optional(number, 2)<br>    pool_machine_type    = optional(string, "e2-medium")<br>    pool_preemptible     = optional(bool, false)<br>    pool_spot            = optional(bool, true)<br>    pool_zone            = optional(string, "")<br>    pool_resource_labels = optional(map(string), {})<br>    pool_taints          = optional(list(object({ key = string, value = string, effect = string })), [])<br>  }))</pre> | <pre>[<br>  {<br>    "pool_machine_type": "e2-standard-4",<br>    "pool_name": "main-pool",<br>    "pool_num_nodes": 2,<br>    "pool_spot": false<br>  },<br>  {<br>    "pool_machine_type": "e2-custom-6-49152",<br>    "pool_name": "redis",<br>    "pool_num_nodes": 1,<br>    "pool_resource_labels": {<br>      "component": "redis"<br>    },<br>    "pool_spot": false<br>  },<br>  {<br>    "pool_machine_type": "e2-highmem-8",<br>    "pool_name": "es-data",<br>    "pool_num_nodes": 3,<br>    "pool_resource_labels": {<br>      "component": "elasticsearch"<br>    },<br>    "pool_spot": false,<br>    "pool_zone": ""<br>  }<br>]</pre> | no |
+| <a name="input_gke_node_pools"></a> [gke\_node\_pools](#input\_gke\_node\_pools) | A list of node pools and their configuration that should be created within the GKE cluster; pools with an empty string for the zone will deploy in the same region as the control plane | <pre>list(object({<br/>    pool_name            = string<br/>    pool_num_nodes       = optional(number, 2)<br/>    pool_machine_type    = optional(string, "e2-medium")<br/>    pool_preemptible     = optional(bool, false)<br/>    pool_spot            = optional(bool, true)<br/>    pool_zone            = optional(string, "")<br/>    pool_resource_labels = optional(map(string), {})<br/>    pool_taints          = optional(list(object({ key = string, value = string, effect = string })), []),<br/>    pool_autoscaling     = optional(object({ min_pool_nodes = string, max_pool_nodes = string }))<br/>  }))</pre> | <pre>[<br/>  {<br/>    "pool_machine_type": "e2-standard-4",<br/>    "pool_name": "main-pool",<br/>    "pool_num_nodes": 2,<br/>    "pool_spot": false<br/>  },<br/>  {<br/>    "pool_machine_type": "e2-custom-6-49152",<br/>    "pool_name": "redis",<br/>    "pool_num_nodes": 1,<br/>    "pool_resource_labels": {<br/>      "component": "redis"<br/>    },<br/>    "pool_spot": false<br/>  },<br/>  {<br/>    "pool_machine_type": "e2-highmem-8",<br/>    "pool_name": "es-data",<br/>    "pool_num_nodes": 3,<br/>    "pool_resource_labels": {<br/>      "component": "elasticsearch"<br/>    },<br/>    "pool_spot": false,<br/>    "pool_zone": ""<br/>  }<br/>]</pre> | no |
 | <a name="input_gke_pods_range_slice"></a> [gke\_pods\_range\_slice](#input\_gke\_pods\_range\_slice) | The full (e.g. 10.0.0.0/14) or simple (e.g. /14) CIDR range slice to assign for internal pod IP addresses | `string` | `"/14"` | no |
-| <a name="input_gke_recurring_maint_windows"></a> [gke\_recurring\_maint\_windows](#input\_gke\_recurring\_maint\_windows) | A start time, end time and recurrence pattern for GKE automated maintenance windows | `list(map(string))` | <pre>[<br>  {<br>    "end_time": "1970-01-01T11:00:00Z",<br>    "recurrence": "FREQ=DAILY",<br>    "start_time": "1970-01-01T07:00:00Z"<br>  }<br>]</pre> | no |
+| <a name="input_gke_recurring_maint_windows"></a> [gke\_recurring\_maint\_windows](#input\_gke\_recurring\_maint\_windows) | A start time, end time and recurrence pattern for GKE automated maintenance windows | `list(map(string))` | <pre>[<br/>  {<br/>    "end_time": "1970-01-01T06:00:00Z",<br/>    "recurrence": "FREQ=DAILY",<br/>    "start_time": "1970-01-01T01:00:00Z"<br/>  }<br/>]</pre> | no |
 | <a name="input_gke_services_range_slice"></a> [gke\_services\_range\_slice](#input\_gke\_services\_range\_slice) | The full (e.g. 10.0.0.0/20) or simple (e.g. /20) CIDR range slice to assign for internal service IP addresses | `string` | `"/20"` | no |
 | <a name="input_infra_prefix"></a> [infra\_prefix](#input\_infra\_prefix) | The string to use for a prefix on resource names (GKE cluster, GCS Buckets, Service Accounts, etc) | `string` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The name of the target GCP project, for creating IAM memberships | `string` | n/a | yes |
