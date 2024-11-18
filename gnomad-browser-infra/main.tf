@@ -107,7 +107,7 @@ resource "google_storage_bucket_iam_member" "gene_cache" {
 
 # GKE Cluster
 module "gnomad-gke" {
-  source                 = "github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster?ref=private-gke-cluster-v1.1.2"
+  source                 = "github.com/broadinstitute/tgg-terraform-modules//private-gke-cluster?ref=private-gke-cluster-v1.2.0"
   gke_cluster_name       = var.infra_prefix
   project_name           = var.project_id
   gke_control_plane_zone = var.gke_control_plane_zone
@@ -125,6 +125,7 @@ module "gnomad-gke" {
   gke_maint_exclusions                  = var.gke_maint_exclusions
   gke_pods_range_slice                  = var.gke_pods_range_slice
   gke_services_range_slice              = var.gke_services_range_slice
+  enable_dns_endpoint_config            = true
 }
 
 resource "google_compute_firewall" "es_webbook" {
