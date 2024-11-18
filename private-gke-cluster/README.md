@@ -7,13 +7,13 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_google"></a> [google](#requirement\_google) | >= 5.44.0 |
+| <a name="requirement_google"></a> [google](#requirement\_google) | >= 6.11.1 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | 6.3.0 |
+| <a name="provider_google"></a> [google](#provider\_google) | 6.11.1 |
 
 ## Modules
 
@@ -33,16 +33,18 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_deletion_protection"></a> [deletion\_protection](#input\_deletion\_protection) | Whether or not to enable deletion protection on the GKE cluster. Default false. | `bool` | `false` | no |
+| <a name="input_enable_dns_endpoint_config"></a> [enable\_dns\_endpoint\_config](#input\_enable\_dns\_endpoint\_config) | Disables or Enables the DNS endpoint for the GKE control plane | `bool` | `false` | no |
 | <a name="input_enable_insecure_kubelet_port"></a> [enable\_insecure\_kubelet\_port](#input\_enable\_insecure\_kubelet\_port) | Disables the unauthenticated readonly kubelet port | `string` | `"FALSE"` | no |
+| <a name="input_enable_private_only_ip_endpoint"></a> [enable\_private\_only\_ip\_endpoint](#input\_enable\_private\_only\_ip\_endpoint) | Disables or Enabels the public IP address on your GKE control plane | `bool` | `false` | no |
 | <a name="input_gke_cluster_name"></a> [gke\_cluster\_name](#input\_gke\_cluster\_name) | The name of the GKE cluster you want to manage | `string` | n/a | yes |
 | <a name="input_gke_control_plane_authorized_networks"></a> [gke\_control\_plane\_authorized\_networks](#input\_gke\_control\_plane\_authorized\_networks) | The IPv4 CIDR ranges that should be allowed to connect to the control plane | `list(string)` | `[]` | no |
 | <a name="input_gke_control_plane_zone"></a> [gke\_control\_plane\_zone](#input\_gke\_control\_plane\_zone) | The zone to launch the GKE cluster in | `string` | `"us-central1-c"` | no |
 | <a name="input_gke_maint_exclusions"></a> [gke\_maint\_exclusions](#input\_gke\_maint\_exclusions) | Specified times and dates that non-emergency GKE maintenance should pause | `list(map(string))` | `[]` | no |
 | <a name="input_gke_master_ipv4_cidr_block"></a> [gke\_master\_ipv4\_cidr\_block](#input\_gke\_master\_ipv4\_cidr\_block) | The IPv4 CIDR Range (RFC1918) that should be used for the control plane | `string` | `"172.16.0.0/28"` | no |
 | <a name="input_gke_pods_range_slice"></a> [gke\_pods\_range\_slice](#input\_gke\_pods\_range\_slice) | The CIDR notation for the size of the GKE pods IP address alias range | `string` | `"/14"` | no |
-| <a name="input_gke_recurring_maint_windows"></a> [gke\_recurring\_maint\_windows](#input\_gke\_recurring\_maint\_windows) | A start time, end time and recurrence pattern for GKE automated maintenance windows | `list(map(string))` | <pre>[<br>  {<br>    "end_time": "1970-01-01T11:00:00Z",<br>    "recurrence": "FREQ=DAILY",<br>    "start_time": "1970-01-01T07:00:00Z"<br>  }<br>]</pre> | no |
+| <a name="input_gke_recurring_maint_windows"></a> [gke\_recurring\_maint\_windows](#input\_gke\_recurring\_maint\_windows) | A start time, end time and recurrence pattern for GKE automated maintenance windows | `list(map(string))` | <pre>[<br/>  {<br/>    "end_time": "1970-01-01T11:00:00Z",<br/>    "recurrence": "FREQ=DAILY",<br/>    "start_time": "1970-01-01T07:00:00Z"<br/>  }<br/>]</pre> | no |
 | <a name="input_gke_services_range_slice"></a> [gke\_services\_range\_slice](#input\_gke\_services\_range\_slice) | The CIDR notation for the size of the GKE services IP address alias range | `string` | `"/20"` | no |
-| <a name="input_node_pools"></a> [node\_pools](#input\_node\_pools) | A list of node pools and their configuration that should be created within the GKE cluster; pools with an empty string for the zone will deploy in the same region as the control plane | <pre>list(object({<br>    pool_name            = string<br>    pool_num_nodes       = optional(number, 2)<br>    pool_machine_type    = optional(string, "e2-medium")<br>    pool_preemptible     = optional(bool, false)<br>    pool_spot            = optional(bool, true)<br>    pool_zone            = optional(string, "")<br>    pool_resource_labels = optional(map(string), {})<br>    pool_taints          = optional(list(object({ key = string, value = string, effect = string })), [])<br>    pool_autoscaling     = optional(object({ min_pool_nodes = string, max_pool_nodes = string }))<br>  }))</pre> | <pre>[<br>  {<br>    "pool_machine_type": "e2-medium",<br>    "pool_name": "main-pool",<br>    "pool_num_nodes": 2,<br>    "pool_preemptible": true,<br>    "pool_resource_labels": {},<br>    "pool_spot": false,<br>    "pool_taints": [],<br>    "pool_zone": ""<br>  }<br>]</pre> | no |
+| <a name="input_node_pools"></a> [node\_pools](#input\_node\_pools) | A list of node pools and their configuration that should be created within the GKE cluster; pools with an empty string for the zone will deploy in the same region as the control plane | <pre>list(object({<br/>    pool_name            = string<br/>    pool_num_nodes       = optional(number, 2)<br/>    pool_machine_type    = optional(string, "e2-medium")<br/>    pool_preemptible     = optional(bool, false)<br/>    pool_spot            = optional(bool, true)<br/>    pool_zone            = optional(string, "")<br/>    pool_resource_labels = optional(map(string), {})<br/>    pool_taints          = optional(list(object({ key = string, value = string, effect = string })), [])<br/>    pool_autoscaling     = optional(object({ min_pool_nodes = string, max_pool_nodes = string }))<br/>  }))</pre> | <pre>[<br/>  {<br/>    "pool_machine_type": "e2-medium",<br/>    "pool_name": "main-pool",<br/>    "pool_num_nodes": 2,<br/>    "pool_preemptible": true,<br/>    "pool_resource_labels": {},<br/>    "pool_spot": false,<br/>    "pool_taints": [],<br/>    "pool_zone": ""<br/>  }<br/>]</pre> | no |
 | <a name="input_project_name"></a> [project\_name](#input\_project\_name) | The name of the gcp project the cluster is launching in | `string` | n/a | yes |
 | <a name="input_release_channel"></a> [release\_channel](#input\_release\_channel) | The release channel name for the GKE cluster | `string` | `"STABLE"` | no |
 | <a name="input_resource_labels"></a> [resource\_labels](#input\_resource\_labels) | A map of string values to use as resource labels on all cluster objects. | `map(string)` | `{}` | no |
