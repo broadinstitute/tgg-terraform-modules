@@ -29,7 +29,7 @@ resource "google_container_cluster" "cluster" {
     }
 
     network_policy_config {
-      disabled = "true"
+      disabled = "false"
     }
   }
 
@@ -132,8 +132,8 @@ resource "google_container_cluster" "cluster" {
   }
 
   network_policy {
-    enabled  = "false"
-    provider = "PROVIDER_UNSPECIFIED"
+    enabled  = "true"
+    provider = "CALICO"
   }
 
 
