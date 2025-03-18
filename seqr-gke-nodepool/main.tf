@@ -38,11 +38,6 @@ resource "google_container_node_pool" "node_pool" {
       mode = "GKE_METADATA"
     }
 
-    kubelet_config {
-      cpu_cfs_quota  = false
-      pod_pids_limit = 0
-    }
-
     dynamic "ephemeral_storage_local_ssd_config" {
       for_each = (var.node_pool_local_ssd_count > 0) ? [var.node_pool_local_ssd_count] : []
       content {
