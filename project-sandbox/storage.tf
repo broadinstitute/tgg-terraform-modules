@@ -7,6 +7,11 @@ resource "google_storage_bucket" "general_use_bucket" {
 
   uniform_bucket_level_access = true
   public_access_prevention    = "enforced"
+
+  autoclass {
+    enabled                = true
+    terminal_storage_class = "ARCHIVE"
+  }
 }
 
 # TODO: add a -tmp-4day bucket for auto-deletion
